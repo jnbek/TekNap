@@ -1,0 +1,81 @@
+/*
+ * Auto-Response script for TekNap
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ */ 
+
+/* Configuration Section */
+
+assign AUTO_RESPONSE 1
+assign AUTO_RESPONSE_BEEP 1
+assign AUTO_RESPONSE_STR fudd
+assign FORMAT_PUBLIC %B<%n$2%B>%n $4-
+assign FORMAT_PUBLIC_AR %B<%Y$2%B>%n $4-
+assign FORMAT_PUBLIC_OTHER %b<%n$2%K/%n$3%b>%n $4-
+assign FORMAT_PUBLIC_OTHER_AR %b<%y$2%K/%n$3%b>%n $4-
+
+/* END CONFIG SECTION */
+/* Probably not a good idea to change anything below this point. */
+
+alias fparse
+{
+        eval return $cparse($($0))
+}
+
+on ^public "*" echo $fparse(FORMAT_PUBLIC $strftime(%X) $*)
+on ^public_other "*" echo $fparse(FORMAT_PUBLIC_OTHER $strftime(%X) $*)
+
+on ^public '% % *\\[${AUTO_RESPONSE_STR}\\]*'
+{
+	if (AUTO_RESPONSE)
+	{
+		if (!match($0 $AUTO_RESPONSE_STR))
+		{
+			if (AUTO_RESPONSE_BEEP)
+			{
+				if (BEEP == [OFF])
+				{
+					^set BEEP ON
+					beep
+					^set BEEP OFF
+				}{
+					beep
+				}
+			}
+			echo $fparse(FORMAT_PUBLIC_AR $strftime(%X) $*)
+		}{
+			echo $fparse(FORMAT_PUBLIC $strftime(%X) $*)
+		}
+	}{
+		echo $fparse(FORMAT_PUBLIC $strftime(%X) $*)
+	}
+}
+
+on ^public_other '% % *\\[${AUTO_RESPONSE_STR}\\]*'
+{
+	if (AUTO_RESPONSE)
+	{
+		if (!match($0 $AUTO_RESPONSE_STR))
+		{
+			if (AUTO_RESPONSE_BEEP)
+			{
+				if (BEEP == [OFF])
+				{
+					^set BEEP ON
+					beep
+					^set BEEP OFF
+				}{
+					beep
+				}
+			}
+			echo $fparse(FORMAT_PUBLIC_OTHER_AR $strftime(%X) $*)
+		}{
+			echo $fparse(FORMAT_PUBLIC_OTHER $strftime(%X) $*)
+		}
+	}{
+		echo $fparse(FORMAT_PUBLIC_OTHER $strftime(%X) $*)
+	}
+}
+
+
+/* bmw '01 */

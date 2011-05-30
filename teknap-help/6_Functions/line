@@ -1,0 +1,22 @@
+Synopsis:
+   $line(<line number> [window number] [-level loglevel])
+
+Technical:
+   This function will return a line number from a specified window or the
+   current window. Optionally a specific log level may be specified. Lines
+   are numbered from 1 which is the most current line to lastlog buffer
+   size.
+
+Returns:
+   If invalid line number nothing.
+   otherwise the specified line
+
+Examples:
+   $line(1)                          returns line 1
+   $line(10 1)                       returns line 10 from window 1
+   $line(10 2 -level server)         returns line 10 from window 2 with
+                                         level of server
+
+See Also:
+   lastlog(6)
+

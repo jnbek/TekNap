@@ -1,0 +1,10 @@
+Synopsis:
+   $isdisplaying() 
+
+Technical:
+   The client has a /set display on/off which controls the output of the
+   client to the windows.
+
+Returns:
+   returns the value of /set display 
+

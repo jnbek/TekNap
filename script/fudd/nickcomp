@@ -1,0 +1,29 @@
+/*
+ * Nick Completion for TekNap
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000
+ *
+ * Most of this was taken from the nick completion module that shade wrote
+ * for my BitchX/EPIC4 script called playdough. He deserves most of the
+ * credit. Please send bug reports to me, not shade.
+ */
+
+assign NICK_COMP 1
+assign NICK_COMP_CHAR :
+
+alias nickcomp
+{
+	fe (%$0% ?$0? %$0 ?$0 $0% $0? $0) patt
+	{
+		^local findnick
+		@ findnick = pattern($patt $channelnicks())
+		@ function_return = findnick ? word(0 $findnick) : function_return
+	}
+}
+
+on ^input "%: *" if (nick_comp)
+{
+	^local complete
+	@ complete = nickcomp($before(: $*))
+	raw 402 $C ${complete ? [$complete$nick_comp_char $1-] : [$*]}
+}

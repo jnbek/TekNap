@@ -1,0 +1,14 @@
+Synopsis:
+   $onchannels()
+
+Technical:
+   This function returns a list of channels you are currently on.
+
+Practical:
+
+Returns:
+   list of channels, or nothing if error
+
+Examples:
+   $onchannels()                  shows current channels
+

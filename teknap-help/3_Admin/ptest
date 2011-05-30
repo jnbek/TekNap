@@ -1,0 +1,13 @@
+Synopsis:
+   ptest <nick> <port>
+
+Description:
+   Runs a port test on the specified nick and port to see if the port is
+   active. Disabled on the windows client due to a lack of threading
+   support. Also requires moderator+ in order to perform.
+
+Examples:
+   /ptest luna 6699
+
+See Also:
+

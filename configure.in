@@ -1,0 +1,1407 @@
+dnl ----------------------------------------------------------
+dnl configure.in for ircii, 2.3.  copyright (c) matthew green, 1993,
+dnl except those bits attributed otherwise.
+dnl thanks to the screen 3.3 configure.in for giving me examples to
+dnl work from and steal ;)
+dnl
+dnl Updated Fri Jun 25 14:00:48 EDT 1999 for BitchX by David Walluck.
+dnl We can now use autoconf to generate the configure script for BitchX! 
+dnl Thanks to ircII and ircII-EPIC4, of course, for a starting place.
+dnl
+
+dnl This is *not* the same revision as the autoconf script in ircII.
+dnl Revision 1.00 will correspond with the BitchX-1.0 release with versions
+dnl moving up from there. 
+AC_REVISION($Revision: 1.2 $)dnl
+AC_INIT(source/main.c)
+AC_CONFIG_HEADER(include/defs.h)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Grok the version number - from source/irc.c
+dnl Maybe it's better to set the VERSION in configure.in
+dnl
+
+VERSION=`sed -n -e 's/";$//' -e '/	const char nap_version.. = "/s///p' -e '/const char nap_version/q' < $srcdir/source/main.c`
+_VERSION_="TekNap"
+echo Welcome to the $VERSION configuration
+echo
+
+VERSION_NUMBER=`echo "$VERSION" | sed -e 's/TekNap-//'`
+AC_SUBST(VERSION_NUMBER)
+
+dnl ---------------------------------------------------------- 
+dnl
+dnl Initial stuff
+dnl
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_ISC_POSIX
+
+AC_PROG_AWK
+if test x"$AWK" = x; then
+  AC_MSG_ERROR(Cannot find awk. Cannot configure without it.)
+fi
+
+
+if test -f "/usr/local/bin/make"; then
+  MAKE=/usr/local/bin/make
+else
+  AC_CHECK_PROG(MAKE, gmake, gmake)
+  if test x"$MAKE" = x; then
+    AC_CHECK_PROG(MAKE, make, make)
+  fi
+fi
+AC_SUBST(MAKE)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Setup variables
+dnl
+
+AC_MSG_CHECKING(for NeXT)
+AC_EGREP_CPP(yes,
+[#if defined(NeXT) || defined(__NeXT) || defined(__NeXT__)
+  yes
+#endif
+],nextstep=1)
+
+if test -n "$nextstep"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+dnl AC_AIX is broken.  blah.
+
+AC_MSG_CHECKING(for AIX)
+AC_EGREP_CPP(yes,
+[
+#ifdef _AIX
+  yes
+#endif
+],AC_MSG_RESULT(yes)
+  aix=1
+  AC_DEFINE(_ALL_SOURCE),
+  AC_MSG_RESULT(no))
+
+AC_PROG_GCC_TRADITIONAL
+
+AC_MSG_CHECKING(for qnx)
+uname=`uname -s`
+case $uname in
+dnl bleck - wish i could ditch this qnx test, but we need to bump the stack
+  QNX*)
+    AC_MSG_RESULT(yes)
+    if test -z "$GCC"; then
+      LDFLAGS=-N256k
+      CFLAGS="-w4 -O -g -fi=unix.h"
+    fi
+    ;;
+  *)
+    AC_MSG_RESULT(no)
+    AC_MSG_CHECKING(for sco)
+    case $uname in
+      SCO*)
+        AC_MSG_RESULT(yes)
+        AC_DEFINE(SCO)
+        ;;
+      *)
+        AC_MSG_RESULT(no)
+    esac
+esac
+
+
+AC_MSG_CHECKING(for solaris)
+if [[ -x /bin/sun ]]; 
+then
+  unamer=`uname -r`
+  case $unamer in
+    4.*)
+      AC_MSG_RESULT(no)
+      sunos4=1
+      ;;
+    5.*)
+      svr4=1
+      ;;
+  esac
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_CHECKING(for SVR4)
+  AC_EGREP_CPP(yes,
+[#if defined(SVR4) || defined(__svr4__) || defined(__SVR4)
+  yes
+#endif
+],svr4=1)
+fi
+
+if test -n "$svr4"; then
+  AC_MSG_RESULT(yes)
+  LIBS="-L/usr/ccs/lib $LIBS"
+else
+  if test ! -n "$sunos4"; then
+    AC_MSG_RESULT(no)
+  fi
+fi
+
+dnl
+dnl testing for svr3/wollengong tcp's /usr/netinclude
+dnl
+
+AC_MSG_CHECKING(for -I/usr/netinclude)
+if test -d "/usr/netinclude"; then
+  AC_MSG_RESULT(yes)
+  CFLAGS="$CFLAGS -I/usr/netinclude"
+else
+  AC_MSG_RESULT(no)
+fi
+
+AC_MSG_CHECKING(for hpux version)
+if test -f "/hp-ux" -o -f "/stand/vmunix"; then
+  AC_MSG_RESULT(yes)
+  hpux=1
+  unamer=`uname -r` 2> /dev/null
+  case $unamer in
+    A.09* | A.9* | a.9* | a.09* | 9* | 09* | B.09*)
+      ;;
+    A.08* | A.8* | a.8* | a.08* | 8* | 08*)
+      AC_DEFINE(HPUX8)
+      ;;
+    A.07* | A.B7* | A.7* | a.7* | a.07* | 7* | 07*)
+      AC_DEFINE(HPUX7)
+      ;;
+    *)
+      AC_DEFINE(HPUXUNKNOWN)
+      ;;
+  esac
+else
+  AC_MSG_RESULT(no)
+fi
+
+AC_MSG_CHECKING(for ultrix)
+AC_EGREP_CPP(yes,
+[#if defined(ultrix) || defined(__ultrix) || defined(__ultrix)
+  yes
+#endif
+], ultrix=1)
+if test -n "$ultrix"; then
+  AC_MSG_RESULT(yes)
+  test -z "$GCC" -a CC="$CC -YBSD"
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_CHECKING(for POSIX.1)
+  AC_EGREP_CPP(yes, [
+#include <sys/types.h>
+#include <unistd.h>
+main () {
+#ifdef _POSIX_VERSION
+	yes
+#endif
+}
+], AC_DEFINE(POSIX) AC_MSG_RESULT(yes); posix=1, AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for sequent/ptx)
+AC_EGREP_CPP(yes,
+[#ifdef _SEQUENT_
+  yes
+#endif
+], LIBS="$LIBS -lseq" seqptx=1 AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for const)
+AC_TRY_RUN([
+#include <stdio.h>
+main()
+{
+	const char lame[9] = "";
+	printf(lame);
+ 	exit(0);
+}
+],
+AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_CONST),
+  AC_MSG_RESULT(no), :)
+
+if test x"$cross_compiling" != x"yes"; then
+   AC_C_BIGENDIAN
+fi
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for libraries before we check for functions!
+dnl
+
+AC_CHECK_FUNCS(connect)
+if test x"$ac_cv_func_connect" = x"no"; then
+  if test -z "$libsocket"; then
+    AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket",)
+  fi
+
+  dnl this is for isc.  need the nsl_s library as well.
+  if test -z "$libinet"; then
+    AC_CHECK_LIB(inet, socket, libnsl=1; LIBS="$LIBS -linet -lnsl_s",)
+  fi
+
+  if test -z "$libnsl"; then
+    AC_CHECK_LIB(nsl, gethostname, LIBS="$LIBS -lnsl",)
+  fi
+fi
+
+
+AC_CHECK_LIB(sun, getpwnam, LIBS="$LIBS -lsun",)
+AC_CHECK_LIB(dgc, inet_addr, LIBS="$LIBS -ldgc",)
+AC_CHECK_LIB(resolv, gethostbyname, LIBS="$LIBS -lresolv",)
+AC_CHECK_LIB(crypt, crypt, LIBS="$LIBS -lcrypt",)
+AC_CHECK_LIB(m, pow, LIBS="$LIBS -lm",)
+
+AC_DEFUN(AC_CHECK_NCURSES_VERSION, [AC_MSG_CHECKING(ncurses version)
+    ncurses_version=unknown
+cat > conftest.$ac_ext <<EOF
+[#]line __oline__ "configure"
+#include "confdefs.h"
+#include <ncurses.h>
+#undef VERSION
+VERSION:NCURSES_VERSION
+EOF
+    if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_CC | egrep "VERSION:" >conftest.out 2>&1; then
+changequote(,)dnl
+      ncurses_version=`cat conftest.out|sed -e 's/^[^"]*"//' -e 's/".*//'`
+changequote([,])dnl
+    fi
+    rm -rf conftest*
+    AC_MSG_RESULT($ncurses_version)
+      # FIXME - WTF!
+      #case $ncurses_version in
+      #  4.2)
+      #    ;;
+      #  *)
+      #    echo You appear to have ncurses version 4.1 or earlier installed. We recommend
+      #    echo upgrading to a more recent version of ncurses \(i.e. 4.2 or newer\). The
+      #    echo latest as of this time is 5.0.
+      #    ;;
+      #esac
+  ])
+
+if test x"$cross_compiling" != x"yes"; then
+  AC_MSG_CHECKING(whether you want to use termcap)
+  AC_ARG_WITH(termcap,
+  [  --with-termcap          Forcibly refuse to use terminfo/ncurses],
+  [   AC_MSG_RESULT(yes)
+      AC_CHECK_LIB(ncurses, setupterm, [LIBS="-lncurses $LIBS"
+                                         AC_CHECK_NCURSES_VERSION()
+					 AC_DEFINE(USING_NCURSES)],
+        AC_CHECK_LIB(termcap, tgetent, LIBS="-ltermcap $LIBS",
+          AC_CHECK_LIB(tinfo,   setupterm, LIBS="-ltinfo $LIBS",
+            AC_CHECK_LIB(termlib, tgetent, LIBS="-ltermlib $LIBS",
+              AC_CHECK_LIB(curses,  setupterm, [LIBS="-lcurses $LIBS"
+					 AC_DEFINE(USING_CURSES)],
+                AC_CHECK_LIB(curses,  tgetent, [LIBS="-lcurses $LIBS"
+						AC_DEFINE(USING_CURSES)],
+                AC_MSG_ERROR(Cannot find tgetent.  Build will fail without it.)))))))],
+  [   AC_MSG_RESULT(no)
+      AC_CHECK_LIB(ncurses, setupterm, [LIBS="-lncurses $LIBS"
+                                       AC_CHECK_NCURSES_VERSION()
+				       AC_DEFINE(USING_NCURSES)],
+  	  AC_CHECK_LIB(curses, setupterm, [LIBS="-lcurses $LIBS"
+					  AC_DEFINE(USING_CURSES)],
+  	    AC_CHECK_LIB(curses, tgetent, [LIBS="-lcurses $LIBS"
+					  AC_DEFINE(USING_CURSES)],
+             AC_CHECK_LIB(tinfo,   setupterm, LIBS="-ltinfo $LIBS",
+                AC_CHECK_LIB(termlib, tgetent, LIBS="-ltermlib $LIBS",
+                  AC_CHECK_LIB(termcap, tgetent, LIBS="-ltermcap $LIBS",
+  	          AC_MSG_ERROR(Cannot find tgetent.  Build will fail without it.)))))))])
+
+    AC_MSG_CHECKING(for tputs in ncurses.h)
+    AC_EGREP_CPP([tputs( |        |\()],[#define __STDC__
+#include <ncurses.h>
+  ], [ AC_DEFINE(USING_NCURSES) 
+       AC_MSG_RESULT(yes)
+       havetputs=1 ], blahhack=1; AC_MSG_RESULT(no))
+
+  if test x"$blahhack" = x"1"; then
+    blahhack=0
+    AC_MSG_CHECKING(for tputs in termcap.h)
+    AC_EGREP_CPP([tputs( |        |\()],[#define __STDC__
+#include <termcap.h>
+  ], [ AC_DEFINE(HAVE_TERMCAP_H) 
+       AC_MSG_RESULT(yes)
+       havetputs=1
+       AC_CHECK_HEADER(termcap.h)], blahhack=1; AC_MSG_RESULT(no))
+  fi
+
+  if test x"$blahhack" = x"1"; then
+    blahhack=0
+    AC_MSG_CHECKING(for tputs in curses.h)
+    AC_EGREP_CPP([tputs( |        |\()],[#define __STDC__
+#include <curses.h>
+  ], [ AC_DEFINE(USING_CURSES) 
+       AC_MSG_RESULT(yes)
+       havetputs=1 ], blahhack=1; AC_MSG_RESULT(no))
+  fi
+
+  if test x"$blahhack" = x"1"; then
+    blahhack=0
+    AC_MSG_CHECKING(for tputs in term.h)
+    AC_EGREP_CPP([tputs( |        |\()],[#define __STDC__
+#include <term.h>
+  ], [ AC_DEFINE(HAVE_TERM_H) 
+       AC_MSG_RESULT(yes)
+       havetputs=1 AC_CHECK_HEADER(term.h)], blahhack=1; AC_MSG_RESULT(no))
+  fi
+
+
+  if test x"$havetputs" != x"1"; then
+    AC_MSG_ERROR(Cannot find tputs.  Build will fail without it.)
+  fi
+fi
+
+AC_CHECK_LIB(panel, new_panel, have_panel=1; LIBS="-lpanel $LIBS", AC_MSG_RESULT(no))
+if test x"$have_panel" = x"1"; then
+   AC_DEFINE(HAVE_PANELLIB)
+fi
+
+
+dnl ----------------------------------------------------------
+dnl
+dnl Checking for headers, functions, and a type declarations
+dnl
+
+AC_CHECK_HEADERS(arpa/inet.h sys/time.h sys/fcntl.h fcntl.h sys/file.h)
+AC_CHECK_HEADERS(sys/syslimits.h netinet/in_systm.h sys/in_systm.h)
+AC_CHECK_HEADERS(sys/filio.h regex.h regexp.h netdb.h sys/un.h)
+AC_CHECK_HEADERS(sys/select.h dirent.h sys/ndir.h sys/dir.h ndir.h)
+AC_CHECK_HEADERS(endian.h sys/endian.h machine/endian.h)
+AC_CHECK_HEADERS(panel.h ncurses/panel.h)
+
+AC_CHECK_FUNC(tparm, AC_DEFINE(HAVE_TPARM),)
+AC_CHECK_FUNC(strtoul, AC_DEFINE(HAVE_STRTOUL),)
+AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON),)
+AC_CHECK_FUNC(strlcpy, AC_DEFINE(HAVE_STRLCPY),)
+AC_CHECK_FUNC(strlcat, AC_DEFINE(HAVE_STRLCAT),)
+AC_CHECK_FUNC(vsnprintf, AC_DEFINE(HAVE_VSNPRINTF),)
+AC_CHECK_FUNC(snprintf, AC_DEFINE(HAVE_SNPRINTF),)
+AC_CHECK_FUNC(setsid, AC_DEFINE(HAVE_SETSID),)
+AC_CHECK_FUNC(setupterm, AC_DEFINE(HAVE_TERMINFO),)
+AC_CHECK_FUNC(strerror, AC_DEFINE(HAVE_STRERROR),)
+AC_CHECK_FUNC(memmove, AC_DEFINE(HAVE_MEMMOVE),)
+AC_CHECK_FUNC(gettimeofday, AC_DEFINE(HAVE_GETTIMEOFDAY),)
+AC_CHECK_FUNC(uname, AC_DEFINE(HAVE_UNAME),)
+AC_CHECK_FUNC(getrusage, AC_DEFINE(HAVE_GETRUSAGE),)
+AC_CHECK_FUNC(scandir, AC_DEFINE(HAVE_SCANDIR),)
+AC_CHECK_FUNC(sysconf, AC_DEFINE(HAVE_SYSCONF),)
+AC_CHECK_FUNC(getpgid, AC_DEFINE(HAVE_GETPGID),)
+AC_CHECK_FUNC(killpg, AC_DEFINE(HAVE_KILLPG),)
+AC_CHECK_FUNC(getlogin, AC_DEFINE(HAVE_GETLOGIN),)
+AC_CHECK_FUNC(realpath, AC_DEFINE(HAVE_REALPATH),)
+AC_CHECK_FUNC(fchdir, AC_DEFINE(HAVE_FCHDIR),)
+AC_CHECK_FUNC(setvbuf, AC_DEFINE(HAVE_SETVBUF),)
+AC_CHECK_FUNC(getpass, AC_DEFINE(HAVE_GETPASS),)
+AC_CHECK_FUNC(fpathconf, AC_DEFINE(HAVE_FPATHCONF),)
+AC_CHECK_FUNC(getpwent, AC_DEFINE(HAVE_GETPWENT),)
+
+dnl AC_MSG_CHECKING(for mmap support)
+dnl AC_TRY_RUN(
+dnl [
+dnl #include <sys/types.h>
+dnl #include <sys/mman.h>
+dnl #include <sys/stat.h>
+dnl int main() {
+dnl   if ((mmap((caddr_t)0, (off_t)0, PROT_READ, MAP_SHARED, 0, (off_t)0)))
+dnl	return 0;
+dnl   else
+dnl	return 1;
+dnl }
+dnl ], AC_DEFINE(HAVE_MMAP) AC_MSG_RESULT(yes),AC_MSG_RESULT(no), AC_MSG_RESULT( unable to test ))
+AC_FUNC_MMAP
+
+dnl AC_MSG_CHECKING(for getpwent)
+dnl AC_TRY_RUN([
+dnl #include <sys/types.h>
+dnl #include <pwd.h>
+dnl main()
+dnl {
+dnl 	struct passwd *pw;
+dnl 	pw = getpwent();
+dnl 	exit(0);
+dnl }
+dnl ],
+dnl   AC_MSG_RESULT(yes)
+dnl   AC_DEFINE(HAVE_GETPWENT),
+dnl   AC_MSG_RESULT(no), :)
+
+
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_HEADER_DIRENT
+
+AC_TYPE_SIGNAL
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_UID_T
+AC_FUNC_ALLOCA
+
+if test x"$ac_cv_header_sys_twg_config_h" = x"yes"; then
+  AC_DEFINE(WINS)
+fi
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check to see if we have to include <sys/select.h>
+dnl 
+
+AC_MSG_CHECKING(whether sys/types.h defines fd_set)
+AC_EGREP_HEADER(fd_set, sys/types.h,
+  AC_MSG_RESULT(yes),
+  AC_MSG_RESULT(no)
+  AC_MSG_CHECKING(whether sys/select.h defines fd_set)
+  AC_EGREP_HEADER(fd_set, sys/select.h,
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(NEED_SYS_SELECT_H),
+    AC_MSG_RESULT(no))) 
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for struct linger
+dnl
+
+AC_MSG_CHECKING(for struct linger)
+AC_EGREP_HEADER([struct( |	)*linger], sys/socket.h, 
+  AC_MSG_RESULT(yes), 
+  AC_DEFINE(NO_STRUCT_LINGER) 
+  AC_MSG_RESULT(no))
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for sun_len in <sys/un.h>
+dnl
+
+AC_MSG_CHECKING(for sun_len in <sys/un.h>)
+AC_EGREP_CPP([sun_len], 
+[
+#include <sys/un.h>
+], AC_DEFINE(HAVE_SUN_LEN) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+dnl ----------------------------------------------------------
+dnl
+dnl Grok process groups
+dnl
+
+if test x"$ac_cv_func_getsid" != x"yes" -a x"$ac_cv_func_getpgid" != x"yes"; then
+  AC_MSG_CHECKING(if getpgrp takes an argument)
+  AC_TRY_RUN([
+main()
+{
+	int pid;
+	int pgid;
+
+	pid = fork();
+
+	if (0 == pid)
+	{
+#ifdef HAVE_SETSID
+	setsid();
+#else
+	setpgrp(0, getpid());
+#endif /* HAVE_SETSID */
+    sleep(10);
+	}
+	else
+	{
+		sleep(2);
+		pgid = getpgrp(pid);
+		kill(pid,9);
+		if (pid != pgid)
+			exit(1);
+		}
+		exit(0);
+	}
+],
+  AC_MSG_RESULT(yes),
+  AC_MSG_RESULT(no)
+  AC_DEFINE(GETPGRP_VOID), :)
+fi
+
+dnl ----------------------------------------------------------
+dnl Work out wait type
+dnl
+
+if test x"$posix" != x"1"; then
+AC_MSG_CHECKING(for bsd wait)
+AC_TRY_LINK([
+#include <sys/types.h>
+#include <sys/wait.h>
+],[
+  union wait x;
+  int y;
+#ifdef WEXITSTATUS
+  y = WEXITSTATUS(x);
+#endif
+],
+  AC_DEFINE(BSDWAIT)
+  bsdwait=1
+  AC_MSG_RESULT(yes),
+  AC_MSG_RESULT(no)
+  AC_CHECK_FUNC(waitpid,,
+    AC_DEFINE(NEED_WAITPID)))
+fi
+
+dnl ----------------------------------------------------------
+dnl Check for select()
+dnl
+
+AC_CHECK_FUNC(select, ,
+  AC_CHECK_LIB(socket, select, LIBS="$LIBS -lsocket",
+    AC_CHECK_LIB(nsl, select, LIBS="$LIBS -lnsl",
+      AC_CHECK_LIB(inet, select, LIBS="$LIBS -linet",
+        AC_CHECK_LIB(cposix, select, LIBS="$LIBS -lcposix",
+          AC_CHECK_LIB(net, select, LIBS="$LIBS -lnet",
+            AC_MSG_ERROR(Cannot find select. Build will fail without it.)))))))
+
+dnl ----------------------------------------------------------
+dnl Check for non-blocking fd style available
+dnl
+
+AC_MSG_CHECKING(non-blocking type)
+AC_ARG_WITH(non-blocking,
+[  --with-non-blocking[=TYPE] With non-blocking TYPE=posix,bsd,sysv,none],
+[ case $withval in
+    posix)
+      AC_DEFINE(NBLOCK_POSIX)
+      AC_MSG_RESULT(posix)
+      ;;
+    bsd)
+      AC_DEFINE(NBLOCK_BSD)
+      AC_MSG_RESULT(bsd)
+      ;;
+    sysv)
+      AC_DEFINE(NBLOCK_SYSV)
+      AC_MSG_RESULT(sysv)
+      ;;
+    none)
+      AC_MSG_WARN(Cannot find a working non blocking system.)
+      ;;
+    *)
+      AC_MSG_WARN(Cannot find a working non blocking system.)
+      ;;
+    esac ],
+[
+changequote(<<, >>)dnl
+<<
+precode='#include <sys/types.h>
+#include <sys/socket.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/file.h>
+#include <signal.h>
+
+alarmed()
+{
+        exit(1);
+}
+
+main()
+{
+        char b[12], x[32];
+        int f, l = sizeof(x);
+        f = socket(AF_INET, SOCK_DGRAM, 0);
+        if (f >= 0 && (fcntl(f, F_SETFL,'
+postcode=') != -1)) {
+                signal(SIGALRM, alarmed);
+                alarm(3);
+                recvfrom(f, b, 12, 0, (struct sockaddr *)x, &l);
+                alarm(0);
+                exit(0);
+        }
+        exit(1);
+}'
+>>
+changequote([, ])dnl
+
+code="$precode O_NONBLOCK $postcode"
+
+AC_TRY_RUN($code,
+  AC_DEFINE(NBLOCK_POSIX)
+  AC_MSG_RESULT(posix),
+  code="$precode O_NDELAY $postcode"
+  AC_TRY_RUN($code,
+    AC_DEFINE(NBLOCK_BSD)
+    AC_MSG_RESULT(bsd),
+    code="$precode FIONBIO $postcode"
+    AC_TRY_RUN($code,
+      AC_DEFINE(NBLOCK_SYSV)
+      AC_MSG_RESULT(sysv),
+      AC_MSG_WARN(Cannot find a working non blocking system.),
+      :),
+    :),
+  :)
+])
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for sys_siglist declaration
+dnl
+
+AC_MSG_CHECKING(for sys_siglist declaration)
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <sys/signal.h>
+#include <signal.h>
+main()
+{
+	char *s = sys_siglist[0];
+	exit(0);
+}
+],
+  AC_MSG_RESULT(yes) 
+  sys_siglist="1"
+  AC_DEFINE(SYS_SIGLIST_DECLARED), 
+  AC_MSG_RESULT(no), :)
+
+if test x"$sys_siglist" = x; then
+AC_MSG_CHECKING(for _sys_siglist declaration)
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <sys/signal.h>
+#include <signal.h>
+main()
+{
+	char *s = _sys_siglist[0];
+	exit(0);
+}
+],
+  AC_MSG_RESULT(yes) 
+  _sys_siglist="1"
+  AC_DEFINE(_SYS_SIGLIST_DECLARED), 
+  AC_MSG_RESULT(no), :)
+fi
+
+dnl ----------------------------------------------------------
+dnl
+dnl Generate signal list
+dnl This is all stolen from perl-4.036's Configure. Larry is god.
+dnl
+if test x"$sys_siglist" = x; then
+if test x"$_sys_siglist" = x; then
+echo "generating a list of signal names..."
+set X `cat /usr/include/signal.h /usr/include/sys/signal.h /usr/include/linux/signal.h 2>&1 | sed 's/^#[	]*/#/' | $AWK '
+$1 ~ /^#define$/ && $2 ~ /^SIG[A-Z0-9]*$/ && $3 ~ /^[1-9][0-9]*$/ {
+  [sig[$3] = substr($2,4,20)]
+  if (max < $3 && $3 < 60) {
+	max = $3
+  }
+}
+
+END {
+  for (i=1; i<=max; i++) {
+    [if (sig[i] == "")]
+      printf "%d", i
+    else
+      [printf "%s", sig[i]]
+    if (i < max)
+      printf " "
+  }
+  printf "\n"
+}
+'`
+shift
+case $# in
+0)
+  if test -f /bin/csh; then
+     set X `/bin/csh -cf 'kill -l'`
+     shift
+     case $* in
+     0) 
+       set HUP INT QUIT ILL TRAP ABRT EMT FPE KILL BUS SEGV SYS PIPE ALRM TERM
+       ;;
+    esac
+  fi
+  ;;
+esac
+
+sig_name="ZERO $*"
+if test -f source/sig.inc; then
+  /bin/rm -f source/sig.inc
+fi
+[echo $sig_name | sed -e 's/$/"};/' -e 's/ /", "/g' -e 's/^/char *sys_siglist[] = { "/' >> source/sig.inc]
+fi
+fi
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check signal handling
+dnl
+
+AC_CHECKING(signal implementation)
+   AC_CHECK_FUNC(sigaction, AC_DEFINE(USE_SIGACTION) 
+   AC_MSG_RESULT(using posix signals)
+  ,
+   AC_CHECK_FUNC(sigset, AC_DEFINE(USE_SIGSET) 
+   AC_MSG_RESULT(using system v signals)
+  ,
+
+AC_CHECKING(for reliable signals)
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <signal.h>
+
+#ifndef SIGCHLD
+# define SIGCHLD SIGCLD
+#endif
+int got;
+
+#ifdef SIGVOID
+void
+#endif
+hand()
+{
+	got++;
+}
+
+main()
+{
+	(void)signal(SIGCHLD, hand);
+	kill(getpid(), SIGCHLD);
+	kill(getpid(), SIGCHLD);
+	if (got < 2)
+		exit(1);
+	exit(0);
+}
+],
+AC_MSG_RESULT(using bsd signals)
+, AC_DEFINE(SYSVSIGNALS)
+AC_MSG_RESULT(using system v signals),
+AC_MSG_RESULT(no signals)
+)))
+
+if test x"$bsdwait" = x"1"; then
+  AC_MSG_CHECKING(for wait3 declaration)
+  AC_EGREP_CPP([wait3( |        |\()],[#include <sys/types.h> )
+#include <signal.h>
+#include <sys/wait.h>
+], AC_DEFINE(WAIT3_DECLARED) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+else
+  AC_MSG_CHECKING(for waitpid declaration)
+  AC_EGREP_CPP([waitpid( |      |\()],[#include <sys/types.h>
+#include <signal.h>
+#include <sys/wait.h>
+], AC_DEFINE(WAITPID_DECLARED) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+dnl ----------------------------------------------------------
+dnl Check for errno declaration
+dnl
+
+AC_MSG_CHECKING(for errno declaration)
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <errno.h>
+main()
+{
+	int i = errno;
+	exit(0);
+}
+],
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(ERRNO_DECLARED),
+  AC_MSG_RESULT(no), :)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Need this for dcc stuff
+dnl
+
+AC_MSG_CHECKING(for a 32 bit integer)
+AC_TRY_RUN([
+main()
+{
+	if (4 == sizeof(unsigned long))
+		exit(0);
+	exit(1);
+}
+],
+  AC_MSG_RESULT(unsigned long)
+  AC_DEFINE(UNSIGNED_LONG32),
+  AC_TRY_RUN([
+main()
+{
+	if (4 == sizeof(unsigned int))
+		exit(0);
+	exit(1);
+}
+],
+  AC_MSG_RESULT(unsigned int)
+  AC_DEFINE(UNSIGNED_INT32),
+  AC_MSG_RESULT(none, using unsigned long)
+  AC_DEFINE(UNKNOWN_32INT), :),
+:)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check if we want to enable dmalloc debugging support
+dnl
+
+AC_MSG_CHECKING(whether to enable dmalloc debugging support)
+AC_ARG_ENABLE(debug,
+[  --enable-debug          Enable dmalloc debugging support],
+[ if test x"$enableval" = x"yes"; then
+    echo
+    AC_CHECK_LIB(dmalloc, dmalloc_debug, AC_MSG_RESULT(compiling with dmalloc debugging support)
+      CFLAGS="-O -g -DMEM_DEBUG" 
+      LIBS="$LIBS -ldmalloc", AC_MSG_WARN(dmalloc library not found, compiling without dmalloc debugging support))
+  else
+    AC_MSG_RESULT(no)
+  fi ],
+AC_MSG_RESULT(no)
+)
+
+dnl Add -Wall to our CFLAGS if we're using gcc
+if test x"$GCC" = x"yes"; then
+  CFLAGS="$CFLAGS -Wall"
+fi
+
+AC_MSG_CHECKING(whether to enable IPv6 support)
+AC_ARG_ENABLE(ipv6,
+[  --enable-ipv6           Enable IPv6 support (Linux only).],
+[ if test x"$enableval" = x"yes"; then
+    if test -d /usr/inet6/include; then
+      CFLAGS="$CFLAGS -I/usr/inet6/include"
+      LIBS="$LIBS -L/usr/inet6/lib -linet6"
+      AC_MSG_RESULT(yes (libinet6))
+    else
+      AC_MSG_RESULT(yes (libc))
+    fi
+    AC_DEFINE(IPV6)
+  else
+    AC_MSG_RESULT(no)
+  fi ],
+AC_MSG_RESULT(no)
+)
+
+if test x"$cross_compiling" != x"yes"; then
+before_PTHREAD="$LIBS"
+
+# Set flags if we wants to have MIT threads.
+AC_ARG_WITH(mit-threads,
+    [  --with-mit-threads      Always use included thread lib.],
+    [ with_mit_threads=$withval ],
+    [ with_mit_threads=no ]
+    )
+
+# Set flags if we want to force to use pthreads
+AC_ARG_WITH(pthread,
+    [  --with-pthread          Force use of pthread library.],
+    [ with_pthread=$withval ],
+    [ with_pthread=no ]
+    )
+
+# Force use of thread libs LIBS
+AC_ARG_WITH(named-thread-libs,
+    [  --with-named-thread-libs='-lib1 -lib2'    Use libs instead of automatically-found thread libs.],
+    [ with_named_thread=$withval ],
+    [ with_named_thread=no ]
+    )
+
+# Check if we threads are in libc or if we should use
+# -lpthread, -lpthreads or mit-pthreads
+# We have to check libc last because else it fails on Solaris 2.6
+
+with_posix_threads="no"
+# Hack for DEC-UNIX (OSF1)
+if test "$with_named_thread" = "no" -a "$with_mit_threads" = "no"
+then
+  # Look for LinuxThreads.
+  AC_MSG_CHECKING("LinuxThreads")
+    res=`grep Linuxthreads /usr/include/pthread.h 2>/dev/null | wc -l`
+    if test "$res" -gt 0
+    then
+      AC_MSG_RESULT("Found")
+      AC_DEFINE(HAVE_LINUXTHREADS)
+      # Linux 2.0 sanity check
+      AC_TRY_COMPILE([#include <sched.h>], [int a = sched_get_priority_min(1);], ,
+      AC_MSG_ERROR([Syntax error in sched.h. Change _P to __P in the /usr/include/sched.h file. See the Installation chapter in the Reference Manual]))
+      # RedHat 5.0 does not work with dynamic linking of this. -static also
+      # gives a speed increase in linux so it does not hurt on other systems.
+      with_named_thread="-lpthread"
+    else
+      AC_MSG_RESULT("Not found")
+      # If this is a linux machine we should barf
+      if test "$IS_LINUX" = "true"
+      then
+	AC_MSG_ERROR([This is a linux system and Linuxthreads was not
+found. On linux Linuxthreads should be used. So install Linuxthreads
+(or a new glibc) and try again. See the Installation chapter in the
+Reference Manual.])
+      else
+	AC_MSG_CHECKING("DEC threads")
+        if test -f /usr/shlib/libpthread.so -a -f /usr/lib/libmach.a -a -f /usr/ccs/lib/cmplrs/cc/libexc.a
+	then
+	  with_named_thread="-lpthread -lmach -lexc"
+	  #with_named_thread="-lpthread -lmach -lexc -lc"
+	  AC_DEFINE(HAVE_DEC_THREADS)
+	  AC_MSG_RESULT("yes")
+	else
+	  AC_MSG_RESULT("no")
+	  AC_MSG_CHECKING("DEC 3.2 threads")
+          if test -f /usr/shlib/libpthreads.so -a -f /usr/lib/libmach.a -a -f /usr/ccs/lib/cmplrs/cc/libexc.a
+	  then
+	    with_named_thread="-lpthreads -lmach -lc_r"
+	    AC_DEFINE(HAVE_DEC_THREADS)
+	    AC_DEFINE(HAVE_DEC_3_2_THREADS)
+            with_osf32_threads="yes"
+	    AC_MSG_RESULT("yes")
+	  else
+	    AC_MSG_RESULT("no")
+          fi
+	fi
+     fi
+   fi
+fi
+# Hack for SCO UNIX
+if test "$with_named_thread" = "no"
+then
+  AC_MSG_CHECKING("SCO threads")
+  if expr "$SYSTEM_TYPE" : ".*sco.*" > /dev/null
+  then
+    if test -f /usr/lib/libgthreads.a -o -f /usr/lib/libgthreads.so
+    then
+      LIBS="$LIBS_BEFORE_SOCKET $LIBS_AFTER_SOCKET"
+      with_named_thread="-lgthreads -lsocket -lgthreads"
+      # sched.h conflicts with fsu-threads
+      touch ./include/sched.h
+
+      # We must have gcc
+      if expr "$CC" : ".*gcc.*"
+      then
+	AC_MSG_RESULT("yes")
+      else
+	AC_MSG_ERROR([On SCO UNIX TekNap must be compiled with gcc. See the Installation chapter in the Reference Manual.]);
+      fi
+      AC_MSG_RESULT("yes")
+      # Hack for SCO UnixWare 7.1
+      #
+    elif test "$with_named_thread" = "no"
+    then
+      AC_MSG_CHECKING("SCO UnixWare 7.1 native threads")
+      if expr "$SYSTEM_TYPE" : ".*sco.*" > /dev/null
+      then
+        if test -f /usr/lib/libthread.so -o -f /usr/lib/libthreadT.so
+        then
+          LIBS="$LIBS_BEFORE_SOCKET $LIBS_AFTER_SOCKET"
+          with_named_thread="-Kthread -lsocket -lnsl"
+          if expr "$SYSTEM_TYPE" : ".*unixware7.0.0" > /dev/null
+          then
+            AC_DEFINE(HAVE_UNIXWARE7_THREADS)
+          else
+            AC_DEFINE(HAVE_UNIXWARE7_POSIX)
+          fi
+          # We must have cc
+          if expr "$CC" : ".*gcc.*"
+          then
+	    { echo "configure: error: On SCO UnixWare7 TekNap must be compiled with cc. See the Installation chapter in the Reference Manual." 1>&2; exit 1; };
+          else
+	    CC="$CC -Kthread -DUNIXWARE_7";
+	    CXX="$CXX -Kthread -DUNIXWARE_7";
+          fi
+          AC_MSG_RESULT("yes")
+        else
+          { echo "configure: error: Can't find thread libs on SCO UnixWare7. See the Installation chapter in the Reference Manual." 1>&2; exit 1; };
+        fi
+      else
+        AC_MSG_RESULT("no")
+      fi
+    else
+      AC_MSG_ERROR([On SCO UNIX TekNap requires that the FSUThreads package is installed. See the Installation chapter in the Reference Manual.]);
+    fi
+  else
+    AC_MSG_RESULT("no")
+  fi
+fi
+# Hack for SCO UnixWare7
+#
+if test "$with_named_thread" = "no"
+then
+  AC_MSG_CHECKING("SCO UnixWare7 native threads")
+  if expr "$SYSTEM_TYPE" : ".*unixware7*" > /dev/null
+  then
+    if test -f /usr/lib/libthread.so -o -f /usr/lib/libthreadT.so
+    then
+      LIBS="$LIBS_BEFORE_SOCKET $LIBS_AFTER_SOCKET"
+      with_named_thread="-Kthread -lsocket -lnsl"
+      if expr "$SYSTEM_TYPE" : ".*unixware7.0.0" > /dev/null
+      then
+        AC_DEFINE(HAVE_UNIXWARE7_THREADS)
+      else
+        AC_DEFINE(HAVE_UNIXWARE7_POSIX)
+      fi
+      # We must have cc
+      if expr "$CC" : ".*gcc.*"
+      then
+	{ echo "configure: error: On SCO UnixWare7 TekNap must be compiled with cc. See the Installation chapter in the Reference Manual." 1>&2; exit 1; };
+      else
+	CC="$CC -Kthread -DUNIXWARE_7";
+	CXX="$CXX -Kthread -DUNIXWARE_7";
+      fi
+      AC_MSG_RESULT("yes")
+    else
+      { echo "configure: error: Can't find thread libs on SCO UnixWare7. See the Installation chapter in the Reference Manual." 1>&2; exit 1; };
+    fi
+  else
+    AC_MSG_RESULT("no")
+  fi
+fi
+
+# Hack for Siemens UNIX
+if test "$with_named_thread" = "no" -a "$with_mit_threads" = "no"
+then
+  AC_MSG_CHECKING("Siemens threads")
+  if test -f /usr/lib/libxnet.so -a "$SYSTEM_TYPE" = "sni-sysv4"
+  then
+    LIBS="$LIBS_BEFORE_SOCKET -lxnet $LIBS_AFTER_SOCKET"
+    with_named_thread="-Kthread $LDFLAGS -lxnet"
+    LD_FLAGS=""
+    CFLAGS="-Kthread $CFLAGS"
+    CXXFLAGS="-Kthread $CXXFLAGS"
+    AC_DEFINE(WANT_THREAD)
+    AC_MSG_RESULT("yes")
+  else
+    AC_MSG_RESULT("no")
+  fi
+fi
+
+# Use library named -lpthread
+if test "$with_named_thread" = "no" -a "$with_pthread" = "yes"
+then
+    with_named_thread="-lpthread"
+fi
+
+# Hack for Solaris >= 2.5
+# We want both the new and the old interface
+ 
+if test "$with_named_thread" = "no" -a "$with_mit_threads" = "no"
+then
+  AC_MSG_CHECKING("Solaris threads")
+  if test -f /usr/lib/libpthread.so -a -f /usr/lib/libthread.so
+  then
+    with_named_thread="-lpthread -lthread"
+    AC_MSG_RESULT("yes")
+    AC_DEFINE(WANT_THREAD)
+  else
+    AC_MSG_RESULT("no")
+  fi
+fi
+
+# Should we use named pthread library ?
+AC_MSG_CHECKING("named thread libs:")
+if test "$with_named_thread" != "no"
+then
+  LIBS="$LIBS $with_named_thread"
+  with_posix_threads="yes"
+  with_mit_threads="no"
+  AC_MSG_RESULT("$with_named_thread")
+else
+  AC_MSG_RESULT("no")
+  if test "$with_mit_threads" = "no"
+  then
+    # pthread_create is in standard libraries (As in BSDI 3.0)
+    AC_MSG_CHECKING("for pthread_create in -libc");
+    AC_TRY_LINK(
+    [#include <pthread.h>],
+    [ (void) pthread_create((pthread_t*) 0,(pthread_attr_t*) 0, 0, 0); ],
+    with_posix_threads=yes, with_posix_threads=no)
+    AC_MSG_RESULT("$with_posix_threads")
+    if test "$with_posix_threads" = "no"
+    then
+      AC_MSG_CHECKING("for pthread_create in c_r");
+      ac_save_LIBS="$LIBS"
+      LIBS="$LIBS -lc_r"
+      AC_TRY_LINK(
+      [#include <pthread.h>],
+      [ (void) pthread_create((pthread_t*) 0,(pthread_attr_t*) 0, 0, 0); ],
+      with_posix_threads=yes, with_posix_threads=no)
+      AC_MSG_RESULT("$with_posix_threads")
+      if test "$with_posix_threads" = "no"
+      then
+        AC_MSG_CHECKING("for pthread_create in -lpthread");
+        LIBS=" $ac_save_LIBS -lpthreads"
+        AC_TRY_LINK(
+        [#include <pthread.h>],
+        [ (void) pthread_create((pthread_t*) 0,(pthread_attr_t*) 0, 0, 0); ],
+        with_posix_threads=yes, with_posix_threads=no)
+        AC_MSG_RESULT("$with_posix_threads")
+        if test "$with_posix_threads" = "no"
+        then
+          LIBS=" $ac_save_LIBS -lpthreads"
+          AC_MSG_CHECKING("for pthread_create in -lpthreads");
+          AC_TRY_LINK(
+          [#include <pthread.h>],
+          [ pthread_create((pthread_t*) 0,(pthread_attr_t*) 0, 0, 0); ],
+          with_posix_threads=yes, with_posix_threads=no)
+          AC_MSG_RESULT("$with_posix_threads")
+          if test "$with_posix_threads" = "no"
+          then
+  	    # This is for FreeBSD
+  	    LIBS="$ac_save_LIBS -pthread"
+  	    AC_MSG_CHECKING("for pthread_create in -pthread");
+ 	    AC_TRY_LINK(
+	    [#include <pthread.h>],
+	    [ pthread_create((pthread_t*) 0,(pthread_attr_t*) 0, 0, 0); ],
+	    with_posix_threads=yes, with_posix_threads=no)
+            AC_MSG_RESULT("$with_posix_threads")
+            if test "$with_posix_threads" = "no"
+  	    then
+	      with_mit_threads="yes"
+	      LIBS="$ac_save_LIBS"
+	    fi
+	  fi 
+        fi
+      fi
+    fi
+  fi
+fi
+fi
+
+AC_MSG_CHECKING("Use threads")
+AC_ARG_ENABLE(threads,
+[  --disable-threads       Disable thread support.],
+[ if test x"$enableval" = x"no"; then
+    LIBS="$before_PTHREAD"
+    AC_MSG_RESULT(no)
+  fi ],
+AC_MSG_RESULT(yes)
+  if test x"$with_mit_threads" = x"yes"
+  then
+  	AC_DEFINE(WANT_THREAD)
+  fi
+  if test x"$with_posix_threads" = x"yes"
+  then
+	AC_DEFINE(WANT_THREAD)
+  fi
+)
+
+AC_CHECK_FUNC(pthread_testcancel, AC_DEFINE(HAVE_PTHREAD_TESTCANCEL),)
+AC_CHECK_FUNC(pthread_cancel, AC_DEFINE(HAVE_PTHREAD_CANCEL),)
+
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for GTK support
+dnl
+
+AC_MSG_CHECKING(whether to enable GTK support)
+AC_ARG_WITH(gtk,
+[  --with-gtk              Enable GTK support],
+[ if test x"$withval" = x"yes"; then
+    AC_MSG_RESULT(yes)
+
+    AM_PATH_GLIB(1.2.0,,AC_MSG_ERROR(AC_MSG_ERROR(Cannot find GLIB: Is glib-config in path?)))
+    AM_PATH_GTK(1.2.0,,AC_MSG_ERROR(AC_MSG_ERROR(Cannot find GTK: Is gtk-config in path?)), gthread)
+
+    AC_CHECK_HEADER(pthread.h,,AC_MSG_ERROR([pthread header not found. gtkBitchX cannot build without it.]))
+    AC_CHECK_LIB(pthread, pthread_attr_init, PTHREAD_LIBS="-lpthread",
+      AC_CHECK_LIB(pthreads, pthread_attr_init, PTHREAD_LIBS="-lpthreads",
+        AC_CHECK_LIB(c_r, pthread_attr_init, PTHREAD_LIBS="-lc_r",
+          AC_MSG_ERROR(pthread library not found. gtkBitchX cannot build without it.
+          )
+        )
+      )
+    )
+     
+    dnl seems that gtk puts the includes in CFLAGS
+    G_CFLAGS="$GLIB_CFLAGS $GTK_CFLAGS"
+dnl    G_CFLAGS=`echo $G_CFLAGS | tr ' ' '\n' | sort -n | uniq | tr '\n' ' '`
+    INCLUDES="$INCLUDES $G_CFLAGS"
+    G_LIBS="$GLIB_LIBS $GTK_LIBS $PTHREAD_LIBS "
+    LIBS="$G_LIBS $LIBS"
+dnl    VERSION="gtk$VERSION"
+dnl    _VERSION_="gtk$_VERSION_"
+    AC_DEFINE(GTK)
+    X_O="X.o"
+    AC_SUBST(X_O)
+    gtk=1
+  fi ],
+AC_MSG_RESULT(no)
+)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for GTK support
+dnl
+
+AC_MSG_CHECKING(whether to enable PM support)
+AC_ARG_WITH(pm,
+[  --with-pm               Enable PM support],
+[ if test x"$withval" = x"yes"; then
+    AC_MSG_RESULT(yes)
+    LIBS="-ldw os2/teknapo.res $LIBS"
+    pm=1
+  fi ],
+AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to enable WIN32 support)
+AC_ARG_WITH(win32,
+[  --with-win32            Enable WIN32 GUI support],
+[ if test x"$withval" = x"yes"; then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(WIN32_GUI)
+    AC_DEFINE(GUI)
+    LIBS="-ldw -mwindows -lcomctl32 win/teknapw.res $LIBS"
+  fi ],
+AC_MSG_RESULT(no)
+)
+
+if test x"$gtk" = x"1" -o x"$pm" = x"1"; then
+  AC_DEFINE(GUI)
+fi    
+
+
+
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for CD-ROM support (linux only?)
+dnl
+
+AC_MSG_CHECKING(whether to enable CD-ROM support)
+AC_ARG_ENABLE(cdrom,
+[  --enable-cdrom          Enable CD-ROM support (Linux only)],
+[ if test x"$enableval" = x"yes"; then
+    case $uname in
+      Linux*)
+        AC_MSG_RESULT(yes)
+        CD_SRCS="cdrom.c"
+        CD_OBJS="cdrom.o"
+        AC_SUBST(CD_SRCS)
+        AC_SUBST(CD_OBJS)
+        AC_DEFINE(WANT_CD)
+        ;;
+      *)
+        AC_MSG_RESULT(no (cdrom support can currently be enabled on Linux only))
+        ;;
+    esac   
+  else
+    AC_MSG_RESULT(no)
+  fi ],
+  AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to enable libwrap support)
+AC_ARG_ENABLE(wrap,
+[  --enable-wrap           Enable libwrap support],
+[ if test x"$enableval" = x"yes"; then
+    AC_MSG_RESULT(yes)
+    AC_CHECK_LIB(wrap, request_init, LIBS="$LIBS -lwrap",AC_MSG_RESULT(no))
+  fi ],
+  AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to enable XMMS support)
+AC_ARG_ENABLE(xmms,
+[  --enable-xmms           Enable XMMS support],
+[ if test x"$enableval" = x"yes"; then
+    AC_DEFINE(WANT_XMMS)
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi ],
+  AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to enable MP3 play support)
+AC_ARG_ENABLE(mp3,
+[  --enable-mp3            Enable mp3 player support (mpg123 latest required)],
+[ if test x"$enableval" = x"yes"; then
+      AC_MSG_RESULT(yes)
+      AC_PATH_PROG(MP3_PLAY, mpg123)
+      if test x"MP3_PLAY" != x; then
+         MP3_SRCS="mp3control.c"
+         MP3_OBJS="mp3control.o"
+         AC_SUBST(MP3_SRCS)
+         AC_SUBST(MP3_OBJS)
+         AC_DEFINE(WANT_MP3PLAYER)
+      else
+         AC_MSG_RESULT(No mpg123 binary found)
+      fi
+  else
+    AC_MSG_RESULT(no)
+  fi ],
+  AC_MSG_RESULT(no)
+)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Check for default server
+dnl
+
+AC_MSG_CHECKING(for default server list)
+AC_ARG_WITH(default-server,
+[  --with-default-server=SERVERNAME[:PORT:NICK:PASSWORD:meta] Connect
+                          to SERVERNAME by default. Additional servers can be 
+                          separated by a comma],
+[ if test x"$withval" != x"yes"; then
+    addl_servers=`echo "$withval" | sed -e 's/,/ /g'`
+    AC_MSG_RESULT($addl_servers)
+    AC_DEFINE_UNQUOTED(DEFAULT_SERVER, "$addl_servers")
+  else
+    AC_MSG_RESULT(none)
+  fi ],
+AC_MSG_RESULT(none)
+)
+
+AC_SUBST(VERSION)
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
+AC_SUBST(_VERSION_)
+AC_DEFINE_UNQUOTED(_VERSION_, "$_VERSION_")
+AC_SUBST(MP3_PLAY)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Don't forget these
+dnl
+
+topdir=`pwd`
+AC_SUBST(topdir)
+
+#LIBS=`echo $LIBS | tr ' ' '\n' | sort -n | uniq | tr '\n' ' ' | sed -e 's/-rdynamic//g'`
+
+RM="rm -f"
+LN="ln -s"
+CP="cp"
+MV="mv"
+
+INSTALL_NAP=\${bindir}/\$\(_VERSION_\)
+NAPLIB=\${datadir}/TekNap
+IRCPATH=\~/.TekNap:\~/.TekNap/plugins:.:$PLUGINDIR:\$\(NAPLIB\)
+HELPDIR=\$\(NAPLIB\)/help
+
+AC_SUBST(SHELL)
+AC_SUBST(INCLUDES)
+AC_SUBST(INSTALL_NAP)
+AC_SUBST(HELPDIR)
+AC_SUBST(NAPLIB)
+AC_SUBST(LIBS)
+
+AC_SUBST(RM)
+AC_SUBST(LN)
+AC_SUBST(CP)
+AC_SUBST(MV)
+
+AC_OUTPUT(
+Makefile
+source/Makefile
+stamp-h
+)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Almost done. Hopefully people read this.
+dnl
+
+echo $_VERSION_ \(C\) 1999-2003 Colten Edwards
+echo ---------------------------------------------------------- 
+echo
+echo The configuration script has finished. You should look through and make any
+echo necessary changes to the file \"$srcdir/include/config.h\". 
+echo

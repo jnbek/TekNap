@@ -1,0 +1,22 @@
+Synopsis:
+   $lastlog(<window description> <pattern> [lastlog levels])
+
+Technical:
+   This function will return all lines from a specified window, matching
+   pattern. Optionally a specific log level may be specified. Lines
+   are numbered from 1 which is the most current line to lastlog buffer
+   size.
+
+Returns:
+   If invalid line number nothing.
+   otherwise the specified line(s).
+
+Examples:
+   $lastlog(1 *)                       returns all lines from window 1
+   $lastlog(2 *luna*)                  returns window 2 lines matching luna
+   $lastlog(10 *kill* server)          returns window 2 lines with level
+                                         server matching kill
+
+See Also:
+   line(6)
+

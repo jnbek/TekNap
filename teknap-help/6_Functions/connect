@@ -1,0 +1,12 @@
+Synopsis:
+   $connect(<host> <port>)
+
+Description:
+   Attempts to connect to a host at port. This is a blocking function.
+   Returns -1 or a valid # 
+
+Examples:
+   $connect(bitchx.com 8888)
+
+See Also:
+   set connect_timeout

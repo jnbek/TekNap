@@ -1,0 +1,12 @@
+Synopsis:
+   cbanlist <channel>
+
+Description:
+   Displays the banlist of the specified channel.
+
+Examples:
+   /cbanlist Alternative
+
+See Also:
+    cbanlist, cunban, cbanclear, cunban
+

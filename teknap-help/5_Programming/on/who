@@ -1,0 +1,31 @@
+Synopsis:
+   on [#][<mode>]who [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered when the client receives server output from the
+   WHO command.
+
+Parameters:
+   $0    is the nickname
+   $1    napster user level in quotes
+   $2    time connected to server
+   $3    napster channels in quotes
+   $4    status "active", "muzzled", "cloaked"
+   $5    number of shared files
+   $6    current number of downloads
+   $7    current number of uploads
+   $8    client's reported line speed
+   $9    client version in quotes
+
+   The following only appear when the user is an moderator+
+   $10   number of downloads
+   $11   number of uploads
+   $12   ip address
+   $13   local port number
+   $14   dataport number
+   $15   email address
+   $16   servername
+
+See Also:
+   who(2)
+

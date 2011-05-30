@@ -1,0 +1,27 @@
+Synopsis:
+   on [<modes>]glist [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives output from
+   the glist command.
+
+Parameters:
+   $0    count
+   $1    variable. W for waiting, U for upload, D for download, C for chat
+                   Q for queued, and bold C for command chat
+   $2    nickname
+   $3    received bytes if dcc chat or the filesize
+   $4    filesize
+   $5    recieved + resume bytes
+   $6    starttime or the time in seconds if active for a chat
+         the eta of the file being sent/received
+   $7    N/A or "cmd" for a dcc chat
+         K per second
+   $8    percentage of file received
+         for dcc chat, N/A or [E] for encrypted
+   $9    filename of the received/sent file
+         password if applicable for a dcc chat or nothing at all.
+
+Examples:
+
+See Also:

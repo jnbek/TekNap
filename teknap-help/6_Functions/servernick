@@ -1,0 +1,7 @@
+Synopsis:
+   $servernick(<server number>)
+
+
+Returns:
+    The nick associated with a particular server number.
+

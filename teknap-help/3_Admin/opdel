@@ -1,0 +1,12 @@
+Synopsis:
+   opdel <channel> <nick>
+
+Description:
+   Drop the operator priveledge that a user has on a channel.
+
+Examples:
+   /deop luna Alternative
+
+See Also:
+   op, opsay, opdel, deop
+

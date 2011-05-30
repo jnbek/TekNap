@@ -1,0 +1,11 @@
+Synopsis:
+   on [<modes>]sigusr1 [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives a SIGUSR1 signal.
+
+Parameters:
+   $0-   Sig user1 signal
+
+See Also:
+

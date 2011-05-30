@@ -1,0 +1,11 @@
+Synopsis:
+   admin stats
+Description:
+   Shows some server stats on the number of users, files, gigabytes,
+   server's connected, channels, registered users, and the server uptime.
+
+Examples:
+   /admin stats
+
+See Also:
+

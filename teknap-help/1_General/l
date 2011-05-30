@@ -1,0 +1,17 @@
+Synopsis:
+   l [<channel>]
+
+Description:
+   L makes you leave a channel.  That's it.  If you happen to be on
+   multiple channels, you may leave more than one at the same time. 
+   
+Examples:
+   To leave channel foobar:
+      /l foobar 
+
+   To leave your current channel:
+      /l
+
+See Also:
+   join(1); leave; set(4)
+

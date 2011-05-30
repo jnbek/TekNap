@@ -1,0 +1,13 @@
+Synopsis:
+   muzzle <nick|nick1,nick2,nick3> [reason]
+
+Description:
+   Muzzle the user with optional reason so they understand why they can no
+   longer speak in any channels. A muzzled user can not join any new
+   channels, but can private msg other users.
+
+Examples:
+   /muzzle luna tired of you
+   
+See Also:
+

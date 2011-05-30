@@ -1,0 +1,49 @@
+Below are some "Trouble" OS's, and how to compile TekNap under them.
+
+
+---Compiling under Solaris Sparc 2.6/2.7/2.8---
+
+Troubles galore with native compiler. Luckily with Solaris Sparc
+there is a software site with all the gnu utils precompiled.
+Go to http://www.sunfreeware.com/ and get gcc. Just pkgadd -d
+the gcc package.
+Once you have that install, run the TekNap's ./configure script.
+When its done, go modify the TekNap/Makefile and add
+-DSOLARIS to the CFLAGS line.
+Compiling will give lots of warnings, but it will compile fine.
+For some reason with curses on Solaris Sparc, the normal TERM
+entries like "ansi" and "vt100" do NOT display colors. You MUST
+use TERM=dtterm; export TERM to get /scott to display colors.
+
+
+---Compiling under HPUX 10.20 and 11---
+
+Troubles galore with native compiler, and native "make".  You really
+just *have* to bite the bullet and install gcc and gmake.
+Once you get a working a working gcc and gmake, run ./configure
+in the TekNap directory. Now, my HPUX box does NOT have threads
+installed, but for some reason, include/defs.h has WANT_THREAD
+defined. You MUST go #undef WANT_THREAD. At this point, you should
+get a clean compile, and the binary will run.
+For some reason, curses does NOT detect that our terminfo supports
+color. So you will not get color, I recommend TERM=dtterm for use
+on HPUX.
+
+
+---Compiling under Sco Unix Openserver 5.x---
+
+Troubles galore with native compiler, and native "make".
+Luckily Sco has all the "gnu" utils precompiled in a package they
+call "Skunkware".
+Go to http://www.sco.com/skunkware/ To get gcc and make.
+Once you have them installed, the rest should go flawless for you.
+TERM=scoansi and TERM=vt100 both give us the colors we want in /scott
+
+
+---Rhapsody 5.5---
+
+for some reason, threads are detected in the libc. however there doesn't
+appear to be threads in the c library. so in "config.h", turn off #define
+THREADS, also turn off #define SCOTT, as the ncurses.h on this OS wants to
+include curses.h. This leads to bad things.
+

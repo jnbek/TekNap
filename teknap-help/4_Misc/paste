@@ -1,0 +1,19 @@
+Synopsis:
+   paste <number> [-win #] [-topic] [channel]
+
+Description:
+   Pastes from the display buffer the specified line number(s). Optionally
+   a window refnum can be specified. The number can be a "range" of numbers.
+   Output can be sent to the topic of the current channel or the specified
+   channel. Line numbers are numbered from 1, which is the current line, to
+   the size of the lastlog buffer.
+
+Examples:
+   To paste the first line:
+      /paste 1
+   
+   To paste first line into the topic:
+      /paste 1 -topic
+
+See Also:
+   lastlog(6); line(6)

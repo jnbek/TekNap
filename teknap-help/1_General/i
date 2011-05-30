@@ -1,0 +1,13 @@
+Synopsis:
+   i [channel] <nick>|<nick1,nick2,nick3>
+
+Description:
+   Will invite a user to the current channel or the specified channel.
+
+Examples:
+   /i luna
+   /i Admins luna,void^
+
+See Also:
+   invite
+

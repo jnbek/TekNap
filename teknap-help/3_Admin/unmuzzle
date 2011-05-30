@@ -1,0 +1,11 @@
+Synopsis:
+   unmuzzle <nick>|<nick1,nick2,nick3> [reason]
+
+Description:
+   Unmuzzle the nick(s) using the reason specified.
+
+Examples:
+   /unmuzzle luna be nice!
+
+See Also:
+   muzzle, cmuzzle, cunmuzzle

@@ -1,0 +1,24 @@
+Synopsis:
+   on [<modes>]naperror [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   Whenever an error on a file send is gotten, this hook is triggered.
+
+Parameters:
+   $0    nickname
+   $1-   "Accept error"
+
+   $0    nick
+   $1    filename in quotes
+   $2-   "Already Queued"
+
+   $0    nickname
+   $1    received bytes
+   $2    filesize
+   $3    filename in quotes
+
+   
+Examples:
+
+See Also:
+

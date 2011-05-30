@@ -1,0 +1,9 @@
+Synopsis:
+   window show_all
+
+Description:
+   This makes ALL hidden windows visible again.  If the specified
+   window is already visible, the command has no effect.
+
+See Also:
+   window(4) hide, hide_others, show

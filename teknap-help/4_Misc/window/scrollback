@@ -1,0 +1,13 @@
+Synopsis:
+   window [refnum] scrollback number
+
+Description:
+   This controls the scrollback lines mode of the current window. 
+
+   The scroll lines of new windows defaults to the current setting of
+   SCROLLBACK.
+
+See Also:
+   set(4) scrollback, scrollback_ratio, scroll_lines
+
+

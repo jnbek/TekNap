@@ -1,0 +1,56 @@
+TekNap-1.4u (Unoffical)
+
+PLEASE NOTE:
+This code has not been updated since ~2003 and is not actively maintained. This is here for historical purposes and will not compile on GCC versions newer than 2.95 without patching. Any Pull Requests will be reviewed and added as appropriate, however I have no current plans to revamp active development of this software.
+Also, teknap.com has been dead for a number of years as well. Happy hacking!! - jnbek.
+
+
+Running autogen.sh with the later 2.5x autoconf will break the configure script.
+The Makefile was fixed so that TekNap-1.4 can be compiled on these systems.
+Please note that running autogen.sh will still break the configure script.
+Basically there is no way around this unless its made compatible. - Spike
+
+More information available at www.teknap.com
+
+Environment Variables.
+
+Each of these can be exported before running BXnap.
+	NAPNICK your default nick
+	NAPPASS your default pass
+	NAPSERVER a server list
+	NAPPORT the metaserver port to use.
+
+the serverlist is in the following format.
+
+	servername:port:nick:password:usemeta
+
+	opennap.fortyoz.org::blah:hrm:1
+
+	opennap.fortyoz.org:8888:blah:hrm
+
+Upon startup a ~/.teknaprc is search for and loaded. Within that file you can
+have various commands.. Under windows this file would be called teknap.rc
+and more than likely be in your c:\TekNap directory.
+	ex.
+	server +add server.name:port:nick:password:meta
+
+
+TekNap [flags] [server] [nickname]
+
+	-N		do not autoconnect to a server
+	-r filename	load filename list of server.
+	-a		add servers, to not overwrite.
+	-n		nickname to use
+	-p		password to use [not advisable to use this]
+	-C		create user account.
+
+
+I'd like to thank all those that have contributed time and code to the TekNap
+project. Some of this code is taken from BitchX/epic irc clients.
+
+~~~~~~~~~~~~~ Various Commands ~~~~~~~~~~~~~~~~
+
+SERVER [-add arg] [-create] [server:port:nick:password:meta]
+	display server list.
+	-add will add a server to the list without connecting.
+	-create to create account on server.

@@ -1,0 +1,153 @@
+## iced, copyright 2000
+## Patrick J. Edwards (buddhax)
+##
+##
+
+load ~/iced.hlp
+
+## GLOBAL VARS
+@iced_str = [%y[%Piced%y]]
+@iced_version = [0.1]
+@iced_reason_count = 2
+@iced_reason_selected = 0
+@iced_kick_reasons.0 = [BitchX Baby!]
+@iced_kick_reasons.1 = [Blha]
+@tmp_nicks = []
+@tmp_x = 0
+
+## ON's
+on ^msg "*" { xecho $cparse($ICED_STR %B[%c$0%B] %C$1-) }
+on ^join "*" { xecho $cparse($ICED_STR %R$0 %Chas joined %R$1 %Cchannel... ) }
+on ^leave "*" { xecho $cparse($ICED_STR %r$0 %chas left %r$1 %cchannel...) }
+on ^idle "*" { xecho $cparse($ICED_STR %Cidle 1 minute...) }
+on ^618 "*" { xecho $cparse($ICED_STR %g[%C$[3]1%g] %C$[15]0 %g$[45]2-) }
+on ^621 "*" { xecho $cparse($ICED_STR %c$*) }
+on ^825 "*" { 
+  @::tmp_nicks[$tmp_x] = [%c[%C$[15]1 %r$[5]2/$[5]3%c]] 
+  @::tmp_x++
+}
+on ^830 "*" { list_names }
+
+alias list { raw 617 }
+alias names (c) {
+  @::tmp_x = 0
+  if (c) {
+    raw 830 $c
+  }{
+    eval raw 830 $C
+  }
+}
+
+alias list_names {
+  xecho $cparse($ICED_STR %C+--------------------------------------------------------------------+)
+  for (@ x=0, x<tmp_x, @ x=x+2) {
+    @y=x+1
+  xecho $cparse($ICED_STR %C+$tmp_nicks[$x]          $tmp_nicks[$y]%C+)
+  }
+  xecho $cparse($ICED_STR %C+-----[$[15]C/$[4]tmp_x]-----------------------------------------+)
+
+}
+
+alias muzzle (nicks, reason) {
+  if (nicks) {
+    fe ($tr(/,/ /$nicks)) xx {
+      if (reason) {
+        raw 622 $xx "$reason"
+      } {
+        raw 622 $xx "$select_reason()"
+      } 
+    }
+  }{
+    xecho -b Usage: /muzzle nick0,nick1,...,nickN [reason] 
+  }
+}
+
+alias unmuzzle (nicks) {
+  if (nicks) {
+    fe ($tr/,/ /$nicks)) xx {
+      raw 623 $xx
+    }
+  }{
+    xecho -b Usage: /unmuzzle nick0,nick1,...,nickN
+  }
+}
+
+alias find_help (z) {
+  for (@ x=0, x<iha_count, @ x++) {
+    @a = $topupper($z)
+    @b = $toupper($iha[x][0])
+
+      xecho -b $cparse(%GLooking for %C$z%G....)
+      xecho -b $cparse(%R       NAME $iha[$x][0])
+      xecho -b $cparse(%R   SYNOPSIS $iha[$x][1])
+      xecho -b $cparse(%RDESCRIPTION %C$iha[$x][2])
+  }
+}
+
+alias load_reasons {
+  @f = open(/home/pje/iced.db R)
+  while (!eof($f)) {
+    @ ::iced_kick_reasons[$iced_reason_count] = read($f)
+    @iced_reason_count++
+  }
+  echo $cparse($ICED_STR %Cfound $iced_reason_count reasons...)
+}
+
+alias select_number {
+  @::iced_reason_selected++
+  if (iced_reason_selected > iced_reason_count) {
+    @::iced_reason_selected = 0
+  }
+  return $iced_reason_selected
+}
+
+alias select_reason {
+  return $iced_kick_reasons[$select_number()]
+}
+
+alias test_reason (void) {
+  @r = select_reason()
+  xecho -b $r
+}
+
+alias lk (nicks, reason) {
+  fe ($tr(/,/ /$nicks)) xx {
+    admin setuserlevel $xx leech
+    kick $xx $reason
+  }
+}
+
+alias caps (nicks, reason) {
+  fe ($tr(/,/ /$nicks)) xx {
+    if (reason) {
+      kick $xx $reason
+    }{
+      @reason = [You see that key on the left of your keyboard saying CAPSLOCK? Use it!]
+      kick $xx $reason
+    }
+  }
+}
+
+alias m (nick,msg) {
+  raw 205 $nick $msg
+  xecho $cparse($ICED_STR %B[%c$nick%B] %C$msg)
+}
+alias msg m 
+
+alias topic (t) {
+  if (t) {
+    eval raw 410 $C $t
+  }{
+    raw 410 $C
+  }
+}
+alias t topic
+
+alias motd { 
+  xecho $cparse($ICED_STR %CMOTD for $S is as follows...)
+  timer 2 { xecho $cparse($ICED_STR %Cend pf MOTD.) }
+  raw 621
+}
+
+eval echo $cparse($ICED_STR %Cversion %P$iced_version%C is now loading...)
+load_reasons

@@ -1,0 +1,11 @@
+Synopsis:
+   wallop
+
+Description:
+   Send a msg to all moderator or better on the server(s).
+
+Examples:
+   /wallop hey, happy victoria day.
+
+See Also:
+

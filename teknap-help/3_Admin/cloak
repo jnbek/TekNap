@@ -1,0 +1,9 @@
+Synopsis:
+   cloak
+
+Description:
+   This is for moderators to "hide" themselves. It's a toggle which means
+   that it turns on/off.
+
+Examples:
+   /cloak   cloaking is off, and now is turned on

@@ -1,0 +1,11 @@
+Synopsis:
+   admin removeserver <server.name> [reason]
+
+Description:
+   Removes the server from the list of servers that are allowed to connect
+
+Examples:
+   /admin removeserver bitchx.dimension6.com hacked!
+
+See Also:
+   killserver

@@ -1,0 +1,6 @@
+Synopsis:
+   names 
+
+Description:
+   NAMES returns a list of users on the specified channel.  
+

@@ -1,0 +1,17 @@
+Synopsis:
+   sc [#channel] [pattern] [-sort songs|speed]
+
+Description:
+   SC returns a list of users on the specified channel.  The current 
+   channel is used if no channel is specified. This scan is taken from the 
+   internal lists kept for each channel, which means there is no lag.
+
+Examples:
+   To show all users on the current channel:
+      /sc
+
+   To show all users on a channel with pattern:
+      /sc *luna*
+
+   To show all users on a channel sorted by songs:
+      /sc -sort songs #alternative

@@ -1,0 +1,21 @@
+Synopsis:
+   debug [alias|hook  <name>]
+
+Description:
+   This command will turn on debugging for a named hook or alias. It
+   provides a method to make sure your script provide debugging information
+   in a special debug window. In order for the debug window to be created
+   you must /set debug first.
+
+   This command with no arguments provides a list of active file descriptors
+   that have waiting input/output.
+
+Usage:
+   Turn Debugging on:
+      /set debug all
+      /debug alias public_feer
+      /debug hook flood
+
+See Also:
+   set(4) debug
+

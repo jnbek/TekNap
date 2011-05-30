@@ -1,0 +1,91 @@
+# Thanks to fudd for parts of this.
+
+assign YOUR_NICK your_nick
+assign YOUR_PASS your_pass
+
+eval server +add bitchx.dimension6.com:8888:$YOUR_NICK:$YOUR_PASS:0
+server -del opennap.fortyoz.org
+server -del server.napster.com
+eval server +add server.napster.com:8875:$YOUR_NICK:$YOUR_PASS:1
+eval server +add wintermute.sparhawk.bc.ca:8888:$YOUR_NICK:$YOUR_PASS:0
+eval server +add opennap.cx:8888:$YOUR_NICK:$YOUR_PASS:0
+set connect_timeout 15
+
+window new bind Alternative channel Alternative hide
+
+join admins
+
+alias lusers { /admin stats }
+on connect * msg operserv usermode -port -change
+
+assign AUTO_MUZZLE_ON_FLOOD 0
+assign AUTO_MUZZLE_TIME 60
+
+
+alias _unmuzzle (nick, void)
+{
+	unmuzzle $nick
+	@ delitem(pubflood $finditem(pubflood $nick))
+}
+
+
+alias _check_flooder
+{
+	if (finditem(pubflood $0) < [0])
+	{
+		@ setitem(pubflood $numitems(pubflood) $0)
+		whois -cmd {
+			@ :_user = tr(/"//$1)
+			if ((_user == [User])||(_user == [Leech]))
+			{
+				muzzle $0 Auto-Muzzle for $auto_muzzle_time seconds: flood
+				/timer $auto_muzzle_time _unmuzzle $0
+			}
+		} $0
+	}
+}
+
+on ^flood "% PUBLIC *" if (AUTO_MUZZLE_ON_FLOOD)
+{
+	switch ($2)
+	{
+		(Admins)
+		{
+			;
+		}
+		(opennap)
+		{
+			;
+		}
+		(*)
+		{	
+			_check_flooder $0
+		}
+	}
+}
+
+alias c (level, void)
+{
+	switch ($level)
+	{
+		(0) {admin setchanlevel $C leech}
+		(1) {admin setchanlevel $C user}
+		(2) {admin setchanlevel $C moderator}
+		(3) {admin setchanlevel $C admin}
+		(4) {admin setchanlevel $C elite}
+		(*) {
+			xecho -b Usage: /c <#> - leech(0)/user(1)/moderator(2)/admin(3)/elite(4)
+			xecho -b    - Sets channel level to <#>
+		}
+	}
+}
+
+alias links (void)
+{
+	admin links
+}
+
+alias pingme (void)
+{
+	ping $N
+}

@@ -1,0 +1,27 @@
+Synopsis:
+   gusers <*|servername> [-elite|-admin|-moderator|-leech|-cloak|-muzzled|
+                           -ip  #|-channel #channel|-cmd { }]
+Description:
+   Shows all users with the specified level on either ALL servers or on the
+   specified server. WARNING this can be a large list! If -ip is used, it
+   can be a specific ip or a range of ips. Using /24, /16, /8 for masking or
+   255.255.0.0 is the only accepted method. Wildcards are not valid. Flags
+   can be used together. For -cloak and -channel at least 2 characters of
+   the command must be specified. A specific command maybe performed on the
+   returned nicks, ALOT of care must be given or you could conceivably kill
+   all your clients on the server.
+
+Examples:
+   /gusers * -admin
+
+   To display all users on the server group with AOL address:
+   /gusers * -ip 172/8  [equivalent to 172/255.0.0.0]
+
+   To display all users using AOL on channel #alternative:
+   /gusers * -ip 172/8 -channel #alternative
+
+   To mass kill by ip range:
+   /gusers * -ip 172/8 -cmd { kill $0 }
+
+See Also:
+

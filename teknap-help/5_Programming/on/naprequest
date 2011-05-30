@@ -1,0 +1,14 @@
+Synopsis:
+   on [<modes>]naprequest [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a request for a file is received from the 
+   server.
+
+Parameters:
+   $0    nickname
+   $1    filename in quotes
+
+Examples:
+
+See Also:

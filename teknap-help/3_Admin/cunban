@@ -1,0 +1,12 @@
+Synopsis:
+   cunban <channel> <ban> [reason]
+
+Description:
+   Removes the specified ban on the channel with optional reason
+
+Examples:
+   /cunban Alternative debs_nzl oops. I did it again
+
+See Also:
+    cbanlist, cunban, cbanclear, cunban
+

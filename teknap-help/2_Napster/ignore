@@ -1,0 +1,13 @@
+Synopsis:
+    ignore [-remove] <channel>
+
+Description:
+    Use this command to ignore a nickname.
+
+Examples:
+    To ignore a nick:
+        /ignore pana
+    To un-ignore a nick:
+        /ignore -remove pana
+
+

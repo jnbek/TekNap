@@ -1,0 +1,26 @@
+Synopsis:
+    scott [<nick>|<-search>]
+
+Description:
+    This is a "interactive ncurses file selector". It allows you to scroll
+    up and down through the results of either a search or a browse,
+    selecting or deselecting files, and then getting the files you request.
+    The Up/Down arrow keys, PgUp and PgDn, Ctrl-D key, Enter key and the 
+    space bar.
+
+Examples:
+    To browse the results of a search:
+          /search madonna
+          /browse -search
+    To browse the results of a browse:
+          /browse nick
+          /scott nick
+
+See Also:
+     get, search, browse
+
+Notes:
+     The results of a browse is kept around, you can actually have multiple
+     browse's stored. In order to clear a browse you need to 
+         /browse -clear nick
+

@@ -1,0 +1,8 @@
+Synopsis:
+   ps
+
+Description:
+   This command is an interface to the system "ps" command for displaying
+   user processes
+
+See Also:

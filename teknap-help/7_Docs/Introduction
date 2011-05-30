@@ -1,0 +1,51 @@
+Crash Course in irc with TekNap                                               
+
+You are using the TekNap napster client.  Assuming you have the correct help
+files for your client.  TekNap is a based on BitchX/EPIC and ircII clients.
+
+TekNap offers a staggering number of features, far too many to describe here.
+Instead, this document will show you the basics you'll need to get started
+with napster and with TekNap.
+
+All commands in TekNap are prefixed with a '/'.  This is called the command
+character, and is used to distinguish typed commands from messages intended
+for a channel.  Here are some basic commands that you should become familiar
+with.  In these examples, do not actually include the <> characters when you
+enter the command.
+
+   /help <n> <topic>   This is the single most important command available
+                       in this client.  If you don't know what a command
+                       does, chances are it is documented in the online
+                       help.  When all else fails, look here.  The 'n' is
+                       a section number, and 'topic' is the command to
+                       get help on.  If you use /help by itself, a list
+                       of sections is given.
+
+   /join <channel>     This makes you join the specified channel.
+
+   /part <channel>     This makes you leave the specified channel.
+
+   /msg <someone>      This lets you send a private message to the specified
+                       nickname.
+
+   /server <server>    This lets you switch to a new napster server.
+
+   /whois <someone>    This will give you some information about the given
+                       nickname.
+
+   /names <channel>    This shows you a list of everyone on the specified
+                       channel.  You will automatically see a listing for
+                       any channel you join.
+
+   /list               This lets you list all the channels on your napster
+                       network.
+
+These commands should be sufficient to get you started.  If you want to learn
+more about TekNap, reading the online help is a good way to start.  If you 
+have questions about napster in general, join one of the napster help channels
+ on efnet and ask someone.  On EFnet, the channel is #napster.
+
+See Also:
+   help(1); join(1); list(2); msg(1); names(2); nick(1); part(1); server(1);
+   whois(2)
+

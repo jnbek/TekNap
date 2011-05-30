@@ -1,0 +1,43 @@
+
+window new server bitchx.dimension6.com:8888:qra:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrb:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrc:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrd:qr:1 hide
+window new server bitchx.dimension6.com:8888:qre:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrf:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrg:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrh:qr:1 hide
+window new server bitchx.dimension6.com:8888:qri:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrj:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrk:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrl:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrm:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrn:qr:1 hide
+window new server bitchx.dimension6.com:8888:qro:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrp:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrq:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrr:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrs:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrt:qr:1 hide
+window new server bitchx.dimension6.com:8888:qru:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrv:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrw:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrx:qr:1 hide
+window new server bitchx.dimension6.com:8888:qry:qr:1 hide
+window new server bitchx.dimension6.com:8888:qrz:qr:1 hide
+
+timer -win 1 -rep 4 10 search blah
+timer -win 2 -rep 4 14 search blah1
+timer -win 3 -rep 4 12 search testing
+timer -win 4 -rep 4 18 search ack
+timer -win 5 -rep 4 15 search winnie
+timer -win 6 -rep 4 5 search blah
+timer -win 7 -rep 4 11 search this sucks
+timer -win 8 -rep 4 12 search blah
+timer -win 9 -rep 4 16 search okok
+timer -win 10 -rep 4 13 search -type video a
+timer -win 11 -rep 4 12 search lalalal
+timer -win 12 -rep 4 14 search christmas
+timer -win 13 -rep 4 15 search brit
+timer -win 14 -rep 4 16 search american
+timer -win 15 -rep 4 11 search canadian

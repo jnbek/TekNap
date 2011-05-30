@@ -1,0 +1,24 @@
+Synopsis:
+   $strcmp(str1 str2)
+
+Technical:
+   Str1 and str2 are compare alphanumerically letter by letter until a
+   difference is found. The difference is returned as a numerical value:
+   negative for less than, 0 for equal, and positive for greater than.
+ 
+Practical:
+   Pay attention to the fact that when they are equal it will return 0.
+   Also note that if either string is null a null is returned (is this a
+   bug).
+   
+Returns:
+  < -1 : if str1 is less than str2
+     0 : if str1 is exactly equal to str2
+  > +1 : if str1 is greater than str2
+
+Examples:
+   $strcmp("hello" "hell")	returns 111
+   $strcmp("hello" "hello")	returns 0
+   $strcmp("hell" "hello")	returns -111
+   $strcmp("hell" "")		returns nothing
+

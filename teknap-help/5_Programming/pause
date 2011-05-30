@@ -1,0 +1,13 @@
+Synopsis:
+   pause [<time>]
+Description:
+   This command will pause the client until a key is pressed. Or if a time
+   period is specified then the client will pause until that time has 
+   passed.
+
+Examples:
+    /pause
+    /pause 4
+
+See Also:
+   sleep, usleep

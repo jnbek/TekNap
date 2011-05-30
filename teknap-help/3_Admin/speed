@@ -1,0 +1,22 @@
+Synopsis:
+   admin speed <speed>
+
+Description:
+   Set your linespeed to the specified speed.
+	 0 is unknown
+	 1 is 14.4
+	 2 is 28.8
+	 3 is 33.6
+	 4 is 56k
+	 5 is 64K ISDN
+	 6 is 128k ISDN
+	 7 is cable
+	 8 is DSL
+	 9 is T1
+	10 is T3+
+
+Examples:
+   /admin speed 4
+
+See Also:
+

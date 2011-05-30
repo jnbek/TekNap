@@ -1,0 +1,36 @@
+/*
+ * This is a sample ~/.teknaprc (unix) or teknap-rc (win32)
+ *
+ * The purpose of this is to show you an effective way of loading my scripts
+ * as well as set some other standard stuff.
+ */
+
+/* Create a list of servers */
+/* Syntax: server -add server:port:nick:pass:0 */
+/* You can add your nick and pass here if you like */
+server -add bitchx.dimension6.com:8888
+server -add opennap.squidcafe.com:8888
+server -add mp3.chemlab.org:8888
+server -add lightning.reboot.org:8888
+server -add wintermute.sparhawk.bc.ca:8888
+server -add imperialfleet.com:8888
+server -add kadoozie.com:8888
+
+/* Gives you a two line statbar */
+window double on
+
+/* Directory where you decided to unpack these scripts */
+/* Remove the # at the beginning of the correct line */
+/* Make sure the scripts are actually in the directory you put here */
+/* Remember, you can put them anywhere as long as you change this assign */
+
+/* UNIX users uncomment this line */
+#assign SCRIPT_DIR ~/.TekNap/scripts
+/* Windows users uncomment this line */
+#assign SCRIPT_DIR ~/scripts
+
+/* This is where you decide which scripts to load */
+fe (autoresponse away bans floodprot functions misc nickcomp oper tabkey window) file
+{
+        ^load $SCRIPT_DIR/$file
+}

@@ -1,0 +1,19 @@
+Synopsis:
+   close [<server number>]
+
+Description:
+   This command disconnects you from your server, but does not actually
+   make the client quit.  If you are connected to multiple servers in
+   multiple windows, the client will only close the connection to the
+   current server.
+
+Examples:
+   To disconnect from your current server:
+      /close
+
+   To disconnect from server 2 in your server list:
+      /close 2
+
+See Also:
+   server(1)
+

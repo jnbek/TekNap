@@ -1,0 +1,12 @@
+Synopsis:
+   admin disconnect <server address> <reason> [remote server]
+
+Description:
+   The DISCONNECT command will break a link between your current server and 
+   the specified server.
+
+Examples:
+   /admin disconnect opennap.somewhere.com
+
+See Also:
+   connect(3)

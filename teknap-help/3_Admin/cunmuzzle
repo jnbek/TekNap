@@ -1,0 +1,11 @@
+Synopsis:
+   cunmuzzle <channel> <n1> [<n2> <n3> ...]
+
+Description:
+   Unmuzzles the specified nick(s) on a channel. 
+
+Examples:
+   /cunmuzzle Alternative [yak]
+
+See Also:
+   cmuzzle, muzzle, unmuzzle  

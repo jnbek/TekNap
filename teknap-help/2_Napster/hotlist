@@ -1,0 +1,18 @@
+Synopsis:
+    hotlist [nick][-nick][-remove nick]
+
+Description:
+    Hotlist entries are used like a notify on irc. It most closely resembles
+    dalnet's watch list. Nicks with a leading - require either a double --
+    or use of the -remove flag.
+
+Examples:
+    To add a nick:
+         /hotlist pana
+    To remove a nick:
+         /hotlist -pana
+         /hotlist -remove pana
+    To display your hotlist nicks:
+         /hotlist
+
+

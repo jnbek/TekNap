@@ -1,0 +1,107 @@
+@friends_list = []
+@friends_count = 0
+
+alias _friend_loaddb 
+{
+	@::friends_list = []
+	@::friends_count = 0
+
+ 	@f = open(/home/pje/friends.db R)
+ 	while (!eof($f)) 
+ 	{
+ 		$_friend_add($read($f))
+  	}
+	echo $cparse(found $friends_count in db...)
+}
+
+alias _friend_savedb
+{
+	@r = unlink(/home/pje/friends.db)
+	@f = open(/home/pje/friends.db W)
+	foreach friends_list x 
+	{
+		@r = $write( $f $friends_list[$x] )
+	}
+	@r = $close($f)
+}
+
+alias _friend_add (n,c,l) 
+{
+#	echo $n $c $l
+	@::friends_list[$friends_count] = [$n $c $l]
+	@::friends_count++
+}
+
+alias _friend_exists (n) 
+{
+	foreach friends_list x 
+	{
+		if (match($n $friends_list[$x])) return $x
+	}
+	return -1
+}
+
+alias _friend_delete (n) 
+{
+	foreach friends_list x
+	{
+		if (match($n $friends_list[$x])) @::friends_list[$x] = []
+	}
+}
+
+alias _friend_list (n) 
+{
+	foreach friends_list x 
+	{
+		echo $friends_list[$x]
+	}
+
+}
+
+alias _friend_count
+{
+	@y=0
+	foreach friends_list x 
+	{
+		@y = $x
+#		echo $friends_list[$x]
+	}
+	return $y
+}
+
+alias _friend_find (n) {
+	foreach friends_list x 
+	{
+		if (match($n $::friends_list[$x])) return $::friends_list[$x]
+	}
+	return 
+}
+
+
+on #^msg 10 "*" 
+{
+	$test($*)
+}
+
+alias test (nick,command,channel) {
+	@f = _friend_find($nick)
+	if (match("$nick" $f)) {
+		@nick = shift(f)
+		@channels = tr(/,/ /$shift(f))
+		@commands = tr(/,/ /$shift(f))
+
+		if ($findw($channel $channels) == -1) return
+		if ($findw($command $commands) == -1) return
+		switch ($command) 
+		{
+			( OP ) 
+			{ 
+				op $channel $nick
+			}
+			( VOICE )
+			{
+				voice $channel $nick
+			}
+		}
+	}
+}

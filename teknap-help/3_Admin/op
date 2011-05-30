@@ -1,0 +1,12 @@
+Synopsis:
+   op <channel> <nick>
+
+Description:
+   Make the specified nick a operator on the channel.
+
+Examples:
+   /op luna Alternative
+
+See Also:
+   op, opsay, opdel, deop
+

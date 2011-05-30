@@ -1,0 +1,260 @@
+/*
+ * Some stuff for Moderators+
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ */
+
+assign AUTO_MUZZLE 1
+assign AUTO_MUZZLE_TIME 60
+assign OPERVIEW_SIZE 5
+
+/* Toggle auto-muzzle on/off */
+alias automuzzle (arg, void)
+{
+	switch ($tolower($arg))
+	{
+		(0)
+		(off)
+		{
+			^assign AUTO_MUZZLE 0
+		}
+		(1)
+		(on)
+		{
+			^assign AUTO_MUZZLE 1
+		}
+		(*)
+		{
+			@ AUTO_MUZZLE = AUTO_MUZZLE ? [0] : [1]
+		}
+	}
+	xecho -b Auto-muzzle has been ${AUTO_MUZZLE ? [activated] : [de-activated]}
+}
+		
+alias c (level, void)
+{
+	switch ($level)
+	{
+		(0) {admin setchanlevel $C leech}
+		(1) {admin setchanlevel $C user}
+		(2) {admin setchanlevel $C moderator}
+		(3) {admin setchanlevel $C admin}
+		(4) {admin setchanlevel $C elite}
+		(*)
+		{
+			xecho -b Usage: /c <level>
+			xecho -b   - Sets channel level to <level>
+			xecho -b   - <level> can be any numbered between 0 and 4
+			xecho -b   - leech(0)/user(1)/moderator(2)/admin(3)/elite(4)
+		}
+	}
+}
+
+/* Clone checker. Executes /gusers and stores the output in an array.
+   It then checks each IP for duplicates and stores them in a new array. */
+alias clones (server default "*", max_clones default "2", void)
+{
+	@ cleanup_clonechk()
+	xecho -b Checking for clones > $max_clones on $server
+
+	^on ^831 "*"
+	{
+		for (@ :cnt = [0], numitems(users) > cnt, @ cnt++)
+		{
+			if (matchitem(clones $getitem(users $cnt)) < 0)
+			{
+				@ :blah = getmatches(users % $word(1 $getitem(users $cnt)))
+
+				if (#blah > max_clones)
+				{
+					fe ($blah) clone
+					{
+						@ setitem(clones $numitems(clones) $getitem(users $clone))
+					}
+				}
+			}
+		}
+		if (numitems(clones))
+		{
+			xecho -b Nickname                         IP
+			for (@ :cnt = [0], numitems(clones) > cnt, @ cnt++)
+			{
+				@ :user = getitem(clones $cnt)
+				echo     $[32]word(0 $user) $word(1 $user)
+			}
+			xecho -b Found $numitems(clones) clone${numitems(clones) > 1 ? [s] : []}.
+		}{
+			xecho -b No clones found.
+		}
+		@ cleanup_clonechk()
+	}
+
+	^on ^832 "*"
+	{
+		@ setitem(users $numitems(users) $*)
+	}
+
+	^gusers $server
+}
+
+/* Mass kill - works with nicks or IPs and does wildcard matching. */
+alias mkill (victim, reason)
+{
+    if (victim)
+    {
+	@ cleanup_mkill()
+	@ mkill.victim = victim
+	@ mkill.reason = reason
+
+	xecho -b Finding matches for \"$victim\"
+
+	^on ^831 "*"
+	{
+		if (numitems(mkill))
+		{
+			xecho -b Nickname                         IP
+			for (@ :cnt = [0], numitems(mkill) > cnt, @ cnt++)
+			{
+				echo     $[32]word(0 $getitem(mkill $cnt)) $word(1 $getitem(mkill $cnt))
+			}
+
+			xecho -b Found $numitems(mkill) match${numitems(mkill) > 1 ? [es] : []}.
+			input "Kill these users now? (y/N) "
+			{
+				switch ($tolower($left(1 $0)))
+				{
+					(y)
+					{
+						for (@ :cnt = [0], numitems(mkill) > cnt, @ cnt++)
+						{
+							raw 610 $word(0 $getitem(mkill $cnt)) \"$mkill.reason\"
+						}
+					}
+					(*) {}
+				}
+				@ cleanup_mkill()
+			}
+		}{
+			xecho -b No matches found.
+			@ cleanup_mkill()
+		}
+	}
+
+	^on ^832 "*"
+	{
+		if (match($mkill.victim $0) || match($mkill.victim $1) && [$0] != N)
+		{
+			@ setitem(mkill $numitems(mkill) $*)
+		}
+	}
+
+	^gusers * $victim
+    }{
+	xecho -b Usage: /mkill <string> [reason]
+	xecho -b   - Mass kills all users matching <string>
+	xecho -b   - Wildcards are accepted
+    } 
+}
+
+alias operview (void)
+{
+	if (!OPERVIEW)
+	{
+		^window new size $OPERVIEW_SIZE name ov level server fixed on last
+		^assign OPERVIEW 1
+		xecho -b OperView [ON]
+	}{
+		^window refnum ov kill
+		^assign -OPERVIEW
+		xecho -b OperView [OFF]
+	}
+}
+
+alias ov operview
+
+alias tmuzzle (time, nick, reason)
+{
+	if (time && nick)
+	{
+		raw 622 $nick \"${reason ? reason : [Temporary muzzle for $time seconds]}\"
+		timer $time raw 623 $nick
+	}{
+		xecho -b Usage: /tmuzzle <seconds> <nick> [reason]
+		xecho -b   - Muzzles <nick> for <seconds>
+	}
+}
+
+alias u (nick, level default "1", void)
+{
+	if (nick)
+	{
+		switch ($level)
+		{
+			(0) {raw 606 $nick leech}
+			(1) {raw 606 $nick user}
+			(2) {raw 606 $nick moderator}
+			(3) {raw 606 $nick admin}
+			(4) {raw 606 $nick elite}
+			(*) {xecho -b [level] must be a number between 0 and 4}
+		}
+	}{
+		xecho -b Usage: /u <nick> [level]
+		xecho -b   - Sets <nick>'s userlevel to [level]
+		xecho -b   - [level] is a number between 0 and 4
+		xecho -b   - leech(0)/user(1)/moderator(2)/admin(3)/elite(4)
+		xecho -b   - If no level is specified, the default of 1 will be used
+	}
+}
+
+alias cleanup_mkill (void)
+{
+	^on 831 -
+	^on 832 -
+	@ delarray(mkill)
+	@ mkill.victim = mkill.reason = []
+	return
+}
+
+alias cleanup_clonechk (void)
+{
+	^on 831 -
+	^on 832 -
+	@ delarray(users)
+	@ delarray(clones)
+	return
+}
+
+on #^flood 421 "% PUBLIC *" if (AUTO_MUZZLE)
+{
+	^assign chan $2
+	^assign nick $0
+	^assign type $1
+
+	if (chan && nick && type)
+	{
+		if (finditem(pubflood $nick) < [0])
+		{
+			@ setitem(pubflood $numitems(pubflood) $nick)
+			whois -cmd
+			{
+				switch ($tr(/"//$1))
+				{
+					(Elite) {#}
+					(Admin) {#}
+					(Moderator) {#}
+					(*)
+					{
+						xecho -b PUBLIC flooding detected from $nick on $chan - Muzzling for $AUTO_MUZZLE_TIME seconds
+						raw 622 $nick \"Auto-muzzle for $AUTO_MUZZLE_TIME seconds: flood\"
+						timer $AUTO_MUZZLE_TIME eval raw 623 $nick;@ delitem(pubflood $finditem(pubflood $nick))
+					}
+				}
+			} $nick
+		}
+	}
+
+	wait -cmd @ chan = nick = type = []
+}
+
+
+/* bmw '01 */

@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]switch_channels [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a switch channels command is given.
+
+Parameters:
+   $0    channel we are switching to or "none"
+
+Examples:
+
+See Also:
+

@@ -1,0 +1,24 @@
+Synopsis:
+   on [<modes>]list [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives server output from
+   the LIST command.  Any individual line of output can trigger the hook.
+
+Parameters:
+   $0    count
+   $1    limit
+   $2    unknown
+   $3    level
+   $4    channel name
+   $5-   channel topic
+
+Examples:
+   To limit output to channels with a topic:
+      on ^list "*" {
+         if ( [$5] ) echo *** $[$CHANNEL_NAME_WIDTH]4 $[-2]0 $5-
+      }
+
+See Also:
+   list(2);
+

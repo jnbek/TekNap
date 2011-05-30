@@ -1,0 +1,20 @@
+Synopsis:
+   nslookup [-cmd { ... }] host1 [[host2] [host3] ...]
+
+Description:
+   This command will attempt to lookup a hostname, ip.
+   As well you can lookup multiple hosts or ips. A alias or cmd may be 
+   specified which is then performed on each. If a failure occurs, then 
+   the failing name is returned, whereas on success, the name and the 
+   associated ip's are returned. There is also a hook which can be used 
+   only upon those nslookups without a -cmd.
+
+Examples:
+   To nslookup a ip:
+      /nslookup ip
+
+   To nslookup a ip and perform a command:
+      /nslookup -cmd { echo $G $* } hostname
+
+See Also:
+   dns

@@ -1,0 +1,11 @@
+Synopsis:
+   admin showallchannels
+ 
+Description:
+   Show all channels on the server.
+
+Examples:
+   /admin showallchannels
+
+See Also:
+   list

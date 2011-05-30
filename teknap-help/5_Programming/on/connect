@@ -1,0 +1,20 @@
+Synopsis:
+   on [<modes>]connect [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client establishes a connection with
+   a server.
+
+Parameters:
+   $0    the server connected to
+   $1    the port number of the server connected to
+
+Examples:
+   To display where the client has connected:
+      on ^connect "*" {
+         echo *** Connected to $0 on port $1
+      }
+
+See Also:
+   server(1)
+

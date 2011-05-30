@@ -1,0 +1,589 @@
+# written by (ice)
+
+# global assigns
+assign TRUE     1
+assign FALSE    0
+
+assign TRIV_TIMEOUT 30
+assign NUM_HINTS 12
+assign NUM_SCORES 5
+assign allow_show_menu 1
+
+assign TRIV_ANS     !guess
+assign PLAY_TRIV    !trivia
+assign SHOW_SCORE   !score
+assign ADD_SCORE    !PLEASE-cheat
+assign SHOW_MENU    !menu
+assign STOP_TRIV    !PLEASE-STOP
+assign START_TRIV   !PLEASE-START
+assign CLEAR_SCORES !PLEASE-CLEAR
+
+assign TRIVIAFILE ~/triviaq.txt
+assign TRIVIAHSFILE ~/tscores.txt
+assign TRIVIAHSREAD $FALSE
+@ Triviafd = 0
+
+
+# this function tests for each !<whatever> case
+alias test_names 
+{
+  ^assign user_name $0
+  ^assign user_chan $1
+  ^assign user_msg  $2-
+  if ([$2] == [$TRIV_ANS])
+  {
+    if ([$allow_triv_ans] == [1])
+    {
+      Triviaguess $user_name $user_msg
+    }
+  }
+  if ([$2] == [$PLAY_TRIV])
+  {
+    if ([$allow_play_triv] == [1])
+    {
+      Triviacreate
+      playtrivia_off
+      showscore_off
+      trivia_on
+    }
+  }
+  if ([$2] == [$SHOW_SCORE])
+  {
+    if ([$allow_show_score] == [1])
+    {
+      Triviashowscore
+    }
+  }
+  if ([$2] == [$SHOW_MENU])
+  {
+    if ([$allow_show_menu] == [1])
+    {
+      Triviamenu
+    }
+  }
+}
+
+
+
+
+
+# nice little function to turn !CHEAT on 
+alias add_score_on
+{
+  ^assign allow_add_score $true
+}
+
+# nice little function to turn !CHEAT off
+alias add_score_off
+{
+  ^assign allow_add_score $false
+}
+
+
+# nice little function to turn !CLEAR on 
+alias clear_scores_on
+{
+  ^assign allow_clear_scores $true
+}
+
+# nice little function to turn !CLEAR off
+alias clear_scores_off
+{
+  ^assign allow_clear_scores $false
+}
+
+
+# nice little function to turn !STOP & !START on 
+alias start_stop_on
+{
+  ^assign allow_startstop_triv $true
+}
+
+# nice little function to turn !STOP & !START off
+alias start_stop_off
+{
+  ^assign allow_startstop_triv $false
+}
+
+
+# this function reads the entire triviafile and puts it into arrays
+alias load_trivia_questions
+{
+  ^local tmp_count 0
+
+  ^assign ret $delarray(TriviaArray)
+  while (! eof($0))
+  {
+    ^assign Trivialine $read($0)
+    if ([$@Trivialine] > [1])
+    {
+      # eval me ---------- Read entry: $Trivialine
+      ^assign ret $setitem(TriviaArray $tmp_count $Trivialine)
+      if ([$ret] < [1])
+      {
+        echo Error reading triviafile
+        break
+      }
+      ^assign tmp_count ${tmp_count + 1}
+    }
+    ^assign -Trivialine
+  }
+  @ close($Triviahs)
+  if ([$numitems(TriviaArray)] != [$tmp_count])
+  {
+    echo Error reading triviafile
+    return 0
+  }
+  { return $tmp_count }
+}
+
+
+# nice little function to set the trivia file
+alias set_trivia_file
+{
+  # $0 should be a valid filename
+  ^assign TRIVIAFILE $*
+  @ Triviafd = open($TRIVIAFILE r)
+  ^assign ret $load_trivia_questions($Triviafd)
+  Trivialoadscore
+  timer -ref 166 1800 { Triviasavescore }
+  start_stop_on
+  clear_scores_on
+  add_score_on
+  playtrivia_on
+  showscore_on
+  eval say Trivia questions have been loaded, feel free to type !trivia for a question
+}
+
+
+# nice little function to turn !trivia on 
+alias playtrivia_on
+{
+  ^assign allow_play_triv $true
+}
+
+# nice little function to turn !trivia off
+alias playtrivia_off
+{
+  ^assign allow_play_triv $false
+}
+
+
+# nice little function to turn trivia on 
+alias trivia_on
+{
+  ^assign allow_triv_ans $true
+}
+
+# nice little function to turn trivia off
+alias trivia_off
+{
+  ^assign allow_triv_ans $false
+}
+
+
+# nice little function to turn show score on 
+alias showscore_on
+{
+  ^assign allow_show_score $true
+}
+
+# nice little function to turn show score off
+alias showscore_off
+{
+  ^assign allow_show_score $false
+}
+
+
+# nice little function to turn menu on 
+alias showmenu_on
+{
+  ^assign allow_show_menu $true
+}
+
+# nice little function to turn show menu off
+alias showmenu_off
+{
+  ^assign allow_show_menu $false
+}
+
+
+on #^public 111 "*"
+{
+  test_names $0 $1 $2-
+}
+
+
+on #^msg 444 "*"
+{
+  if ([$1] == [$STOP_TRIV])
+  {
+    if ([$allow_startstop_triv] == [1])
+    {
+      timer -d 199
+      timer -d 110
+      trivia_off
+      playtrivia_off
+      eval say ---------- Game has been paused, will start again soon
+      eval msg $0 Trivia paused, to start up type $START_TRIV !!
+    }
+  }
+  if ([$1] == [$START_TRIV])
+  {
+    if ([$allow_startstop_triv] == [1])
+    {
+      playtrivia_on
+      eval say ---------- Game has started, for next question type: $PLAY_TRIV
+      eval msg $0 Trivia started, to pause type $STOP_TRIV !!
+    }
+  }
+  if ([$1] == [$CLEAR_SCORES])
+  {
+    if ([$allow_clear_scores] == [1])
+    {
+      Triviaclearscore
+      eval msg $0 Trivia highscores cleared!!
+    }
+  }
+  if ([$1] == [$ADD_SCORE])
+  {
+    if ([$allow_add_score] == [1])
+    {
+      Triviacheat $0
+      eval msg $0 I have added 1 to your score, cheater!!
+    }
+  }
+}
+
+
+alias EntryMessageOn
+{
+  on #^join 222 "*"
+  {
+    eval msg $1 For Trivia Answers type : $TRIV_ANS <answer>
+    eval msg $1 For Trivia Questions type : $PLAY_TRIV
+  }
+}
+
+alias EntryMessageOff
+{
+  on -join
+}
+
+alias ExitMessageOff
+{
+  on -leave
+}
+
+alias ExitMessageOn
+{
+  on #^leave 333 "*"
+  {
+    eval msg $1 Good Bye, hope you enjoyed your stay !!!
+  }
+}
+
+
+alias Triviamenu
+{
+  eval say <><><><><><><><>  Trivia Menu <><><><><><><><>
+  eval say <><><><><>  $SHOW_MENU - to show this menu
+  eval say <><><><><>  $SHOW_SCORE - to show scores
+  eval say <><><><><>  $TRIV_ANS - to make a guess
+  eval say <><><><><>  $PLAY_TRIV - to start a question
+  eval say <><><><><><><><><><><><><><><><><><><><><><><>
+}
+
+
+# this function returns a random trivia question from the array
+alias get_rand_question
+{
+  return $getitem(TriviaArray $rand($numitems(TriviaArray)))
+}
+
+
+alias Triviacreate 
+{
+  ^assign -Trivialine
+  ^assign Triviahnr 0
+  ^assign Triviafinished $false
+  ^assign Trivialine $get_rand_question()
+  ^assign Triviaanswer $toupper($after(-1 \* $Trivialine))
+  ^assign Triviaquestion $toupper($before(-1 \* $after(1 \* $Trivialine)))
+  ^assign Triviahint $answer_replace($Triviaanswer)
+  eval say ------------------ Here's the question --------------------
+  eval say ---------- question: $Triviaquestion
+  eval say ---------- hint: $Triviahint
+  eval say ---------- type: $TRIV_ANS <answer>
+  timer -ref 110 $TRIV_TIMEOUT { Triviahint }
+}
+
+
+# nice little function to replace all letters and numbers in the answer
+alias answer_replace
+{
+  ^assign -mystr
+  fec ($*) mych
+  {
+    if ([$mych] == [ ] || [$mych] == ['] || [$mych] == [&] || [$mych] == [-])
+    { ^assign mystr $mystr$mych }
+    { ^assign mystr $mystr* }
+  }
+  return $mystr
+}
+
+
+alias Triviaguess
+{
+  ^assign Triviaguess1 $toupper($2-)
+  if ([$Triviafinished] == [$false]) 
+  {
+    if ([$Triviaguess1] == [$Triviaanswer])
+    {
+      timer -d 110
+      ^assign Triviafinished $true
+      eval say ---------- Congratulations $0 ! You have solved the question. The answer was $Triviaanswer
+      Triviaaddscore $0 1
+      Triviashowscore $NUM_SCORES
+      eval say ---------- For the next question type $PLAY_TRIV
+      trivia_off
+      showscore_on
+      playtrivia_on
+    }
+    {
+      eval say ---------- Sorry $0 , $Triviaguess1 is not correct.
+    }
+  }
+}
+
+
+alias Triviahint 
+{
+  ^assign Triviahnr ${Triviahnr + 1}
+  if ([$Triviahnr] == [$NUM_HINTS] || [$Triviahnr] == [$@Triviaanswer])
+  {
+    trivia_off
+    Triviaend
+  }
+  {
+    ^assign remain $@Triviaanswer
+    ^local tmp_num 0
+    while ([$tmp_num] < [$Triviahnr])
+    {
+      ^assign remain ${remain - 1}
+      ^assign tmp_num ${tmp_num + 1}
+    }
+    ^assign Triviahint $left($Triviahnr $Triviaanswer)$right(${remain} $Triviahint)
+    eval say ------------------ Here's hint # $Triviahnr --------------------
+    eval say ---------- question: $Triviaquestion
+    eval say ---------- hint: $Triviahint
+    eval say ---------- type: $TRIV_ANS <answer>
+    timer -ref 110 $TRIV_TIMEOUT { Triviahint }
+  }
+}
+
+
+alias Triviakillscore
+{
+  if ([$@0] > [0])
+  {
+    ^assign myitem $matchitem(highscorenames $0)
+    if ([$myitem] < [0])
+    {
+      echo >>>>> No such score as $0
+    }
+    {
+      if ([$@1] > [0] && [$1] < [$getitem(highscores $myitem)])
+      {
+        eval say >>>>>>>>>> CHEATING: subtracting $1 from $0 score
+        ^assign Triviascore $getitem(highscores $myitem)
+        ^local tmp_num 0
+        while ([$tmp_num] < [$1])
+        {
+          ^assign Triviascore ${Triviascore - 1}
+          ^assign tmp_num ${tmp_num + 1}
+        }
+        ^assign ret $setitem(highscores $myitem $Triviascore)
+        while ([${myitem + 1}] < [$numitems(highscores)] && [$getitem(highscores $myitem)] < [$getitem(highscores ${myitem + 1})])
+        {
+          ^assign temp_num $getitem(highscores $myitem)
+          ^assign temp_name $getitem(highscorenames $myitem)
+          ^assign ret $setitem(highscores $myitem $getitem(highscores ${myitem + 1}))
+          ^assign ret $setitem(highscorenames $myitem $getitem(highscorenames ${myitem + 1}))
+          ^assign ret $setitem(highscores ${myitem + 1} $temp_num)
+          ^assign ret $setitem(highscorenames ${myitem + 1} $temp_name)
+          ^assign myitem ${myitem + 1}
+        }
+      }
+      {
+        eval say >>>>>>>>>> REMOVING: $0 from highscores
+        ^assign ret $setitem(highscores $myitem 0)
+        while ([${myitem + 1}] < [$numitems(highscores)] && [$getitem(highscores $myitem)] < [$getitem(highscores ${myitem + 1})])
+        {
+          ^assign temp_num $getitem(highscores $myitem)
+          ^assign temp_name $getitem(highscorenames $myitem)
+          ^assign ret $setitem(highscores $myitem $getitem(highscores ${myitem + 1}))
+          ^assign ret $setitem(highscorenames $myitem $getitem(highscorenames ${myitem + 1}))
+          ^assign ret $setitem(highscores ${myitem + 1} $temp_num)
+          ^assign ret $setitem(highscorenames ${myitem + 1} $temp_name)
+          ^assign myitem ${myitem + 1}
+        }
+        ^assign ret $delitem(highscores $myitem)
+        ^assign ret $delitem(highscorenames $myitem)
+      }
+    }
+  }
+}
+
+
+alias Triviacheat
+{
+  if ([$@0] > [0])
+  {
+    if ([$@1] > [0])
+    {
+      Triviaaddscore $0 $1
+      eval say >>>>>>>>>> CHEATING: adding $1 to $0 score
+    }
+    {
+      Triviaaddscore $0 1
+      eval say >>>>>>>>>> CHEATING: adding 1 to $0 score
+    }
+  }
+}
+
+
+alias Triviaaddscore 
+{
+  ^assign myitem $matchitem(highscorenames $0)
+  if ([$myitem] < [0])
+  {
+    ^assign ret $setitem(highscorenames $numitems(highscores) $0)
+    ^assign ret $setitem(highscores $numitems(highscores) $1)
+  }
+  {
+    ^assign Triviascore $getitem(highscores $myitem)
+    ^local tmp_num 0
+    while ([$tmp_num] < [$1])
+    {
+      ^assign Triviascore ${Triviascore + 1}
+      ^assign tmp_num ${tmp_num + 1}
+    }
+    ^assign ret $setitem(highscores $myitem $Triviascore)
+    while ([$myitem] > [0] && [$getitem(highscores $myitem)] > [$getitem(highscores ${myitem - 1})])
+    {
+      ^assign temp_num $getitem(highscores $myitem)
+      ^assign temp_name $getitem(highscorenames $myitem)
+      ^assign ret $setitem(highscores $myitem $getitem(highscores ${myitem - 1}))
+      ^assign ret $setitem(highscorenames $myitem $getitem(highscorenames ${myitem - 1}))
+      ^assign ret $setitem(highscores ${myitem - 1} $temp_num)
+      ^assign ret $setitem(highscorenames ${myitem - 1} $temp_name)
+      ^assign myitem ${myitem - 1}
+    }
+  }
+}
+
+
+alias Triviaend 
+{
+  eval say ---------- Sorry, no one got it, answer was: $Triviaanswer . For the next question type: $PLAY_TRIV
+  trivia_off
+  showscore_on
+  playtrivia_on
+}
+
+
+alias Triviashowscore 
+{
+  ^assign mycount 0
+  ^assign mynum $numitems(highscores)
+  if ([$@0] > [0] && [$mynum] > [$0])
+  {
+    ^assign mynum $0
+    eval say ********** Top $mynum Scores **********
+  }
+  {
+    eval say ********** High Scores **********
+  }
+  while ([$mycount] < [$mynum])
+  {
+    eval say ********** $getitem(highscorenames $mycount) $getitem(highscores $mycount)
+    ^assign mycount ${mycount + 1}
+  }
+}
+
+
+alias get_first_arg
+{
+  return $0
+}
+
+
+alias get_second_arg
+{
+  return $1
+}
+
+
+alias Trivialoadscore 
+{
+  @ Triviahs = open($TRIVIAHSFILE r)
+  echo ---------- Openned file: $TRIVIAHSFILE , file desc: $Triviahs
+  while (! eof($Triviahs))
+  {
+    ^assign mynum $numitems(highscores)
+    if ([$mynum] < [0])
+    { ^assign mynum 0 }
+    ^assign Trivialine $read($Triviahs)
+    if ([$@Trivialine] > [1])
+    {
+      echo ---------- Read entry: $Trivialine
+      ^assign ret $setitem(highscorenames $mynum $get_first_arg($Trivialine))
+      ^assign ret $setitem(highscores $mynum $get_second_arg($Trivialine))
+    }
+    ^assign -Trivialine
+  }
+  @ close($Triviahs)
+  echo ---------- Closed file desc: $Triviahs
+  ^assign TRIVIAHSREAD $TRUE
+  Triviashowscore
+}
+
+
+alias Triviasavescore 
+{
+  if ([$TRIVIAHSREAD] == [$TRUE])
+  { @ unlink($TRIVIAHSFILE) }
+  @ Triviahs = open($TRIVIAHSFILE w)
+  echo ---------- Openned file: $TRIVIAHSFILE , file desc: $Triviahs
+  ^assign mycount 0
+  ^assign mynum $numitems(highscores)
+  while ([$mycount] < [$mynum])
+  {
+    @ write($Triviahs $getitem(highscorenames $mycount) $getitem(highscores $mycount))
+    echo ---------- Wrote entry: $getitem(highscorenames $mycount) $getitem(highscores $mycount)
+    ^assign mycount ${mycount + 1}
+  }
+  @ close($Triviahs)
+  echo ---------- Closed file desc: $Triviahs
+  eval me has backed up the Trivia Highscores to a file.
+  timer -ref 166 1800 { Triviasavescore }
+}
+
+
+alias Triviaclearscore
+{
+  ^assign ret $delarray(highscores)
+  ^assign ret $delarray(highscorenames)
+}
+
+
+alias Triviastop 
+{
+  timer -d 199
+  timer -d 110
+  eval say ---------- Trivia Has Stopped ----------
+  trivia_off
+  showscore_on
+  playtrivia_off
+}

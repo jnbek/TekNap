@@ -1,0 +1,15 @@
+Synopsis:
+   kill [-ip] <nick|nick1,nick2,nick3> [reason]
+
+Description:
+   Kill the users connection to the server with optional reason.
+   Use of -ip allows you to kill all users with the specified ip. No
+   Wild card matching is possible. Exact ip only.
+
+Examples:
+   /kill luna hi!
+   /kill luna,void^ hey!
+   /kill -ip 192.168.0.2
+
+See Also:
+

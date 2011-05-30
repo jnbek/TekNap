@@ -1,0 +1,43 @@
+Synopsis:
+    search [-type mp3/audio/video/image][-any][-maxresults #]
+             [-bitrate #][-minbitrate #][-maxbitrate #]
+             [-freq #][-minbitrate #][-maxbitrate #]
+             [-linespeed #][-minlinespeed #][-maxlinespeed #]
+             [-end] [pattern] 
+
+Description:
+    This is the command used to find anything you happen to be looking for
+    on napster. There are many options..
+
+        -type       is used to specify a media type other than mp3 for your
+                    search. It's only valid on opennap servers and clients that
+                    are opennap compliant.
+        -any        searches for ANY media type.
+        -maxresults specifies the max search results to return. The server
+                    has a MAX send results which cannot be bypassed.
+        -bitrate    specifies the exact bitrate
+        -minbitrate specifies the least the bitrate can be.
+        -maxbitrate specifies the most the bitrate can be.
+                20, 24, 32, 48, 56, 64, 98, 112, 128, 160, 192, 256, 320
+        -freq       specifies the exact frequency in hz.
+        -minfreq    specifies the min frequency in hz.
+        -maxfreq    specifies the max frequency in hz.
+                8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
+        -maxlinespeed
+        -minlinespeed
+        -linespeed  specifies the linespeed which we require for the person
+                    we want to download from. A number from 0-10 is used to
+                    specify the speed
+       0      1     2     3     4         5          6      7    8   9  10
+       ?   14.4  28.8  33.6  56.7  64k ISDN  128k ISDN  Cable  DSL  T1  T3 >              
+	-end        on occasion the client might become confused as to the
+                    status of searching. This resets the client
+
+Examples:
+    To find a mp3:
+    /search keyword
+    To find a mp3 with a bitrate at least 192:
+    /search -minbitrate 192 keyword
+
+See Also:
+    scott, browse, soundex 

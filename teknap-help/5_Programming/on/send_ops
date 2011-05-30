@@ -1,0 +1,14 @@
+Synopsis:
+   on [<modes>]send_ops [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered when a opsay command is done.
+
+Parameters:
+   $0    channel
+   $1-   text
+
+Examples:
+
+See Also:
+   opsay(3)

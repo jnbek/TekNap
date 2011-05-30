@@ -1,0 +1,10 @@
+Synopsis:
+   du [<path>]
+
+Description:
+   This command is a interface to the system "du" command for displaying
+   disk usage on the system
+
+See Also:
+
+

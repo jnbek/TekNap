@@ -1,0 +1,12 @@
+Synopsis:
+   setchanlevel <channel> <level>
+
+Description:
+   Sets the level for a channel at which nicks are able to join it. Levels
+   are Leech, User(default), Moderator, Admin, Elite.
+
+Examples:
+   /setchanlevel Admins Moderator
+
+See Also:
+

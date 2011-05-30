@@ -1,0 +1,11 @@
+Synopsis:
+   nukeuser <nick>
+
+Description:
+   Removes the user from the server database of nicks.
+
+Examples:
+   /admin nukeuser luna
+
+See Also:
+   unnukeuser

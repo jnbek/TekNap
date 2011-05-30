@@ -1,0 +1,14 @@
+Synopsis:
+   mp3 [stop][current][start][restart][quit][pause][list][jump]
+         [equalize 32 numbers] [load file] ["filename"]
+
+Description:
+   Optional mp3 player using mpg123 version r which supports a special
+   command mode used in gui mp3 players. This can be found in a CVS version
+   of mpg123 with the following
+
+   :pserver:guest@cvs-ti.informatik.uni-tuebingen.de:/home/hippm/cvs
+   Use a password of 'guest' in order to login.
+   
+See Also:
+   xmms(6), on mp3

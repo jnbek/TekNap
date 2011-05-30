@@ -1,0 +1,177 @@
+# Makefile.in
+#
+# TekNap - by panasync
+#
+# targets recognised by this makefile:
+#   all, everything	- compiles TekNap
+#   install		- installs TekNap
+#			  man pages
+#   installeverything	- all of the above
+#   clean		- remove all .o files, core, and binaries
+#   distclean		- remove all files geneated by compilation/installation
+
+.SUFFIXES: .c .o .so .in
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+topdir = @topdir@
+objdir = @topdir@/source
+srcdir = @srcdir@
+bindir = @bindir@
+datadir = @datadir@
+libdir = @libdir@
+libexecdir = @libexecdir@
+mandir = @mandir@
+local_dir = $(HOME)
+
+# Where the TekNap binary will be installed.
+# 'make install' will compile and install the program
+INSTALL_NAP = @INSTALL_NAP@
+
+# Where the TekNap library will be.  Generally this is the place that
+# you put the scripts, help pages and translation tables.  It is
+# very important that you set this correctly.
+NAPLIB = @NAPLIB@
+
+CC = @CC@
+DEFS = -I$$(srcdir)/../include -I$(topdir)/include
+LIBS = @LIBS@
+INCLUDES = @INCLUDES@
+
+# Set this to -g if you want to be able to debug the client, otherwise
+# use -O to have the compiler do some optimization instead.
+CFLAGS = @CFLAGS@
+
+# Set this to -s if you want the binary to be stripped.
+LDFLAGS = @LDFLAGS@
+
+# These are for the cd device player
+CD_SRCS = @CD_SRCS@
+CD_OBJS = @CD_OBJS@
+
+# These are for the cd device player
+MP3_SRCS = @MP3_SRCS@
+MP3_OBJS = @MP3_OBJS@
+
+# This is for mpg123 location
+MP3_PLAYER = @MP3_PLAY@
+
+# Full path of the directory for TekNap help files.
+HELPDIR = ${datadir}/TekNap/help
+
+
+# This command will be used to install the TekNap help files.  If you don't
+# want to install them, replace with the following:
+# INSTALL_HELP_CMD = @echo The help files have not been installed.
+INSTALL_HELP_CMD = cp -pr $(srcdir)/teknap-help/* $(HELPDIR)
+
+## You probably don't need to change anything below this line
+
+RM = @RM@
+LN = @LN@
+CP = @CP@
+MV = @MV@
+INSTALL = $(srcdir)/bsdinstall -c -s -m 755
+INSTALL_DATA = $(srcdir)/bsdinstall -c -m 644
+
+VERSION = @VERSION@
+_VERSION_ = @_VERSION_@
+
+SHELL = @SHELL@
+MAKE = @MAKE@ $(MFLAGS)
+MFLAGS ='CC=$(CC)'					\
+	'CFLAGS=$(CFLAGS)'				\
+	'DEFS=$(DEFS)'					\
+	'NAPLIB=$(NAPLIB)'				\
+	'LDFLAGS=$(LDFLAGS)'				\
+	'LIBS=$(LIBS)'					\
+	'LN=$(LN)'					\
+	'RM=$(RM)'					\
+	'CD_PLAY=$(CD_PLAY)'				\
+	'CD_SRCS=$(CD_SRCS)'				\
+	'CD_OBJS=$(CD_OBJS)'				\
+	'MP3_PLAY=$(MP3_PLAY)'				\
+	'MP3_SRCS=$(MP3_SRCS)'				\
+	'MP3_OBJS=$(MP3_OBJS)'				\
+	'MP3_PLAYER=$(MP3_PLAYER)'			\
+	'SHLIB_SUFFIX=$(SHLIB_SUFFIX)'			\
+	'_VERSION_=$(_VERSION_)'			\
+	'VERSION=$(VERSION)'				\
+	'INSTALL_DATA=$(INSTALL_DATA)'			\
+	'INCLUDES=$(INCLUDES)'				\
+	'local_dir=$(local_dir)'
+
+default: all
+
+all: Makefile $(objdir)/Makefile TekNap 
+
+TekNap: Makefile $(objdir)/Makefile
+	@cd $(objdir); $(MAKE) all
+
+install: all installbin installhelp
+
+installeverything: install
+
+everything: all
+
+installbin: installirc
+
+installirc: installdirs
+	$(INSTALL) $(objdir)/$(_VERSION_) $(bindir)/$(VERSION)
+	@if test -f $(INSTALL_NAP).old; then $(RM) $(INSTALL_NAP).old; fi
+	@if test -f $(INSTALL_NAP); then $(MV) $(INSTALL_NAP) $(INSTALL_NAP).old; fi
+	$(RM) $(INSTALL_NAP)
+	$(LN) $(bindir)/$(VERSION) $(INSTALL_NAP)
+
+install_local: local_installdirs installuserhelp
+	$(INSTALL) $(objdir)/TekNap $(local_dir)/bin/$(VERSION)
+	@if test -f $(local_dir)/bin/$(_VERSION_).old; then $(RM) $(local_dir)/bin/$(_VERSION_).old; fi
+	@if test -f $(local_dir)/bin/$(_VERSION_); then $(MV) $(local_dir)/bin/$(_VERSION_) $(local_dir)/bin/$(_VERSION_).old; fi
+	$(LN) $(local_dir)/bin/$(VERSION) $(local_dir)/bin/$(_VERSION_)
+
+installhelp: installdirs
+	$(INSTALL_HELP_CMD)
+
+installuserhelp:
+	umask 022; $(srcdir)/mkinstalldirs $(local_dir)/.TekNap/help
+	cp -pr $(srcdir)/teknap-help/* $(local_dir)/.TekNap/help
+
+installdirs:
+	umask 022; $(srcdir)/mkinstalldirs $(bindir) $(HELPDIR) $(NAPLIB) $(mandir)/man1
+
+local_installdirs:
+	umask 022; $(srcdir)/mkinstalldirs $(local_dir)/bin $(local_dir)/.TekNap
+
+clean:
+	@-if test -f $(objdir)/Makefile; then cd $(objdir); $(MAKE) clean; fi
+
+distclean cleandir realclean: clean
+	$(RM) Makefile $(objdir)/Makefile $(objdir)/sig.inc config.status config.cache config.log include/defs.h
+	$(RM) stamp-h
+
+export: distclean
+	$(topdir)/autogen.sh
+
+package: export
+	(cd ..;tar zcvvf $(VERSION).src.tar.gz TekNap; )
+
+distrib: $(srcdir)/TekNap
+	(cp $(srcdir)/TekNap TekNap; strip --strip-all TekNap; gzip TekNap; tar zcvvf $(VERSION).tar.gz )
+
+depend:
+	@cd $(objdir); $(MAKE) depend
+
+# autoheader might not change $(topdir)/include/defs.h.in, so touch a stamp file.
+include/defs.h.in: stamp-h.in
+stamp-h.in: configure.in aclocal.m4
+	echo timestamp > $(topdir)/stamp-h.in
+
+include/defs.h: stamp-h
+stamp-h: $(topdir)/include/defs.h.in config.status
+	$(topdir)/config.status
+
+Makefile: $(srcdir)/Makefile.in config.status 
+	$(topdir)/config.status 
+
+config.status: $(srcdir)/configure
+	$(topdir)/config.status --recheck

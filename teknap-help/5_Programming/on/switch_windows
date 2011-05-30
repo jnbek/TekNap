@@ -1,0 +1,16 @@
+Synopsis:
+   on [<modes>]switch_windows [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a switch window is done.
+
+Parameters:
+   $0    old screen number
+   $1    old window number
+   $2    new screen number
+   $3    new window number
+
+Examples:
+  
+See Also:
+

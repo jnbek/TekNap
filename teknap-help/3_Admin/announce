@@ -1,0 +1,14 @@
+Synopsis:
+   announce <Message to all users>
+
+Description:
+   The ANNOUNCE command will send a message to all users currently logged
+   into the server(s).
+
+Examples:
+   /admin announce opennap.somewhere.com will be going down for a reboot
+
+   Users see:
+   *IamElite/announces*  opennap.somewhere.com will be going down for a
+   reboot
+

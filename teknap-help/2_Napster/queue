@@ -1,0 +1,16 @@
+Synopsis:
+    queue [-remove "pattern"] [-clear]
+ 
+Description:
+    Displays the download file queue. Allows removal of files from the
+    queue. When we request files from a person, they have a MAX send per
+    nick setting, which helps prevents bandwidth overloading. When this send
+    limit is reached the sender will send a queue msg to your client, 
+    causing the file to be placed in the queue. After one of the downloads
+    to this person is finished, another file will be requested.
+
+Examples:
+    To display the queue:
+    /queue
+
+

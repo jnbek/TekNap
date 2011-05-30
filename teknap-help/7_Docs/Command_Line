@@ -1,0 +1,24 @@
+Command Line Usage of TekNap                                                  
+
+The TekNap napster client has a number of options available to it from the 
+command line.  The basic command-line syntax is:
+
+   TekNap [<switches>] [<nickname> [<server list>]]
+
+The nickname may be at most 30 characters long.  The server list may be a
+space-delimited list of server addresses.  Each server name may use the
+server:port notation if a port other than the default (usually 8888) is
+desired.  The available switches are as follows:
+
+   -r <file>  loads a list of server from specified file
+   -a         add default servers and command line servers to server list
+   -n <nick>  nickname to use
+   -p [pass]  password to use
+   -N         No auto-connect to a server
+   -v         print the client's version string and exit
+   -C         create the account
+   -S <num>   number of the server to connect to
+
+Unlike other Unix programs, switches for TekNap cannot be combined. 
+Something like "-db" is not allowed, "-d -b" must be used.
+

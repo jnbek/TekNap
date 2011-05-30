@@ -1,0 +1,117 @@
+# Mp3play 0.4i for BitchX
+# by probe <bourne@holyfire.com>
+# modified by Colten Edwards for running under TekNap
+# Remember to read README file
+# Enjoy!
+
+# Configuration
+@ player = [/usr/local/bin/mpg123]
+@ mp3dir = [/cdrom/mp3]
+# End.
+
+^eval cd $mp3dir
+
+
+# Colors
+@ normal =  [\[0m\\[37m]
+@ hwhite =  [\[1m\\[37m]
+@ blue   =  [\[0m\\[34m]
+@ hblack =  [\[1m\\[30m]
+# Logo
+@ mp3p   =  [[mp3p/bX]
+# Echo 
+@ echostr = [${hblack}÷${hwhite}÷${normal}÷] 
+alias mecho {eval echo $echostr $*}
+
+^eval echo ${blue}ÚÄÄÄÄÄ${hblack}---${blue}Ä${hblack}--${blue}ÄÄ${hblack}-${blue}ÄÄÄÄÄÄ---Ä${hblack}--ÄÄ${blue}-${hblack}ÄÄÄÄÄÄÄÄÄ--- --
+^eval echo ${blue}³
+^eval echo ${blue}|${normal}.. Mp3play 0.4i for BitchX
+^eval echo ${blue}|${normal}.. Working Dir: $W
+^eval echo ${hblack}³${normal}.. /mhelp for help 
+^eval echo ${hblack}:                               ${blue}probe${hblack}[${normal}can${hblack}@${normal}linux.org.tr${hblack}]
+^eval echo ${hblack}ÀÄÄÄÄÄÄÄÄÄÄ${blue}ÄÄÄÄÄÄÄÄ${hblack}ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄ-
+^eval echo 
+
+^eval set format_version $format_version + ${blue}mp3p/bx
+
+# Aliases
+
+alias mhelp {
+^eval echo ${blue}ÚÄÄÄÄÄ${hblack}---${blue}Ä${hblack}--${blue}ÄÄ${hblack}-${blue}ÄÄÄÄÄÄ---Ä${hblack}--ÄÄ${blue}-${hblack}ÄÄÄÄÄÄÄÄÄ--- --
+^eval echo ${blue}|${normal}
+^eval echo ${blue}³${normal}.. /mp3   plays a song without displaying to the channel (F4)
+^eval echo ${blue}³${normal}.. /mp3c  plays a song and displays it to the channel (F5)
+^eval echo ${blue}|${normal}.. /mp3st plays a song from the web
+^eval echo ${blue}³${normal}.. /mp3s  stops (F6)
+^eval echo ${hblack}³${normal}.. /mconf displays current configuration 
+^eval echo ${hblack}|${normal}.. /mlist lists all mp3s in current directory
+^eval echo ${hblack}:${normal}.. /pwd   prints working directory
+^eval echo ${hblack}³
+^eval echo ${hblack}ÀÄÄÄÄÄÄÄÄÄÄ${blue}ÄÄÄÄÄÄÄÄ${hblack}ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄ-
+
+^eval echo 
+
+}
+alias mp3 if (fexist($*)==1) {
+        exec $player $* 1>/dev/null 2>/dev/null
+        mecho Song: $* $mp3p
+}{ mecho Song: $* Not found }
+
+alias mp3c if (fexist($*)==1) {
+        exec $player $* 1>/dev/null 2>/dev/null
+        me is listening $* $mp3p
+}{ mecho Song: $* Not found }
+
+alias mp3s {
+exec killall -9 $player 1>/dev/null 2>/dev/null
+mecho Song cancelled, use /mp3 or /mp3c to replay it $mp3p
+}
+
+alias mconf {
+mecho ${blue}Mp3${normal}play ${blue}Config${normal}uration
+eval echo
+mecho ${blue}-${normal}I${blue} -${normal}  Mp3player location, ${blue}Currently:${normal}$player 
+mecho ${blue}-${normal}II${blue}-${normal}  Mp3 Directory,      ${blue}Currently:${normal}$mp3dir
+mecho  Edit mp3play.bx for configuration.
+}
+
+alias mp3st {
+  if (![$0]) { mecho Type an url next time.. }
+   {
+exec $player $* 1>/dev/null 2>/dev/null
+mecho Playing stream at: $*
+   }
+}
+
+alias mp3i {
+input "$echostr Enter songname: " {
+if (fexist($*)==1) {exec $player $* 1>/dev/null 2>/dev/null
+mecho Song: $* $mp3p
+  }
+ { mecho Song: $* Not found }
+  }
+}
+
+alias mp3ci {
+input "$echostr Enter songname: " {
+if (fexist($*)==1) {
+exec $player $* 1>/dev/null 2>/dev/null
+me is listening $* $mp3p
+    }
+{ mecho Song: $* Not found }
+  }
+}
+
+# Extra Aliases
+
+alias pwd { exec pwd }
+alias mlist {
+mecho ${blue}Mp3${normal}List
+ls 
+}
+
+^bind ^[[17~ parse_command mp3s
+^bind ^[[[D parse_command mp3i
+^bind ^[[[E parse_command mp3ci
+
+

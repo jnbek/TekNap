@@ -1,0 +1,26 @@
+Synopsis:
+   window [refnum] server [-irc] [+add] [-delete] [-create] 
+          [<server>[:[<port>][:[<nickname>][:[<password>][:[meta]]]]
+
+Description:
+   This command works is the real command with SERVER being a frontend to
+   this particular command. The specified server applies to the current
+   window. Multiple servers are possible using this command.
+
+   The server name is the only required argument.  Any or all of the other
+   may be specified as desired, however a colon must separate each
+   argument, even if one is missing (see the examples below).
+
+Examples:
+   To connect to server opennap.foo.com on port 8888:
+      /window server opennap.foo.com:8888
+
+   To connect to server opennap.foo.com with the nickname JoeBob:
+      /window server opennap.foo.com::JoeBob
+
+   To connect to a irc server irc.core.com with the nickname JoeBob:
+      /window server -irc irc.core.com:6667:JoeBob
+
+See Also:
+   server(1)
+

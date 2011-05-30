@@ -1,0 +1,16 @@
+Synopsis:
+    send <nick(s)> <file(s)>
+
+Description:
+    This is a direct client to client transfer of a file. It's similar to
+    irc DCC but based on napster protocols. Multiple nicks can be specified
+    using ,'s between them. Multiple files can be sent as well. If the 
+    filename is using spaces in it, it can be quoted using "'s.
+
+Examples:
+    To send a file:
+        /send q test.mp3
+        /send q,luna,duff "filename with space" filename2
+
+See Also:
+    set allow_dcc, dccget

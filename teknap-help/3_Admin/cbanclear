@@ -1,0 +1,12 @@
+Synopsis:
+   cbanclear <channel>
+
+Description:
+   Clear's the specified channels banlist removing all bans.
+
+Examples:
+   /cbanclear Alternative
+
+See Also:
+    cbanlist, cunban, cbanclear, cunban
+

@@ -1,0 +1,12 @@
+Synopsis:
+   cban <channel> <nick> [reason]
+
+Description:
+    Ban a nick from a channel. Nick can be a ip address as well. Reason is
+    optional
+
+Examples:
+    /cban Alternative _snuggs_ just me
+
+See Also:
+    cbanlist, cunban, cbanclear, cunban

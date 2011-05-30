@@ -1,0 +1,24 @@
+Synopsis:
+   $getcap(arg)
+
+Technical:
+   This function is a general purpose interface to capabilities that 
+   might be made available to the epic scripter.  Right now, the only 
+   capability namespace is for termcap/terminfo.  The $getcap() function 
+   takes at least one argument (the namespace) and a variable number of 
+   additional arguments, depending on the needs of the namespace.
+
+   The TERM namespace.  Usage:
+          $getcap(TERM <capability name> <captype> <mangle>)
+   Where "TERM" is the literal string TERM
+   Where <capability name> is either a termcap capability name or a
+           terminfo capability name or a "long name", as defined by
+           the terminfo standard.  A list of these names can usually
+           be found by 'man terminfo' if you have ncurses installed.
+   Where <captype> is 0 if <capability name> is a "long name",
+           is 1 if <capability name> is a "terminfo name",
+           or is 2 if <capability name> is a "termcap name".
+   Where <mangle> is 0 if you want the capability to be returned in
+           its "raw" format, and 1 if you want control characters to
+           be converted into a format suitable for use with /bind or
+           for echoing to the screen.

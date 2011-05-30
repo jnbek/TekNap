@@ -1,0 +1,175 @@
+                  ________       __      ____
+                 |__    __|____ |  | __ /    \ _____  ______
+                    |  | _/ __ \|  |/ /|   |  |\__  \ \____ \
+                    |  | \  ___/|     \|   |  |/ __  \|  |_> >
+                    |__|  \___  >__|\__>___|  |____  /|   __/
+                              \/            \/     \/ |__|
+
+[TekNap FAQ v1.0 by dialtone <dialtone@chemlab.org>...........................]
+[TekNap by panasync...........................................................]
+
+_______________________________________________________________________________
+[Foreword.....................................................................]
+*******************************************************************************
+The latest version of TekNap at the time of writing this FAQ is TekNap-1.0. For
+contact information please see Section 3.1 at the end of this document.
+
+_______________________________________________________________________________
+[Table of Contents............................................................]
+*******************************************************************************
+1.0	TekNap - General Information
+	1.1	What is TekNap?
+	1.2	What Operating System's will TekNap work on?
+	1.3	Where can I get TekNap?
+	1.4	How do I install TekNap from source?
+	1.5	How do I install TekNap from a binary?
+
+2.0	Common Questions
+	2.1	What is .teknaprc?
+	2.2	What are the color codes in TekNap?
+	2.3	I want to learn how to script.. where do I start?
+	2.4	Do you have a web site where I can get more info?
+	2.5	Is there a help channel where I can go?
+
+3.0	Miscellaneous
+	3.1	Contacting
+	3.2	ChangeLog
+
+_______________________________________________________________________________
+[General Information.......................................................1.0]
+*******************************************************************************
+1.1	What is TekNap?
+
+	TekNap is a console Napster client written and maintained by the author
+	of a very well known IRC client, BitchX -- Colten Edwards aka panasync.
+	Owing to the fact that it is based on BitchX, it shares the same script
+	writing abilities. It has built in support for both OpenNap and Napster
+	servers. The program has been ported to a variety of Operating Systems,
+	the list of these can be viewed in the section below.
+
+1.2	What Operating System's will TekNap work on?
+
+	TekNap has been know to work on the following Operating Systems:
+
+		* Linux (All)
+		* BSDi
+		* FreeBSD
+		* MacOS
+		* Solaris
+		* Windows/32
+		* OS/2
+		* HPUX
+
+	If you manage to successfully compile TekNap on any other Operating Sy-
+	stem, please goto Section 3.1 and find out how to contact the author of
+	the FAQ.
+
+1.3	Where can I get TekNap?
+
+	TekNap is available via FTP, Napster or IRC: -
+
+		* ftp.TekNap.com:/pub/TekNap
+		* TekNap@OpenNap
+		* #BitchX@EFNet
+
+1.4	How do I install TekNap from source?
+
+	To install TekNap from source, first follow the instructions above, and
+	get it =)  Next, follow the list below in the correct order and you sh-
+	ould have a working version.
+
+		* # tar xvfz TekNap-x.x.tar.gz
+		* # cd TekNap 
+		* TekNap# ./configure [options]
+		* TekNap# (g)make
+		* TekNap# (g)make install
+
+	Note: use "gmake" if you're on a Non-GNU system (ie, *BSD), else just
+	      use "make"
+
+	      Configure options can be viewed with "./configure --help".
+
+1.5	How do I install TekNap from a binary?
+
+	To install TekNap from a binary (bin), follow the instructions found in
+	Section 1.3 and then follow the instructions below:
+
+		* # gzip -d TekNap-bin.gz
+		* # cp ./TekNap /usr/local/bin/
+
+_______________________________________________________________________________
+[Common Questions..........................................................2.0]
+*******************************************************************************
+2.1	What is .teknaprc?
+
+	This file is an initialization file used to load your default settings,
+	an example can be found in your TekNap/scripts directory as "_teknaprc"
+	it should be placed into your home directory (~/) and renamed.
+
+2.2	What are the color codes in TekNap?
+
+        %K = Dark Gray                          %k = Black
+	%G = Bright Green                       %g = Dark Green
+	%Y = Bright Yellow                      %y = Brown
+	%C = Bright Cyan                        %c = Cyan
+	%B = Bright Blue                        %b = Blue
+	%P and %M = Bright purple/magenta       %p and %m = Purple/Magenta
+	%R = Bright Red                         %r = Red
+
+        %n - Null color (will nullify colors before it)
+        %0 %1 %2 %3 %4 %5 %6 %7 %8 %9 = Background Colors
+        %F Flashing Foreground
+        %U Underline Text.
+
+	To try it out, issue the following command:
+	/eval echo $cparse(%PWerd, this is Bright Purple)
+
+2.3	I want to learn how to script.. where do I start?
+
+	The best place to start would be by issuing the /help command, that has
+	a list of all the functions that you can use in TekNap. A HTML version
+	of the help files can be viewed online at http://www.TekNap.com/
+
+	If you get completely puzzled, ask your question in the TekNap channel
+	on OpenNap, someone will probably be able to help you out.
+
+2.4	Do you have a web site where I can get more info?
+
+	Yes, we do. You can find it by pointing your browser (it is lynx frien-
+	dly) at http://www.TekNap.com.
+
+2.5	Is there a help channel where I can go?
+
+	Yes, there is. Once you get TekNap up and running, connect to an
+	OpenNap server and type "/join TekNap" and you will be in our help
+	channel. However.. we are normally idle in there, chances are that
+	your question will be answered in #BitchX on EFNet IRC.
+
+_______________________________________________________________________________
+[Miscellaneous.............................................................3.0]
+*******************************************************************************
+3.1	Contacting
+
+	The group of people involved in TekNap is in this section, and what to
+	do if you have a question that isn't answered in this FAQ.
+
+	FAQ Author	: I can be contacted in three ways:-
+			  * Email   : dialtone@chemlab.org
+			  * EFNet   : dialtone
+			  * OpenNap : dialtone or dizzial
+
+	TekNap Author	: The author can be contacted in three ways:-
+			  * Email   : edwards@teknap.com
+			  * EFNet   : panasync
+			  * OpenNap : q
+
+3.2	ChangeLog
+
+	This is a ChangeLog of the revisions of this FAQ.
+
+	16th July 2000:	TekNap FAQ v1.0 by dialtone <dialtone@chemlab.org>
+		      : First revision.
+
+_______________________________________________________________________________
+[EOF.......................................................................EOF]
+*******************************************************************************

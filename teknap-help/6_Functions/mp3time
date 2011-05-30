@@ -1,0 +1,14 @@
+Synopsis:
+   $mp3time(<seconds>)
+
+Practical:
+   This function takes a argument in seconds and "pretty prints" the result
+   in minutes:seconds
+
+Returns:
+   returns minutes:seconds
+
+Examples:
+
+See Also:
+

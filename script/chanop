@@ -1,0 +1,101 @@
+/* 
+ * script written by Skillio and modified by HackSaw for removing channel 
+ * ops by number
+ */
+
+alias ops (chann)
+{
+@ delarray(chanoparray)
+	^on ^msg "chanserv operators for channel %" 
+	{
+	^assign opchan $before(-1 : $4)
+		^on ^msg "chanserv %"
+		{@ setitem(chanoparray $numitems(chanoparray) $1)}
+		^on ^msg "chanserv end of operators for channel*"
+		{
+		^on ^msg -"chanserv %"
+		xecho -b  $cparse(%W#  Chanop)
+		for (@ x = 0, x < numitems(chanoparray), @ x++)
+		{eval xecho -b $cparse(%B\($[2]{x+1}\)) $getitem(chanoparray $x)}
+		eval xecho -b Chanop List for $cparse(%W$opchan) $cparse(%B\(Total $numitems(chanoparray)\))
+			input "Which Chanops to Remove?:" if ([$0])
+			{
+			@ remop1 = before(- $0)
+			@ remop2 = after(- $0)
+			^local cont
+			  if ([$0] == [all]) 
+			  {
+			  for (@ cont = 0, cont < numitems(chanoparray), @ cont++)
+			  {raw 10205 $opchan $getitem(chanoparray ${cont - 1})}
+			  } else {
+					if (remop1 < remop2 && remop1 < numitems(chanoparray) && remop2 <= numitems(chanoparray))
+					{
+					^local count
+						for (@ count = remop1, count <= remop2, @ count++)
+						{raw 10205 $opchan $getitem(chanoparray ${count-1})}
+					}{
+						if ([$0] <= numitems(chanoparray)) {raw 10205 $opchan $getitem(chanoparray ${[$0] -1})}
+					 }
+				  }
+			}
+		}
+	}
+oplist $chann
+eval timer -ref chanoptimer 5 {^on ^msg -"chanserv operators for channel %";^on ^msg -"chanserv end of operators for channel*";@ remop1 = remop2 = [] }
+}
+
+
+alias cbans (chan)
+{
+@ chann = chan
+@ delarray(cbanee)
+@ delarray(cbaner)
+	^on ^421 * 
+	{
+	@ setitem(cbanee $numitems(cbanee) $0)
+	@ setitem(cbaner $numitems(cbaner) $1)
+	@ setitem(cbanreason $numitems(cbanreason) $tr(/"//$2))
+		^on ^420 * 
+		{
+		^on 421 -* 
+		eval xecho -b      $cparse(%WBanned               By                   Reason)
+		for (@ x = 0, x < numitems(cbanee), @ x++)
+			{eval xecho -b $cparse(%B\($[2]{x+1}\)) $[20]getitem(cbanee $x) $[20]getitem(cbaner $x) $[20]getitem(cbanreason $x)}
+		eval xecho -b     Banlist for $cparse(%W$chann) $cparse(%B\(Total $numitems(cbanee)\))	
+			input "Which Channel Bans to Remove?:" if ([$0])
+			{
+			@ remban1 = before(- $0)
+			@ remban2 = after(- $0)
+			^local cont
+				if ([$0] == [all]) 
+				{
+					for (@ cont = 0, cont < numitems(cbanee), @ cont++)
+					{raw 423 $chann $getitem(cbanee $cont)}
+					} else {
+						 if (remban1 < remban2 && remban1 < numitems(cbanee) && remban2 <= numitems(cbanee))
+						 {
+						 ^local count
+						 	for (@ count = remban1, count <= remban2, @ count++)
+							{raw 423 $chann $getitem(cbanee ${count - 1})}
+						 } else {if ([$0] <= numitems(cbanee)) {raw 423 $chann $getitem(cbanee ${[$0] -1})}}
+				}
+			}
+		}
+	}
+if (chann)
+{
+	if (match($onchannels() $chann))
+	{
+	raw 420 $chann
+	eval timer -ref cbantimer 5 ^on 420 -*
+	} else {xecho -b You aren't in $chann!}
+} else {
+	 eval ^assign chann $C
+	 raw 420 $chann
+	 }
+
+}
+
+
+
+

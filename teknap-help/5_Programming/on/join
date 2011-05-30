@@ -1,0 +1,26 @@
+Synopsis:
+   on [<modes>]join [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client joins a channel, or whenever
+   it observes another client joining a common channel.
+
+Parameters:
+   $0    channel joined
+   $1    nickname of person joining channel
+   $2    number of shared files
+   $3    speed of the connection
+
+Examples:
+   To distinguish between the client and other users joining the channel:
+      on ^join "*" {
+         if ( [$0] == N ) {
+            echo *** You have joined channel $1
+         } {
+            echo *** $0 \($2\) has joined channel $1
+         }
+      }
+
+See Also:
+   join(1)
+

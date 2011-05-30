@@ -1,0 +1,11 @@
+Synopsis:
+   purge <alias> [<alias>]
+
+Description:
+   This command will remove the specified alias's from the clients memory.
+
+Examples:
+    /purge flood flood1 
+
+See Also:
+     dump

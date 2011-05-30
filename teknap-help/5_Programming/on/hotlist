@@ -1,0 +1,15 @@
+Synopsis:
+   on [<modes>]hotlist [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a user on your hotlist signs on or off.
+
+Parameters:
+   $0    nick                       $0    nick
+   $1    speed                      $1    OFF
+   $2    ON
+
+Examples:
+
+See Also:
+   hotlist

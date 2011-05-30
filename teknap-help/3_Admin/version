@@ -1,0 +1,11 @@
+Synopsis:
+   admin version
+
+Description:
+   Queries the server for the version it's running.
+
+Examples:
+   /admin version
+
+See Also:
+

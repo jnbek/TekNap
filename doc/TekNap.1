@@ -1,0 +1,107 @@
+.TH TekNap 1 "Tuesday, July 1, 2000" "TekNap 1.0" ""
+.SH NAME
+TekNap \- The Only Alternative
+.SH SYPNOSIS
+.B TekNap
+[-anpcrvHACNS] [nickname] [server list]
+.SH DESCRIPTION
+.B TekNap
+is a console Napster client.  It has powerful scripting features based on
+BitchX(1) and EPIC(1) scripting, support for both Napster and opennap
+servers, and a full-screen browse/search mode.
+
+.B TekNap
+1.0 20000701
+
+.SH OPTIONS
+.TP
+.I -a
+Adds default servers and command line servers to the server list.
+.TP
+.I -n [nickname]
+Nickname to use.
+.TP
+.I -p
+Request password to use.
+.TP
+.I -r [filename]
+Use [filename] for the server list.
+.TP
+.I -v
+Tells you about the client's version.
+.TP
+.I -C
+Create an account on the server.
+.TP
+.I -N
+Do not auto-connect to the first server.
+.TP
+.I -S [refnum]
+Starting server to use.
+.TP
+.I -A
+Talk to napigator.com and download the server list from there.
+.TP
+.I -H ip
+Specify a ip to use for the connection. Also called a vhost.
+.TP
+.I -c
+Set's napster.com compatibility mode
+.TP
+.I -s
+Windows only. Runs a setup routine which directly modifies autoexec.bat
+
+.SH ENVIRONMENT
+.TP
+.BR TekNap
+uses a few environment variables to configure the client.  These can be set
+accordingly depending upon which shell you are using.  If you use BASH(1),
+ZSH(1) or KSH(1) you use the syntax: export VARNAME="value" and place it in
+either ~/.profile or ~/.<shellname>rc.  If you use CSH(1) or TCSH(1) you use
+the syntax: setenv VARNAME="value" and place it in either ~/.profile,
+~/.<shellname>rc.  Below is the the list of variables.
+.PP
+.TP
+.BR NAPNICK
+Default nickname when connecting to a server.
+.TP
+.BR NAPPASS
+Default password to use when connecting to a server.
+.TP
+.BR NAPSERVER
+Default server list, space delimited, server:port:nick:pass:meta.
+.TP
+.BR NAPPORT
+Default server port to connect to.
+.TP
+.BR NAPPATH
+Same as
+.B LOAD_PATH
+setting.
+.TP
+.BR NAPLIB
+Path of the library of scripts.
+.TP
+.BR SHELL
+Shell to use.
+.TP
+.BR SHELL_FLAGS
+Shell flags for default.
+.PP
+
+.SH OBTAINING
+The latest version of
+.B TekNap
+is always available via anonymous FTP at the following address:
+.B ftp.teknap.com
+or via the webpage at:
+.B http://www.teknap.com
+.PP
+
+.SH MAN PAGE AUTHOR
+dialtone
+.B <dialtone@chemlab.org> <dialtone@opennap>
+
+.SH TekNap Author
+Colten Edwards
+.B <edwards@teknap.com> <q@opennap>

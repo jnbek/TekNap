@@ -1,0 +1,21 @@
+Synopsis:
+   irc [server server:port:nick] [who [arg]] [nick nickname]
+
+Description:
+   Command to use if you would like to connect to a irc server instead of a
+   napster/opennap server. 
+      server   server to connect to with specified port and nick
+      who      to get a who of some channel or nick
+      nick     to change to a specified nickname
+
+Examples:
+   To connect to a specific irc server:
+      /irc server irc.bitchx.com:6667:luna
+   To change your nickname:
+      /irc nick luna_jen
+   To do a who on a channel:
+      /irc who #bitchx
+
+
+See Also:
+   server; window server

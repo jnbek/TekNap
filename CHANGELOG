@@ -1,0 +1,527 @@
+	*** UNOFFICAL CHANGES *** - Spike
+	Hopefully someone can get back into the TekNap spirit and continue
+	this wonderful legacy. I have been doing some spotted work for the
+	client, but when I finally get better at coding hopefully I can do
+	much more to fix many problems that need to be fixed, such as stuff
+	that exists in the TODO file. I've named this release TekNap-1.4u,
+	where the 'u' refers to an unoffical version. If anyone has any
+	better ideas or would like to help, please let me know. I do wish
+	Colten Edwards would get back into the TekNap code and help fix
+	the remaining errors, but we all realize that he does have a family
+	to take care of, as well that he never has much time to himself even.
+	Even so, we do thank him for the work he did put into this wonderful
+	client. :)
+
+May 10th, 2004
+	Fixed compile errors when using the latest GCC 3.4.0
+
+Aug 23rd, 2003
+	Fixed some varibles so that TekNap-1.4 now compiles with GCC 3.3
+
+Feb 10th, 2003
+	Changed copyright date in configure script from 2000/2001 to 2003.
+
+	Fixed configure script issue rerunning autoconf, rerunning autoconf on
+	systems with newer autoconf versions will break the configure script.
+	If you must run autoconf, execute the autogen.sh script yourself.
+	You will need the older autoconf installed to do this successfully.
+
+	Fixed "Memory Usage" string in server stats to show proper memory
+	usage on opennap-ng servers. Since older opennap versions this feature
+	was broken, not only broken in TekNap, but in the opennap code as well.
+
+	Changed internal date from 20000909 to 20011011. Since November 11th
+	2001 was the last offical update for TekNap. Not October 9th 2000.
+
+	Fixed the "Unexpect pong" typo. "Unexpected pong" is where its at!
+
+	Patched in newly updated Napigator server list download code, since
+	the boys at Napigator changed the layout, the -A switch works again. :)
+
+	Updated napster.txt file with the more informative one from teknap.com.
+
+	*** OFFICAL CHANGES ***
+
+Oct 11th, 2001
+	Added RAW_IRC support as requested. This will allow you to grab
+	the incoming raw irc commands and do something with them. Added
+	a couple of necessary compiler defines for OSX/darwin.. no libcrypt
+	or libresolv however.
+
+	Added Support for new napster login methiod. Changed serverio
+	to use big-endian and spoof the v2.0 beta10.3 login abilities
+	To use, start TekNap with -c switch
+
+	Added better alias args support.. we can now use both of the
+	following 
+		alias foo (one, two, three) { }
+		alias foo(one, two, three) { }
+
+	Added /raw -server and /raw -rawfd support for sending raw numerics
+	to both a server reference number and a raw socket number
+
+	Added support for the new opennap class limits, ilines, dlines,
+	elines. 
+
+	Added -A flag on startup. This will grab the entire list of servers
+	from www.napigator.com and place it in the server list of TekNap. As
+	Well auto-connect is turned off. The /set default's are used for
+	nick and password. 
+	
+	/server -save added to save a list of your current servers. This
+	list is reloaded upon startup. Due to restrictions, the password is
+	not encrypted, therefore should not be used on a shell for mod+
+	users
+	
+	Fixed new browse method so it doesn't block (oops).
+	
+	Added ability for /gusers to use a -cmd {} which is performed on the
+	matches
+	
+	Added /set LASTLOG_TIMEFORMAT for time output on lastlog output. Set
+	this to the strftime() format you would like.
+	
+	Added /on lastlog 
+	
+	Added display of time in H:M format
+	
+	Added /admin cversion to show all client version codes.
+	
+	Added variables /set status_user20 through 39
+	
+	Added change to status_server() which displays partial server name
+	in %S and full server name with %{2}S.
+
+	Added %{1}K status_scrollback_info() for scrollback position
+
+	Fixed ignore list to remove multiple entries.
+
+	Added save of ignores to the TekNap.sav file
+
+	Changed /sping to support a -ALL using opennap mass ping for
+	servers.
+
+	Changed /gusers to add -ip # and -channel #name as well as
+	supporting multiple types.
+
+	Added support for the MKILL numeric to /kill
+
+	Added generic_handler() for the napster msg's which should be
+	handled but have not real specific handler.
+
+	Added support for new Napster direct client browse.. Also a /set
+	DEFAULT_DIRECT_BROWSE. /browse -direct [nick] will toggle the value.
+	Added ALLOW_DCC_OVERWRITE on/off. More checking on files about to be
+        dcc'd to you.
+
+	Added private DCC CHAT support using /chat [nick] [password].
+
+	Encryption is really simple xor and not some super duper 
+	private/public key encryption
+
+	Added support for Windows Winamp player control. -luser32 must be
+	in the -l line
+
+	Added ILLEGAL_CHARS set for replacing chars in a filename with _'s
+
+	Added a change which makes the file gets/sends in whois update
+	when switching servers.
+
+	Fixed probable core problem when doing searching and glist's.
+
+	Added /whowas using 10121 on 0.38 opennap servers.
+
+	Added support for /list wild card matching.
+
+	Bots-Brain discovered an annoyance with dcc sends
+
+	Virtual Host support added. export NAPHOST or export NAP_HOST
+	as well as -H hostname from the command line to use another
+	ip on napster.
+
+	Added /window status_special /window status_format1 /window
+	status_format2. These provide special status bar formats.
+
+	Added the ability to change a specific window's status bar, using
+	/set status_format1 /set status_format2
+	chanusers() modified to accept a nick to check for on a channel.
+
+	Added /debug and /set debug with documentation.
+
+	Fixed $channelnicks() to search the windows for the channel.
+	Reinstated my clear() when we start curses in scott.c because:
+        /* I know pana removed this before, but I have to have this clear(),
+         * Or else my Win95 Securecrt -> Linux -> "screen" (TERM=ansi)
+         * does not clear the non-curses text correctly. -Sheiker
+         */
+
+	Because I was very annoyed at having to type /scott -search,
+	instead of /scott -se<enter>
+	I decided to change /scott slightly.
+	I have now expanded scott.c to be 3 commands in 1.
+	1) /ssearch<enter>  This will automagically go to your
+		search list. No BS typing of -search.
+	2) /sbrowse nick<enter> This will automagically go to your
+		browse nicks. No way to do -search here.
+	3) /scott <nick or -search><enter>. The old way of doing
+		things, just in case you are too hardcased to switch
+		commands after all this time. =) -Sheiker
+
+	Added output of /me to display as irc does not display it
+	Added /on glist for scripters.
+	Fixed tabkey handling of directories.
+
+Sept 9th, 2000
+	Prettified admin stats output
+	Changed the way we deal with killing our threads in cdns.c/ptest.c.
+	I believe it is much more robust, and *hopefully* will make gdb
+	much happier about things when we /quit the client. -Sheiker
+
+	Fixed /m #chan so it works. Added . to signify last nick you sent a
+        msg to, "," to specify last nick who messaged you and * to specify 
+        current channel. special alias's for $. and $, added as well.
+	Discovered/fixed problem with SIGWINCH and resizing under certain
+        BSD and linux Xwindows.. Moved the refresh_screen() out of the
+        signal handler
+	search params added. 
+		-local for local server only
+		-duration/maxduration/minduration #   for time
+		-size/maxsize/minsize #               for file size
+	/scan modifed to take a "pattern" to match against.
+	Changes to /op to allow the oplist to be gotten.
+	New channel mode +r is added for registered channels
+	Added color to whowas output.
+	Added VBR detection and time calculation. We scan the whole mp3 and
+        calc the avg bitrate.
+	added /shift and /unshift commands and documentation
+	ignore/cignore now require a -remove flag in order to remove a
+	ignore from the list.
+	/exec -o output was being output twice. Fixed.
+	Fixed glob() for symlinks. My previous fix, broke the tabkey handler
+	A limited  irc client capability added. 
+		/irc server  server.name:port:nick
+		/irc nick nickname
+	tcp-wrapper support added for the fserv.
+	Correct numeric for setting the channel level found.
+	Added ping reply's to search results..
+	Added /xtype and documention.
+	Fixed /type command.
+	Added /stack command.
+	Added $isalpha() $isdigit() $isalnum() $isxdigit() $isspace()
+	Added $rest() $restw() $remw() $insertw() $chngw() $common $diff() 
+           $remws() 
+	Added $jot(), $push(), $pop() $shift(), $unshift(). /push, /pop and
+	/stack. Added documentation for all.
+	Added window_create hook.
+	Added $v for client internal version
+	Moved the "user is no online" msg out of the servermsg level
+	/which commands added. will display path to script file.
+	Added $uname() function. see man page for help with it.
+	/load is fixed so that it will output error msg's.
+	/paste, $line() and $lastlog() added along with documentation.
+	Added $strlen() function and documentation.
+	Added $numwords() function and documentation
+	multi-server joins to channels work now. window needs to be created
+	using "noserv" command. which we can then use to connect to another
+	server.
+	$xmms() function added for controlling xmms under X.
+	Changes to the support of "" material in the parser.
+	Possible core dump problem in help.c
+	mp3 player will attempt to guess at the song title. Forgot to
+	kill_mp3() in nap_exit()..
+	Added a hook which is called on SIGUSR1. User can then run an event
+	if kill -SIGUSR1 TekNap.pid is given.
+	Users might want to send something to the server on a SIGHUP, so
+	don't close until the hook has finished.
+	Oops. forgot about TRANSFER_TIMEOUT variable. Used to timeout, sends
+	that have never started.
+	Added support for /admin rehash for opennap.
+
+July 1 2000 (Canada Day) TekNap 1.0 released.
+	Fixed a few annoying bugs with windowing.
+	Fixed a problem with move_window_channels() after a window_delete().
+	Added some sanity checking in nap_exit().
+	Added a /dccget <nick> command.
+	Added $chanusers() function and documentation.
+	Fixed an annoyance with switch_channels() in multi-window mode.
+	Added in /on exit as well as some stats on /quit
+	Fixed bug in move_to_abs_word() when " " is encountered.
+	Added even more documentation
+	Added alot more documentation for /help
+	Added /url command
+	Added /voice, /unvoice, /unmuzzle, /muzzle commands.
+	Because sheiker is blind, modified the color on publics slightly
+	Added back the IDLE and TIMER_HOUR hooks.
+	move_to_abs_word() modified to understand that anything in "'s is
+	one word
+	Possible core problem in /help show_help().
+	Possible core problem in $sort() and $numsort()
+	Opennap numerics extend pass 1000 causing a problem in hooks.
+	Added AUTO_SHARE for auto sharing of files on connect
+	Changed occurances of .bwaprc to .teknaprc and ~/.BWap to ~/.TekNap
+	Changed name to TekNap 
+
+06-21-00 BWap 1.4/1.4a (only available in cvs)
+	More of the /admin commands moved out to the main list of commands.
+	New configure option to disable threading. 
+	Updated makefile dependancies.
+	Added new hook for channel wallops. /on wall	
+	Added support for channel modes and invites. /invite and /mode
+		/mode [<channel>] <+/->p/i/m/t
+		/invite [<channel>] <nick>|<nick1,nick2,nick3>
+	Fixed exec hooks.	
+	Added $J for the client version.
+	%s from the status bar was not using a large enough buffer.
+	Fixed a bug with invalid passwords and the client coring.
+	Added /set SHARE_LINKS, modifed glob.c so that symbolic links can be
+		turned on/off when sharing files.
+	Fixed a problem in /scott where the structure was not cleaned.
+	Fixed a problem with / in nicks and channelnames
+	Added -lc_r support for freebsd 4.0current threading.
+	Fixed problem with a define in share.c
+	Added threading support to the windows port for scanning for files.
+	Fixed the off by one in the share code.
+	Added a if () to cdns.c and ptest.c for a thread that hasn't
+		started.	
+	Added %u for the status bar. it displays the current directory that
+		share is working on.
+
+06-02-00 1.3a
+	Removed MD5 calc support. It's only needed for resume which is
+	disabled in napster clients and opennap servers.
+	Added -S # for specifing the starting server number.	
+	Fixed problem of forgetting to run autoconf. doh!
+
+05-24-00
+	Added STATUS_STATS for dynamic display of server stats.
+	Added %t to the status bar formats for the topic
+	Fixed win32 non-blocking support.
+	Found/fixed a problem with /whois and nick's not online.
+	
+	Added new commands /op, /delop and /oplist for opennap servers.
+	Found fixed a few slight problems with scripting.
+	Added a few new functions $rand() $srand(), $strcmp()
+	Added support for some of the new opennap/napster numerics, most
+	notable was the new 870 share numeric.
+	Fixed a problem with file sends/recieve under windows. Needed to use
+	O_BINARY for the open()'s.
+
+05-04-00
+	Fixed up a slight error todo with the /input command.
+	Added $winnum() and $winsize().
+
+04-27-00
+	Added new napster commands. /gusers /cloak /cban /cbanlist /cunban 
+	/cbanclear /block /blocklist /unblock. Just need to figure out
+	output from servers.
+	Added new status variable %h which follows the value of the
+	cloak/decloak
+	Added new %L for lag indicator. It's only active when your a
+	moderator. /sping added as well.
+
+04-23-00
+	Added $open() $read() $write() $eof() and $close(). $toupper() and
+	$tolower(). Help pages added for these as well. 
+	Added /pause /wait /return /break /continue /sleep and /usleep 
+	commands.
+	
+04-17-00
+	Couple of new functions added. $tr() $strip() $encode() $decode().
+	Sasafras noticed that /share -type was not working.
+	Added /input and /input_char
+	Added a new function $strftime() which works just like the unix
+	clib version. Also added $word() which will pull a specified word
+	off the input list of words
+	Found bug in the /whois queue causing problems with on flood.
+	Changed behaviour of -p so it requests the password from the user
+	using getpass() which does not echo to the screen.
+
+04-10-00
+	whois can accept multiple nicks. As well, -cmd { } can be used to
+	perform an operation on the result's of the /whois
+	nslookup can use -cmd { }.
+	|wolf| discovered /whois % would kill the connection to the server.
+	join can now do a little better than it was.. If the channel is
+	bound in another window, it cannot be moved until unbound. join can
+	accept multiple channels in both space and comma delimited form.
+	so join chan1 chan2  and join chan1,chan2 are accepted.
+
+04-09-00
+	Added a /whois queue.
+	Phucilage discovered that calc_eta() can still core on us..
+	Added /ptest <ip> <port>. /set PTEST must be on for this to work.
+	Added support for /join from .bwaprc
+
+04-08-00
+	Found a bug in the file sharing and % in a filename.
+	Found a bug in the shared file loading.
+	Fixed multi-window channel rejoining.
+	Fixed rejoin of channels on  server error.
+	Added in changes from scott for the gtk file browser.
+
+04-06-00
+	Support for opennap kick command added
+	Added support for 401 part numeric.
+	Added several moderator only numerics. set channel limit
+	Added hook for ERROR parsing. This will make scripting support for
+	commands and return easier.
+
+04-02-00
+	Found the problem with server reconnect not rejoining channels.
+	Fixed problem with core on send's finally.
+	Fixed a problem with ptest/cdns not setting the global_max_fd
+	variable.
+	Added in find_next_port() for ptest code. find_next_port() returns
+	the next port in a list of ports from /set PTEST_CHANGE_PORT.
+	Removed the debugging msg's as well.
+	
+03-30-00
+	Fixed lockup problem.
+	Found a memleak in cmd_parted() if we had browsed nick.
+
+03-29-00
+	Released 1.0 on freshmeat.
+03-26-00
+	Found a FD leak.
+	added a finished_transfer struct.
+	more documentation.
+
+03-21-00
+	Looks like the send bug is fixed.
+	minor bug in the dcc transfer fixed.
+	/command -help will display a small amount of help for the command.
+	/help is an interactive help system ala BX/epic. Most of the
+	commands are documented now.
+	More undocumented changes, mostly to the internals.
+
+03-18-00
+	Added a type of DCC send to the client. /set allow_dcc to turn
+	on/off the direct client to client transfer of files. 
+	/send nick filename to transfer a file.
+	Added a bunch of functions for scripting.
+	Added new opennap commands /admin setchanlevel and 
+	/admin register.
+
+03-15-00
+	Still attempting to find the send file bug, which only occurs after
+	100-200 sends.
+	Sheik sent an updated scott.[ch]
+	Discovered that STOP_IRC key bind was perm disabled.
+	Fixed Byte-order bug. working binaries for HPUX, Sparc, PowerPPC
+	Added auto-reconnect for server reconnecting. Attempts to be smart.
+
+03-12-00
+	Added /cignore to ignore a channel.
+
+03-09-00
+	Added /set MAX_RELM for the max number of msgs in your msg buffer.
+	Fixed a bug with /share and threads.
+	Added a change to the sharing that changes the select timeout and
+	makes it faster to respond when sharing.
+	Sheik compiled gcc on HPUX and we have a running but not connecting
+	binary. Suspected byte order problem
+
+03-07-00
+	Added a mp3printf() routine for internal printing of mp3 file info.
+	Added /set SEARCH_FORMAT, /set FILENAME_FORMAT and /set
+	DIRECTORY_FORMAT.
+	Multi-threaded directory searching and /NSLOOKUP.
+	If you use caselogic(a cdr indexing tool), /dbsearch added. Filename
+	is hardcoded at the moment for /etc/mp3.db
+	Tabkey implemented(unsure if entirely correct).
+	Scripting BWap is now possible. functions at the moment are limited.
+	Found/fixed bug in /print
+
+03-03-00
+	Several bugs with removal of shared files found.
+	Cleared up a problem with queuing of files.
+	
+03-04-00
+	Multiple bugfixes all around.
+	/resume added. Here's how it works. If a file download fails, the
+	result is put into a special queue. To list this queue, /resume.
+	If you want to resume a file, then you /resume # which will query
+	the server for matches to this file. It is based on the MD5
+	checksum. You can then /resume to list the possible people to resume
+	from. Finally /resume # <letter> will attempt to actually resume the
+	file. The resume list is saved upon exit and re-loaded when you
+	restart the client. ~/.BWap/unfinished is the name of the file.
+
+03-02-00
+        Found/fixed a core problem when sending from the queue.
+        Found/fixed a problem when browsing a user twice.
+        Found/fixed a problem with dgets() and browsing large lists.
+	Added more /on's and a /echo command.
+	Fudd noticed that /get was no longer working. Syntax needed to be
+	changed slightly unfortunately. /get <nick> <#>. Arguments can be
+	reversed. Also /get -browse nick #.
+	Sheik noted a reverse'd sense to the ->flags.
+	Added a download queueing system based on 620 msg. We'll
+	automatically retry requested files.
+
+02-27-00
+		
+	setting a topic, displayed the change twice.
+	Found a file descriptor leak in send.c
+	Alot of various changes. /queue command expanded. /share command
+	expanded. 
+	Found bug when connected to /server 0 and a reconnect is attempted.
+	
+02-21-00
+	Fixed another huge bug in file recieves. This is after the fix from
+	below.
+	Fixed major bug in filesends.. seems that we don't need to request
+	the linespeed on a filesend/request. 
+	All transfer/queue structures are now double linked
+
+02-19-00
+	Modified some structures. 
+	Added a /queue command to see the incoming/outgoing queue
+	Added handler for the 620 send limit reached msg.
+	Sheik supplied more patches.
+	Corrected create_and_do_get()
+	Fixed some msg's todo with resuming and getting files
+
+02-18-00
+	Cleanup changes.
+	Multi-window support working.
+	
+02-17-00 0.4c
+	Firewall sends working.
+	Scott Kilhau (sheik) with more changes to scott.c browser.
+
+02-15-00
+	Fixed core on /del #
+	Fixed /names not working on current_channel.
+	Reformatted /names.
+	Fixed bug with -create and -C with account creation.
+	Buncha various bug fixes. 
+	indigoid submitted a filename print patch.
+
+02-14-00
+	Fixed /share -save and /share -load
+	Added double link list for the browse.
+	Added clean queue'd entries. 
+
+02-13-00
+	Added in /query.
+	Toasty demonstrated a new numeric for /me.
+	Added sharing of files. 
+	Sheik make me add /get [range] support.
+		ex. /get 10-15, /get 10-, /get 3,5,6,7  /get *
+	File upload support added.
+	Bug fixed if you /browse before the first browse has completed. 
+	Added /clear [-all|-scrollback|-unhold]
+
+02-11-00
+	Fixed bug in alias.c with non-functions coring client.
+	Added in epic's $cparse() function.
+
+02-10-00
+	Added /timer and /exec commands.
+	Fixed a problem with server sockets not being closed properly.
+	Added firewall receive of files.
+	Changed dgets() so it does both nap and unbuffered read.
+	Added a /version command for the /whois impaired.
+	Fixed /server +add so it works. +add -add /add are equivalant.
+	Added a check for /quit when active download/uploads are running.

@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]search_end [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is sent when the user's search has ended
+
+Parameters:
+   $0    a count of the number of items found in the search
+
+Examples:
+
+See Also:
+   on search_begin(5); search(2); browse(2)

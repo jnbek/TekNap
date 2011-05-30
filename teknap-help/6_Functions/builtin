@@ -1,0 +1,6 @@
+$builtin_expando(N)     returns the value of $N inline expando
+
+        Since it is possible to override the SETNAME or single-character
+        inline expandos with your own variables, these functions are
+        provided as absolute ways to get at those values without worrying
+        about interference from other scripts.

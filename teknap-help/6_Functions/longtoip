@@ -1,0 +1,14 @@
+Synopsis:
+   $iptolong(<ip>)
+   $longtoip(<number>)
+
+Technical:
+   These functions will convert a number or ip to the other.
+
+Returns:
+     number or ip
+
+Examples:
+   $iptolong(127.0.0.1)            returns 2130706433
+   $longtoip(2130706433)           returns 127.0.0.1
+

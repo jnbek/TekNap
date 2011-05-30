@@ -1,0 +1,12 @@
+Synopsis:
+   setchanlimit <channel> <limit>
+
+Description:
+   Sets the limit for the number of users on one channel before the rollover
+   to another channel takes effect. When a channel is at the limit, then the
+   server will create a new channel and add a number to the end of the name.
+Examples:
+    /setchanlimit Alternative 2
+
+See Also:
+

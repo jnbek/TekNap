@@ -1,0 +1,16 @@
+Synopsis:
+   get [<-request> <file>|<-browse> <#> <nick>]
+
+Description:
+   Attempts to get a file after a /search or a /browse if done. <#> can be a
+   range of numbers to get. You can also directly request a file you know
+   exists (not recommended).
+
+Examples:
+   To get files from a browse of pana's files:
+       /get -browse 1,3,5,7 pana
+   To get files from a search:
+       /get 1,3,5,6-10 pana
+
+See Also:
+   browse, search, scott

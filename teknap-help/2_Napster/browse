@@ -1,0 +1,25 @@
+Synopsis:
+   browse [-direct][nick][-clear nick]
+
+Description:
+   Used to browse a "nick"'s filelist. The first time a browse command is
+   issued, the server is queried about that users files. The second time the
+   command is issued, then that persons files are displayed.
+
+   You will need to clear the browse list if that persons has changed there
+   filelist.
+   Added support for direct browsing. Your client will connect to the remote
+   client and request a list of files. This is then transmitted to the
+   client. If the method is not supported, a timer of 30 seconds is used and
+   a regular server browse is done.
+
+Examples:
+    To browse a persons files:
+        /browse pana
+
+    To clear a nick:
+        /browse -clear pana
+
+See Also:
+    scott sbrowse ssearch
+

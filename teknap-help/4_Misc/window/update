@@ -1,0 +1,8 @@
+Synopsis:
+   window [refnum] update
+
+Description:
+   This updates the status bar of the current window.
+
+See Also:
+   window(4) refresh

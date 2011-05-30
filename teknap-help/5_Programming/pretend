@@ -1,0 +1,20 @@
+Synopsis:
+   pretend <numeric> <arguments>
+
+Description:
+   The PRETEND command allows the client to "pretend" it received the given
+   arguments from the server.  It is intended only to be used inside a hook
+   action.  
+
+Examples:
+   pretend 202 0   # would cause the client to think a end of search msg was
+                     recieved
+
+See Also:
+
+Other Notes:
+   This command is only designed to be used as part of a hook action.  
+   Its behavior when not used in this manner is undefined and possibly
+   dangerous to the client. USE WITH CAUTION.
+
+

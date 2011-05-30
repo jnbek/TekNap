@@ -1,0 +1,8 @@
+@iha_count = 2
+@iha.0.0 = [%GMUZZLE]
+@iha.0.1 = [%GMUZZLE %Y<%Cnick1,nick2,...,nickN%Y> [%Creason%Y]]
+@iha.0.2 = [Used to muzzle a series of nicks]
+
+@iha.1.0 = [%GUNMUZZLE]
+@iha.1.1 = [%GUNMUZZLE %Y<%Cnick1,nick2,...,nickN%Y>]
+@iha.1.2 = [Used to unmuzzle a series of nicks]

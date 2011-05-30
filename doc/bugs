@@ -1,0 +1,96 @@
+
+/scan doesn't go past 80 chars.
+/scan doesn't update the speed when changed.
+
+<sheiker> *desperr* wanna code stuff into bwap for me?
+          <[04:18]:despair@lex-ts2-25.iglou.com>
+<sheiker> -> *desperr* Oh, whatcha looking for? <[04:19]>
+<sheiker> *desperr* i thought it would be really cool if i could set up a
+list
+          of music that i am looking for
+<sheiker>           <[04:19]:despair@lex-ts2-25.iglou.com>
+<sheiker> *desperr* and have it autosearch those people when i connect to a
+          server and return a list
+<sheiker>           <[04:19]:despair@lex-ts2-25.iglou.com>
+<sheiker> *desperr* instead of having to search for each of the things i
+like
+          every time i connect to a server
+<sheiker>           <[04:19]:despair@lex-ts2-25.iglou.com>
+<sheiker> *desperr* it would make bwap elite++++
+          <[04:20]:despair@lex-ts2-25.iglou.com>
+
+<masquith> to replicate, /hotlist <own nick>, then /server <new server>, you
+           should be online
+<masquith> but it says you ain't
+
+<q> I used to
+
+<drscholl> 831 [server] [flags]
+<drscholl> server and flags are optional
+<drscholl> no args lists all users on all servers
+<drscholl> flags are any combination of: e a m
+
+<drscholl> q: new numeric 10207 <channel> [ "<reason>" ]
+<drscholl> drops (unregisters) a channel
+
+<DavidW3> panasync: and this may be a bug, I /del -2 for example and /glist
+          showed nothing, but /scott thowed the percentage and it just went
+          whacky i guess because it'
+
+<void^> if I have a hidden window and create a split window then create a
+          another hidden it resizes the split one
+<void^> it also seg faulted a few times when I window killswap
+
+[ruinsofwisdom(*@*)] Buf report (?) I did a search with line speeed at least
+                     DSL and got this error: EQUAL TO: invalid comparison
+for
+                     search
+
+<void^/Admins> ^window new size 7 level server;window back;window new
+<void^/Admins> if you do that it resizes the 7 back to like 10 or something
+
+<drscholl> 10301 <nick>
+<drscholl> NEW_BROWSE_REQUEST
+<drscholl> 10302 <nick> "<path>" <filename> <md5> <size> <bitrate>
+<frequency>
+           <time> [ <filename> ... ]
+<drscholl> NEW_BROWSE_RESPONSE
+ωνω bitchx.dimension6.com has muzzled 98093458: quit while muzzled
+<drscholl> list is terminated by a 10301 <nick> from the server
+
+hotlist on napster doesn't work properly
+
+<matty> ωνω Topic for Help: Welcome to the Help channel.
+<matty> Received error for 425 Find future stars in Napster's New Artist
+          Program! Go to http://artist.napster.com!.
+
+hooks and notices which don't exist.
+
+add a /unignore * from []Anyone[]
+
+[synak(halt@ns.dhs.org)] you might want to edit the color.h file in the
+                         humble/hades section of the defines..
+                         DEFAULT_STATUS_STAT is defined under the teknap
+                         default, however nut under the hades section.. wont
+                         compile correctly if you opt to use the hades look.
+
+<drscholl> my main mp3 directory is ~/mp3
+<drscholl> under that i have a pending directory
+<drscholl> in the pending directory there is on .mp3 and 2 subdirs
+<drscholl> on=one
+<drscholl> when i do /share ~/mp3/pending  and then /share -share
+<drscholl> the first 870 command that gets send to the server has
+           ~/mp3/pending as the dir...
+<drscholl> then it lists the one .mp3 in that directory
+<drscholl> and then it lists files in one of the subdirectories
+<drscholl> so its leaving out the subdir name
+<drscholl> and just labeling it as being in ~/mp3/pending
+
+handle_connection(): tag=617, len=0, data=
+
+753 and 701 possibly broken.
+
+<drscholl> if you join 2 channels in the same window, then creat another and
+           do /win channel #chan  it doesnt switch
+<drscholl> you have to part and then do a /join in the other channel
+<drscholl> err window i mean

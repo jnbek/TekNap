@@ -1,0 +1,14 @@
+Synopsis:
+    signore [-] <pattern>
+
+Description:
+    Use this command to ignore a server msgs. You could also use the hook
+    method, /on ^servermsg "pattern" #
+
+Examples:
+    To ignore the server message 'Notification from':
+        /signore "Notification from %: *"
+    To remove:
+        /signore - "Notification from %: *"
+
+

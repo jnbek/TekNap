@@ -1,0 +1,13 @@
+Synopsis:
+   kick [channel] <nick> [reason]
+
+Description:
+   Kick a user from the current or the specified channel with optional
+   reason.
+
+Examples:
+   /kick luna hi hunny, I'm home.
+   /kick Alternative luna hey sweety!
+
+See Also:
+

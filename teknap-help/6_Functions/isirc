@@ -1,0 +1,10 @@
+Synopsis:
+   $isirc([server number])
+
+Returns:
+   "true" or "false" value if the server is a irc window.
+
+Examples:
+   $isirc(2)               returns true if server #2 is a irc server
+   $isirc()                returns true if current server is irc server
+

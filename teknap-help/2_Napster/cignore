@@ -1,0 +1,13 @@
+Synopsis:
+    cignore [-remove] <channel>
+
+Description:
+    Use this command to ignore a channel
+
+Examples:
+    To ignore the channel 'Alternative':
+        /cignore Alternative
+    To un-ignore the channel:
+        /cignore -remove Alternative
+
+

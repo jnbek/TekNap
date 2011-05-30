@@ -1,0 +1,14 @@
+Synopsis:
+   on [<modes>]error [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever an error from the napster server is
+   received.
+
+Parameters:
+   $0    numeric of the error
+   $1    output from the server
+
+Examples:
+
+See Also:

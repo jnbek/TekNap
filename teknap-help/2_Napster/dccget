@@ -1,0 +1,16 @@
+Synopsis:
+    dccget <nick(s)>
+
+Description:
+    This is a direct client to client transfer of a file. It's similar to
+    irc DCC but based on napster protocols. Multiple nicks can be specified
+    using ,'s between them. If /set allow_dcc is off, you can use this
+    command to retrieve the offered file.
+
+Examples:
+    To send a file:
+        /dccget q
+        /dccget q,luna,duff
+
+See Also:
+    set allow_dcc, send

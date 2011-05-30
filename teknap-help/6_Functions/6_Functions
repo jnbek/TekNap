@@ -1,0 +1,24 @@
+Section 6: Built-In Functions                                               
+
+This section will be a treasure trove for many script writers.  Every single
+built-in function is described here; every helpfile shows exactly what each
+function takes in and what they spit out.
+
+Time Functions: stime strftime time utime
+
+Pattern Matching: match pattern
+   regcomp regerror regex regexec regfree rmatch rpattern
+
+Character Operations: ascii chr 
+
+String Operations: after before cparse index left mid msar right rindex sar
+   strchr strrchr
+
+Word Operations: afterw beforew findw insertw leftw midw
+   numwords restw rightw
+
+Array Operations: delarray delitem finditem getarrays getitem getmatches
+   getrmatches gettmatch ifindfirst ifinditem igetitem igetmatches igetrmatches
+   indextoitem itemtoindex matchitem numarrays numitems rmatchitem setitem
+
+Miscellaneous: aliasctl

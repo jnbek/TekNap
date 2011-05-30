@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]channel_join [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered when we join a channel.
+
+Parameters:
+   $0    is the channel name
+
+Examples:
+
+See Also:
+

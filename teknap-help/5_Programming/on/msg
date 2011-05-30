@@ -1,0 +1,25 @@
+Synopsis:
+   on [<modes>]msg [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives a MSG from another
+   client.
+
+Parameters:
+   $0    nickname of message sender
+   $1-   text of message
+
+See Also:
+   msg(1); send_msg
+
+Restrictions:
+   IF your using a automated reply system, some caution is required. A
+   continuous loop is possible, if you send a msg in reponse to a msg. So
+   for example, nick1 is using an away script and is away. nick2 is using an
+   away script and is also away.
+	nick1 msg's nick2
+	nick2 sends back an auto-reply.
+	nick1 send back an auto-reply.
+	.....
+
+

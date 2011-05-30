@@ -1,0 +1,239 @@
+This is a set of scripts I wrote for TekNap (formerly BWap). They do a range 
+of things including nick completion, auto-response, fixed tabkey support, and
+a wide variety of stuff for Moderators and higher. I wrote everything except
+the nick completion which was written by shade for a BitchX/EPIC script I
+wrote a while back.
+
+HOW TO USE THESE SCRIPTS
+
+In order for these scripts to do anything, they must be loaded into the
+client's memory. This can be done with the /load command. Since each of
+these scripts is independent of the others, you have the choice of loading
+only the features you want. This can be done at any time from within the
+client by typing "/load <filename>".
+
+  Examples:
+
+	/load /home/you/.TekNap/scripts/oper
+	/load ~/.TekNap/scripts/away
+	/load scripts/misc
+
+Most people don't want to have to type this every single time they start
+TekNap. So loading the scripts automatically on startup through the .teknaprc
+file is usually the best way to go. This can be done a couple of different
+ways..
+
+  UNIX users put the following in ~/.teknaprc
+  Windows users put the following in c:\TekNap\teknap-rc or teknap.rc
+
+  Windows users also do not have a ~/.TekNap directory so I recommend
+  something like c:\TekNap (//c/TekNap)
+
+	Method 1:
+
+	load ~/.TekNap/scripts/autoresponse
+	load ~/.TekNap/scripts/away
+	load ~/.TekNap/scripts/floodprot
+	  ...
+
+	---
+
+	Method 2:
+
+	fe (autoresponse away floodprot oper) file
+	{
+		load ~/.TekNap/scripts/$file
+	}
+
+	---
+
+  The sample.teknaprc file included demonstrates method 2.
+
+
+WHAT'S IN THE SCRIPTS
+
+Just a note, the global variables (the ones in CAPS) that I will be using
+throughout these scripts can be changed using the /assign command. At some
+point I may write an interactive config, but until then, everything has to be
+done on the fly using /assign or in the scripts themselves.
+
+*autoresponse*
+
+  This script makes the nick of anyone saying something with
+  $AUTO_RESPONSE_STR in it, yellow.
+
+  *note* AUTO_RESPONSE_STR can contain multiple nicks separated by spaces.
+
+  Config Variables:		Value:		Description:
+    AUTO_RESPONSE		0/1		Auto-response ON/OFF
+    AUTO_RESPONSE_BEEP		0/1		Auto-response beep ON/OFF
+    AUTO_RESPONSE_STR		text string	What triggers Auto-response
+
+*away*
+
+  Your standard away system including public away notification and msg
+  logging.
+
+  Config Variables:		Value:		Description:
+    AWAY_LOG			0/1		Msg logging ON/OFF
+    AWAY_LOGFILE		filename	Away logfile
+    DEFAULT_AWAY_REASON		text string	Default away reason
+    DEFAULT_BACK_REASON		text string	Default back reason
+    PUBLIC_AWAY			0/1		Public away notice ON/OFF
+    PUBLIC_AWAY_CHANNELS	channel list	Channels to notify. If this
+						variable does not exist, all 
+						channels are notified.
+
+  Commands:
+    /away [reason]		- Sets you as away for [reason]
+    /back [reason]		- Sets you as not away for [reason]
+    /readlog			- Read your away msgs
+    /remlog			- Remove logfile
+
+*bans*
+
+  A whole bunch of ban related stuff.
+
+  Commands:
+    /ban <nick1|IP1,nick2|IP2,...> [reason]	- Places ban(s)
+    /bankill <nick1,nick2,...> [reason]		- Places a ban and then
+						  kills each nick specified
+    /banlist					- Display the server banlist
+    /bans					- Same as /banlist
+    /bk	<nick> [reason]				- Add channel ban and kick
+    /cban <channel> <nick> [reason]		- Add a channel ban
+    /cbanclear <channel>			- Clear a channels banlist
+    /cbanlist [channel]				- List a channels bans
+    /ctban					- Interactive channel ban remove
+    /cunban <channel> <ban1> [ban2] ...		- Remove channel bans
+    /tban					- Interactive server ban remove
+    /tempban <seconds> <nick|IP> [reason]	- Temporary ban for <seconds>
+    /unban <nick1|IP1> [nick2|IP2] ...		- Remove ban(s)
+
+*floodprot*
+
+  Standard flood protection.
+
+  Config Variables:		Value:		Description:
+    AUTO_IGNORE_TIME		# of seconds	How long to ignore the flooder
+    FLOOD_PROTECTION		0/1		Flood protection ON/OFF
+
+  Commands:
+    /fprot [0|1|off|on]			- Toggle flood protection
+    /ignore [nick]			- Add [nick] to ignore list
+    /unignore [nick]			- Remove [nick] from ignore list
+
+  If you want to change what exactly triggers a flood, try '/set flood' from
+  within TekNap.
+
+*functions*
+
+  Some (un)useful functions. 
+
+  Functions:
+    checkuserclass(<nick>)	- Checks <nick>'s user class and returns a #
+				  accordingly.
+    fparse(<fset> <args>)	- Doesn't currently work.
+
+*misc*
+
+  Miscellaneous stuff that doesn't fit anywhere else.
+
+  Commands:
+    /cme <text>			- Sends an action with colored text
+    /csay <text>		- Sends a public with colored text
+    /cycle [channel]		- Leaves then re-joins a channel
+    /links			- Shortcut for /admin links
+    /lusers			- Shortcut for /admin stats
+    /partall			- Part ALL your current channels
+    /pingme			- Pings yourself
+    /q				- Shortcut for /query
+    /quote			- Shortcut for /raw
+    /sv				- Shortcut for /version
+    /wi <nick1> [nick2] ...	- Perform a whois lookup on nick(s)
+
+  Also included is a fix for Auto-rejoin on channel kick and on channel
+  clear. Works with TekNap's internal /set AUTO_REJOIN
+
+*nickcomp*
+
+  Auto-completes people's nicknames when addressing them in public channels.
+  This was borrowed from my BitchX/EPIC4 script playdough. It was originally
+  written by shade <shade@chemlab.org>.
+
+  Config Variables:		Value:		Description:
+    NICK_COMP			0/1		Nick completion ON/OFF
+    NICK_COMP_CHAR		character	Character to use with nick
+						completion
+
+  This is triggered when the first word you send is followed by a ":". For
+  example..
+
+  Users on channel Lobby: You, Friend, SomeGuy
+
+  Typing "fri: hi!" would send "Friend: hi!"
+  Typing "omeg: you are lame" would send "SomeGuy: you are lame"
+
+*oper*
+
+  A bunch of stuff for Moderators+
+
+  Config Variables:		Value:		Description:
+    AUTO_MUZZLE			0/1		Auto-muzzle ON/OFF
+    AUTO_MUZZLE_TIME		# of seconds	Duration of muzzle
+    OPERVIEW_SIZE		# of rows	Determines size of OperView
+						window
+
+  Commands:
+    /automuzzle [0|1|off|on]		- Toggles auto-muzzle
+    /c <0|1|2|3|4>			- Sets current channel's level to <#>
+    /clones [server]			- Checks for clones
+    /mkill <string> [reason]		- Mass kills everything matching
+					  <string>. Accepts wildcards.
+    /operview				- Toggles OperView
+    /ov					- Same as /operview
+    /tmuzzle <seconds> <nick> [reason]  - Temporarily muzzles <nick> for
+					  <seconds>
+    /u <nick> [level]			- Changes <nick>'s level to [level]
+
+  Note: If Auto-muzzle is enabled then the public flood protection will not
+        ignore anyone flooding, but will attempt to muzzle them instead.
+
+*tabkey*
+
+  This was just an attempt to fix BWap's broken msg history. Without this
+  script BWap only keeps track of the last nick that msg'd you. This allows
+  you to keep track of an unlimited amount of nicks.
+
+  *NOTE* This has been fixed in the latest release of TekNap.. This script
+         is no longer needed, and I recommend using the builtin tabkey stuff.
+
+  Config Variables:		Value:		Description:
+    MAX_MSG_BUFFER_SIZE		#		How many nicks to keep in
+						the msg history
+
+  Just press your Tab key to use this. Note: loading this script will
+  disable all builtin tabkey functions such as filename and command completion.
+
+*window*
+
+  Some very simple, but useful, window related aliases.
+
+  Commands:
+    /swap [winnum]		- Swap to a different window
+    /wc				- Create a new hidden double statbar window
+    /wj <channel>		- Creates a new window (/wc) and joins <channel>
+    /wk				- Kills the current window
+    /wl				- Shortcut for /window last
+    /wn				- Shortcut for /window next
+    /wp				- Shortcut for /window previous
+
+
+That's it for now.. I'll try to keep this file updated as often as possible.
+Let me know if you find any bugs or have any suggestions for these scripts.
+
+Enjoy..
+
+Brian Weiss <brian@got.net>
+http://www.got.net/~brian/
+I can be found on OpenNap or EFnet IRC on the nick "fudd"

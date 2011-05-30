@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]search_begin [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered when a users search begins
+
+Parameters:
+   $0-    The text of what the user is searching for
+
+Examples:
+
+See Also:
+   on search_end(5); search(2); browse

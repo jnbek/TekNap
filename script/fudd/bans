@@ -1,0 +1,247 @@
+/*
+ * Ban related stuff for TekNap
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ */
+
+alias admin
+{
+	switch ($0)
+	{
+		(banlist)
+		{
+			@ delarray(banlist)
+			raw 615
+		}
+		(*)
+		{
+			//admin $*
+		}
+	}
+}
+
+alias ban (ban, reason)
+{
+	if (ban)
+	{
+		fe ($sar(g/,/ /$ban)) xx
+		{
+			raw 612 $xx \"$reason\"
+		}
+	}{
+		xecho -b Usage: /ban <nick|IP,nick2|IP2,etc> [reason]
+	}
+}
+
+alias bankill (nick, reason)
+{
+	if (nick)
+	{
+		fe ($sar(g/,/ /$nick)) newnick
+		{
+			raw 612 $newnick \"$reason\"
+			raw 610 $newnick \"$reason\"
+		}
+	}{
+		xecho -b Usage: /bankill <nick1,nick2,etc> [reason]
+	}
+}
+
+alias banlist (void)
+{
+	@ delarray(banlist)
+	raw 615
+}
+
+alias bans banlist
+
+alias bk (nick, reason)
+{
+	if (nick)
+	{
+		raw 422 $C $nick \"$reason\"
+		raw 829 $C $nick \"$reason\"
+	}{
+		xecho -b Usage: /bk <nick> [reason]
+		xecho -b   - Bans then kicks <nick> from the current channel
+	}
+}
+
+alias cban (chan, ban, reason)
+{
+	if (chan && ban)
+	{
+		raw 422 $chan $ban \"$reason\"
+	}{
+		xecho -b Usage: /cban <channel> <nick|IP> [reason]
+	}
+}
+
+alias cbanclear (chan, void)
+{
+	if (chan)
+	{
+		raw 424 $chan
+	}{
+		xecho -b Usage: /cbanclear <channel>
+	}
+}
+
+alias cbanlist (chan default "$C", void)
+{
+	@ delarray(cbanlist)
+	raw 420 $chan
+}
+
+alias ctban (chan default "$C", void)
+{
+	cbanlist $chan
+	@ channel = chan
+
+	input "Which ban(s) to remove? (1, 2-5, ...) " if ([$0])
+	{
+		fe ($*) bannum
+		{
+			^local tban1,tban2
+			@ tban1 = before(- $bannum)
+			@ tban2 = after(- $bannum)
+
+			if (tban1 < tban2 && tban1 < numitems(cbanlist) && tban2 <= numitems(cbanlist))	
+			{
+				for (@ count = tban1, count <= tban2, @ count++)
+				{
+					raw 423 $channel $word(0 $getitem(cbanlist ${[$count] - [1]}))
+				}
+			}{
+				if ([$0] <= numitems(cbanlist))
+				{
+					raw 423 $channel $word(0 $getitem(cbanlist ${[$0] - [1]}))
+				}
+			}
+		}
+	}
+	@ channel = []
+}
+
+alias cunban (chan, ban)
+{
+	if (chan && ban)
+	{
+		fe ($ban) uban
+		{
+			raw 423 $chan $uban
+		}
+	}{
+		xecho -b Usage: /cunban <channel> <ban1> [ban2] ...
+	}
+}
+
+alias tban (void)
+{
+	banlist
+
+	input "Which ban(s) to remove? (1, 2-5, ...) " if ([$0])
+	{
+		fe ($*) bannum
+		{
+			^local tban1,tban2
+			@ tban1 = before(- $bannum)
+			@ tban2 = after(- $bannum)
+
+			if (tban1 < tban2 && tban1 < numitems(banlist) && tban2 <= numitems(banlist))
+			{
+				for (@ count = tban1, count <= tban2, @ count++)
+				{
+					raw 614 $word(0 $getitem(banlist ${[$count] - [1]}))
+				}
+			}{
+				if ([$0] <= numitems(banlist))
+				{
+					raw 614 $word(0 $getitem(banlist ${[$0] - [1]}))
+				}
+			}
+		}
+	}
+}
+
+alias tempban (time, ban, reason)
+{
+	if (time && ban)
+	{
+		raw 612 $ban \"$reason\"
+		timer $time raw 614 $ban
+	}{
+		xecho -b Usage: /tempban <seconds> <nick|IP> [reason]
+		xecho -b   - Bans <nick|IP> for <seconds>
+	}
+}
+
+alias unban (bans)
+{
+	if (bans)
+	{
+		fe ($bans) ban
+		{
+			raw 614 $ban
+		}
+	}{
+		xecho -b Usage: /unban <ban1> [ban2] [ban3]..
+	}
+}
+
+on ^420 "*"
+{
+	if (numitems(cbanlist))
+	{
+		^local count
+
+		xecho --  #    SETBY      DATE     BAN
+		for (@ count = [0], numitems(cbanlist) > count, @ count++)
+		{
+			^local ban,bannum,bantime,reason,setby
+			@ ban = word(0 $getitem(cbanlist $count))
+			@ bannum = count + 1
+			@ bantime = word(3 $getitem(cbanlist $count))
+			@ reason = word(2 $getitem(cbanlist $count))
+			@ setby = word(1 $getitem(cbanlist $count))
+			echo $cparse([%W$[3]bannum%n]) $[10]setby $[8]strftime($bantime %x) $ban \"$reason\"
+		}
+	}{
+		xecho -b No bans for this channel.
+	}
+}
+
+on ^421 "*"
+{
+	@ setitem(cbanlist $numitems(cbanlist) $*)
+}
+
+on ^615 "*"
+{
+	if (numitems(banlist))
+	{
+		^local count
+
+		xecho --  #    SETBY      DATE     BAN
+		for (@ count = [0], numitems(banlist) > count, @ count++)
+		{
+			^local ban,bannum,bantime,reason,setby
+			@ ban = word(0 $getitem(banlist $count))
+			@ bannum = count + 1
+			@ bantime = word(3 $getitem(banlist $count))
+			@ reason = word(2 $getitem(banlist $count))
+			@ setby = word(1 $getitem(banlist $count))
+			echo $cparse([%W$[3]bannum%n]) $[10]setby $[8]strftime($bantime %x) $ban \"$reason\"
+		}
+	}{
+		xecho -b No bans for this server.
+	}
+}
+
+on ^616 "*"
+{
+	@ setitem(banlist $numitems(banlist) $*)
+}
+
+
+/* bmw '01 */

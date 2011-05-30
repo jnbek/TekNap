@@ -1,0 +1,11 @@
+Synopsis:
+   admin killserver <server> [reason]
+
+Description:
+   Causes the specified server to quit and exit. Elite only.
+
+Examples:
+   /admin killserver bitchx.dimension6.com upgrade time..
+
+See Also:
+   removeserver

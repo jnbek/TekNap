@@ -1,0 +1,15 @@
+Synopsis:
+   $md5(<filename> [<size>])
+
+Practical:
+   This function calculates the MD5 checksum on the specified filename using
+   the first 300,000 bytes of the file. If size is specified then that is
+   used instead. 
+
+Returns:
+   returns the MD5 sum of the file
+
+Examples:
+
+See Also:
+

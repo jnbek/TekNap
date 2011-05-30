@@ -1,0 +1,36 @@
+Synopsis:
+   $xmms(options)
+
+Technical:
+   The $xmms() function communicates with a running xmms mp3 player using
+   the control socket that is provided.
+          playlist_add
+               adds a group of quoted filenames to the playlist of xmms
+          pause
+               pauses the currently playing mp3
+          next
+               skips to the next mp3 in the playlist
+          prev
+               skips to the prev mp3 in the playlist
+          play [#]
+               start playing the playlist or from the specified # in the
+               playlist
+          stop
+               stop the current playlist
+          info
+               returns the info from the currently playing mp3
+          playlist
+               returns the playlist
+          volume
+               set's the volume that xmms is playing at
+
+Returns:
+   -1:     if xmms is not running or error
+   empty:  if no command is provided
+   0:      for most commands that succede
+   string: for commands like info and playlist
+
+Examples:
+
+See Also:
+   mp3(4)

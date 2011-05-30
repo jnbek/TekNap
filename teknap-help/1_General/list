@@ -1,0 +1,9 @@
+Synopsis:
+   list 
+
+Description:
+   This is used to list the channels that currently exist (i.e. that have
+   one or more client on them) on the network.  The output will include
+   the channel name (usually; see below), the number of users on that
+   channel, and the channel's current topic.
+

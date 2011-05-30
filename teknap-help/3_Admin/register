@@ -1,0 +1,11 @@
+Synopsis:
+   register <user> <pass> <email> [level]
+
+Description:
+   Force a registration of a nick.
+
+Examples:
+   /admin register luna nutzo luna@tek.com elite
+
+See Also:
+

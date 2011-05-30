@@ -1,0 +1,16 @@
+Synopsis:
+   on [<modes>]napsend [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   Whenver a send is about to start, this hook is triggered.
+
+Parameters:
+   $0   type of transfer RESUME or SEND.
+   $1   nickname
+   $2   filesize
+   $3   filename in quotes   
+
+Examples:
+
+See Also:
+

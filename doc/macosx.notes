@@ -1,0 +1,26 @@
+
+
+With Rhapsody 5.5, the following needs to be changed in order to have any
+programs that use libtermcap run.
+
+ln -s /usr/share/misc/termcap /etc/termcap
+
+The libtermcap.a library is expecting /etc/termcap to exist (at least on the
+system I was on), another method to fix this, is to re-compile libtermcap.a
+and change the location of the termcap database.
+
+I also discovered that libncurses.a is expecting /usr/local/share/terminfo,
+which is a directory of term files, does not exist on Rhapsody. Any ncurses
+program will require these files to be in either that location or in each
+users home directory as ~/.terminfo
+Grabbing the terminfo database from a known working system and installing in
+the proper location will fix this small problem.
+
+
+cpp on Rhapsody has major issues with #define'd macros. In fact it refuses
+to accept multi-line macros as being in-valid. There is no real easy fix for
+this, other than using cpp -E on a working system cleaning up the result and
+replacing the old file.
+
+						Colten Edwards
+						aka panasync

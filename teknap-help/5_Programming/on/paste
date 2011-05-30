@@ -1,0 +1,14 @@
+Synopsis:
+   on [<modes>]paste [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the user performs a paste command.
+
+Parameters:
+   $0    channel
+   $1    text
+
+Examples:
+
+Other Notes:
+

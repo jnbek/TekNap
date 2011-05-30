@@ -1,0 +1,12 @@
+Synopsis:
+   admin unbanuser <mask> [reason]
+
+Description:
+   Unban a nick a matching ban that someone has placed on the global banlist
+   on the server.
+
+Examples:
+   /admin unbanuser luna
+
+See Also:
+   admin banuser

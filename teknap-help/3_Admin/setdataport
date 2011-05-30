@@ -1,0 +1,11 @@
+Synopsis:
+   setdataport <nick> <portnumber>
+
+Description:
+   Sets a users dataport to the specified port. 
+
+Examples:
+   /setdataport luna 6969
+ 
+See Also:
+   set ptest

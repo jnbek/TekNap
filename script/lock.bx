@@ -1,0 +1,94 @@
+# lock.bx v1.0 by goat [chuck@???]
+# Copyright (C) 2000 Chuck Healy, all rights reserved
+# This script is to be used with window.bx
+#
+# Commands:
+# /setpw		- set password
+# /lock			- lockdown
+# /idlelock		- toggles idle locking
+# /idleset		- sets idlelock
+
+# Im sure there are many ways to break into BitchX, but 
+# it at least gives you some level of privacy...
+@lock.idl = [x]
+@lock.tmp = [x]
+^timer -d idle
+^alias setpw {
+	echo $echo Setting password...
+	input -noecho "Enter password: " {
+		if ([$0-]) {
+			@lock.com = [$0-]
+			echo $echo Enter again...
+			input -noecho "Enter password: " {
+				if ([$0-] == [$lock.com]) {
+					^assign -lock.com
+					@lock.slt = [$rand($time())]
+					@lock.pwd = [$crypt($0- $lock.slt)]
+				} else {
+					echo $echo Mismatch, try again...
+					setpw
+				}
+			}
+		}
+	}
+}
+^alias lock {
+	if (!lock.pwd) {
+		echo $echo Use /setpw to set a password first.
+	} else {
+		^window new hide
+		^window swap last
+		^alias window {}
+		^wset STATUS_FORMAT1 BitchX is locked.
+ 		lockdown
+	}
+}
+^alias lockdown {
+	input -noecho "Enter password: " {
+		if ([$crypt($0- $lock.slt)] != [$lock.pwd] || [$0] == []) {
+			^wset STATUS_FORMAT1 Failed attempt @ $stime($time())
+			lockdown
+		} else {
+			^alias -window
+			^window kill
+			^window swap first
+			if (lock.idl && !lock.tmp) {
+				^timer -ref idle -rep -1 1 checkidle
+			}
+		}
+	}
+}
+
+^alias idlelock {
+	if (!lock.pwd) {
+		echo $echo Use /setpw to set a password first.
+	} else {
+		if (!lock.idt) {
+			echo $echo Use /idleset to set idle limit.
+		} else {
+			if (!lock.idl) {
+				@lock.idl = [x]
+				echo $echo IdleLock is off.
+			} else {
+				^assign -lock.idl
+				^assign -lock.tmp
+				echo $echo IdleLock is on.
+				^timer -ref idle -rep -1 1 {
+					if (idle() > lock.idt) {
+						^timer -d idle
+						lock
+					}
+				}
+			}
+		}
+	}
+}
+^alias idleset {
+	if ([$0]) {
+		@lock.idt = [$0]
+		echo $echo IdleLock will go off when $0 seconds idle.
+	} else {
+		echo $echo Usage: /idleset <seconds>
+	}
+}
+eval echo $echo Loaded lock.bx v1.0 by goat.

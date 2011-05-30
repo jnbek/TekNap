@@ -1,0 +1,11 @@
+Synopsis:
+   voice <channel> <n1> [<n2> <n3> ...]
+
+Description:
+   Gives a nick voice status on a +moderated channel.
+
+Examples:
+   /voice Alternative [yak]
+
+See Also:
+   unvoice, mode

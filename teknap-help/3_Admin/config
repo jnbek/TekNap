@@ -1,0 +1,21 @@
+Synopsis:
+   config <variable> <value>
+Description:
+   The config command allows you to set server configuration variables.
+
+Variables:
+   The server variables for the opennap server are:
+
+	client_queue_length	max_user_channels	server_name
+	server_password		server_port		stat_click
+	strict_channels		server_queue_length	max_results
+	compression_level	max_shared		max_connections
+	nick_expire		listen_addr		max_browse_result
+	collect_interval	uid			gid
+	connection_hard_limit	max_data_size		max_rss_size
+	max_nick_length		user_db_interval	channel_limit
+	login_timeout		max_command_length	config_dir
+
+Examples:
+   /admin config max_shared 2500 
+

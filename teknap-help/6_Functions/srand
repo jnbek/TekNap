@@ -1,0 +1,22 @@
+Synopsis:
+   $srand(<seed>)
+
+Technical:
+   This function seeds the random number generator used by $rand().
+
+Practical:
+   This function is used to help truly randomize the client's random number
+   generator.  In general, a larger seed will produce more unpredictable
+   results (which is good). SET random_source determines from where we get
+   the random number. 0 is from /dev/urandom, 1 is a pseudo random and 2
+   based on the gettimeofday().
+
+Returns:
+   empty string
+
+Examples:
+   $srand($time())             a very large seed
+
+See Also:
+   rand(6) set random_source
+

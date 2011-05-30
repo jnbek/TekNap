@@ -1,0 +1,10 @@
+Synopsis:
+   on [#][<mode>]wall [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook used to be triggered whenever the client received a WALL
+   message. 
+
+See Also:
+   wall(4)
+

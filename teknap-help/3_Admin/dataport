@@ -1,0 +1,11 @@
+Synopsis:
+   dataport <port>
+
+Description:
+   The DATAPORT command is used to set your dataport.
+
+Examples:
+   /admin dataport 6699
+
+See Also:
+   setdataport(3)

@@ -1,0 +1,15 @@
+Synopsis:
+   on [<modes>]napfinish [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a file is sent completely to a user.
+
+Parameters: 
+   $0    nickname of the user
+   $1    filesize in bytes
+   $2    filename in quotes
+
+Examples:
+
+See Also:
+

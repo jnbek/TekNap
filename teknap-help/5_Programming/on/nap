@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]nap [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This is triggered when recieving files.
+
+Parameters:
+   various
+
+Examples:
+
+See Also:
+

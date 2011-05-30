@@ -1,0 +1,16 @@
+Synopsis:
+   ban <nick|ip> [reason]
+
+Description:
+   Ban an abusive user based on there nick or there ip address. The ip
+   address can be a subnet. When banning a subnet a trailing "." is required
+   on the end of the ip. Using ,'s you can ban multiple nick and or ip's
+
+Examples:
+   /ban buddhax bad boy buddha
+   /ban 207.195. ban a class B ip range
+   /ban 207.195.110. ban a class C ip range
+   /ban badboy,badboy2 go away
+
+See Also:
+   unban

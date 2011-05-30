@@ -1,0 +1,10 @@
+Synopsis:
+   chanlevel <channel> <level>
+
+Description:
+   Set a channel so only users of <level> can join the channel. <level> is
+   one of Leech, User, Moderator, Admin, Elite.
+
+Examples:
+   /chanlevel Alternative Admin
+

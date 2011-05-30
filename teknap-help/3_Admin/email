@@ -1,0 +1,11 @@
+Synopsis:
+   admin email <user@host>
+
+Description:
+   Will set your email address to whatever you want. Opennap has this
+   disabled by default. Napster has this disabled period.
+
+Examples:
+   /admin email edwards@host.com
+
+See Also:

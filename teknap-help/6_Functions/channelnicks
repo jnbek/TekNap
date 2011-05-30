@@ -1,0 +1,11 @@
+Synopsis:
+   $channelnicks(<channel name>)
+
+Technical:
+   This function returns some extended information about who's on a channel.
+   It returns a sorted list of nicknames.
+
+Returns:
+    A space separated list of nicks on a channel.
+
+

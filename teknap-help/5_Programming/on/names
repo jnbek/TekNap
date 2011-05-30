@@ -1,0 +1,22 @@
+Synopsis:
+   on [<modes>]names [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives server output from
+   the NAMES command on join to a channel, or when a scan(2) command
+   is performed.
+
+Parameters:
+   $0    count
+
+   The following is repeated for count users.
+   $1    nicknames of (visible) users on the channel
+   $2    speed
+   $3    shared files
+
+See Also:
+   scan(2); names(2); set show_channel_names
+
+Other Notes:
+   This hook is not triggered by the NAMES commands.
+

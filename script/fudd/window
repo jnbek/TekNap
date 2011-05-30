@@ -1,0 +1,58 @@
+/*
+ * Some useful window stuff
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000
+ */
+
+alias swap (winnum, void)
+{
+	if (winnum)
+	{
+		window swap $winnum
+	}{
+		input "What window should we swap to? "
+		{
+			window swap $0
+		}
+	}
+}
+
+alias wc (void)
+{
+	window new double on hide
+}
+
+alias wj (chan)
+{
+	if (chan)
+	{
+		window new double on hide
+		window swap last
+		join $chan
+	}{
+		xecho -b Usage: /wj <channel>
+	}
+}
+
+alias wk (void)
+{
+	window kill
+}
+
+alias wl (void)
+{
+	window last
+}
+
+alias wn (void)
+{
+	window next
+}
+
+alias wp (void)
+{
+	window previous
+}
+
+
+/* bmw '00 */

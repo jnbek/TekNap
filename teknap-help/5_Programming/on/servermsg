@@ -1,0 +1,15 @@
+Synopsis:
+   on [<modes>]servermsg [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a msg from the server is received. This
+   covers a broad range of various server msgs.
+
+Parameters:
+   various
+
+Examples:
+   on ^servermsg "*ghost*" #     will block all ghost msgs from the server.
+
+See Also:
+

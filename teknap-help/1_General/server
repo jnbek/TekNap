@@ -1,0 +1,58 @@
+Synopsis:
+   server [<server name>|<server index> [<port>]]
+   server [-add] <server>[:[<port>][:[<nickname>][:[<password>][:[0|1]]]]]
+   server [+|-][<server name>]
+   server [-delete <server index>]
+   server [-irc <server name>[:<port>][:[<nickname>]]]
+
+Description:
+   The SERVER command allows you to manipulate your client's internal
+   list of servers, as well as to switch servers.  If no arguments are
+   given, your current server list is printed.  Any attempt to connect to
+   a new server not already in your list will append it to your list.
+   Additionally, servers can be associated with specific TekNap windows,
+   which can be useful when being on multiple networks at once.
+
+   Your initial server list is compiled into the client.  This is usually
+   a minimal list.  Users can further override this file's list by setting 
+   their respective NAPSERVER environment variables.
+
+   Specifying -irc as a flag will convert this server into a irc capable
+   client.
+  
+Options:
+   +<server>  associate a new server to your current window (this will
+                also connect you to that server)
+   -<server>  disassociate a server from your current window (this will
+                also disconnect you from that server)
+   -add       add a server to your server list
+   -delete    delete server with given server index from your list
+   -irc       server is a irc server
+   -create    create the account on the server specified. This changes the
+                login method, so that the account actually does a create.
+
+Examples:
+   To change to a new server, host.foobar.com, on port 6668:
+      /server host.foobar.com 6668
+      /server host.foobar.com:6668
+
+   To change to a new server and register with the nickname "JoeBob":
+      /server host.foobar.com:::JoeBob
+
+   To switch to the next, or previous, server in your list
+      /server +
+      /server -
+
+   To associate a new server, host.booya.net, to your current window:
+      /server +host.booya.net
+
+   To delete server 5 from your list:
+      /server -delete 5
+
+   To add server "host.foo.com" on port 6667 with nick "blah" to your list:
+      /server -add host.foo.com:6667::blah
+
+See Also:
+   discon(1); disconnect(1); on(5) connect, disconnect; reconnect(1);
+   window(4) server
+

@@ -1,0 +1,16 @@
+Synopsis:
+    chat <nick> [password]
+
+Description:
+    This is a direct client to client chat feature. It's similar to
+    irc DCC CHAT. It is directly between the 2 clients and does not 
+    use the server other than to initiate the start of the chat. The
+    password is used to XOR encrypt the chat for the security concious.
+
+Examples:
+    To start a chat:
+        /chat q
+    To start a chat with a password:
+        /chat q the quick brown fox
+
+See Also:

@@ -1,0 +1,14 @@
+Synopsis:
+   setuserlevel <nick> <level>
+
+Description:
+   Set a users level to the specified level. Can be Leech, User, Moderator,
+   Admin, Elite. A nick can change there userlevel to a lower level, but
+   cannot change themselves back. Elites are the only ones who can create
+   Moderator and better users.
+
+Examples:
+   /setuserlevel p Elite
+
+See Also:
+

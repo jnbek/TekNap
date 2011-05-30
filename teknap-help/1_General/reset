@@ -1,0 +1,9 @@
+Synopsis:
+   reset
+
+Description:
+   Resets the screen to known state.
+
+Examples:
+   /reset
+

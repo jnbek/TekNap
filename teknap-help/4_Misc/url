@@ -1,0 +1,15 @@
+Synopsis:
+   url [save] [url [on/off]] [-] [-#] [list] [+]
+
+Description:
+   Automatic url grabber system. Anytime someone msg's you or says a url in
+   a channel your in, this system will grab the url and store it. 
+	save  - saves the urls to a file called TekNap.url
+	url [on/off] - toggles or turns on/off the url grabbing.
+	- - clears the url list.
+	-# - deletes the specifed url. This can be a "pattern", 4-6 etc.
+	list - list the saved urls to your screen.
+	+ - same as above
+
+See Also:
+   set url_grab, set max_urls

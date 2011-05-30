@@ -1,0 +1,20 @@
+Synopsis:
+   on [<modes>]pong [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives a PING
+   message.  
+
+Parameters:
+   $0    nickname sending the PONG
+   $1-   argument to PONG (usually a time in seconds, but not necessarily)
+
+Examples:
+   To filter PING messages from other clients:
+      on ^pong "*" {
+         echo *** Received PING from $0: $1-
+      }
+
+See Also:
+   quote(5)
+

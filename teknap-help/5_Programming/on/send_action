@@ -1,0 +1,14 @@
+Synopsis:
+   on [<modes>]send_action [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered when the user does a me comand.
+
+Parameters:
+   $0    channel
+   $1-   text
+
+Examples:
+
+See Also:
+   me(2)

@@ -1,0 +1,11 @@
+Synopsis:
+   banlist
+
+Description:
+   The BANLIST command lists all the bans on the server.
+   
+Examples:
+   /admin banlist
+
+See Also:
+   banuser(3); unbanuser(3)

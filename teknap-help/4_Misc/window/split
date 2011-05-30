@@ -1,0 +1,12 @@
+Synopsis:
+   window [refnum] split [on|off|toggle]
+
+Description:
+   When turned on, this causes the current window to use a "doubled" status
+   bar with the second status bar going to the top of the screen.  In other 
+   words, the status bar is two lines instead of one, allowing more 
+   information to be visible at once.  Each window may have a split status
+   bar independently of the rest.
+
+See Also:
+   set(4) status_format; window(4) double

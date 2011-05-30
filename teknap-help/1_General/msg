@@ -1,0 +1,35 @@
+Synopsis:
+   msg <nickname> <text to send>
+   msg <#channel> <text to send>
+   msg %<process id|process name> <text to send>
+
+Description:
+   This command has 3 primary functions; to send a private message to an
+   individual, to send a message to a channel, or to send a message to a
+   running EXEC process (usually a command of some sort).  You can specify
+   multiple recipients for the message by delimiting them with commas (but
+   no spaces), and you may even mix-and-match the types of recipients.
+
+   Additionally, there are 3 special cases for recipients.  If you specify
+   a single comma, ",", the message will go to the last person who sent you a
+   MSG.  If a single period, ".", the message will go to the last person you
+   sent a MSG to.  If you specify an asterisk, "*", the message will go to
+   your current channel.
+
+Examples:
+   To send a private message to your friend Buddha:
+      /msg buddha hi there!
+
+   To send a message to your current channel:
+      /msg channel how is everyone today?
+
+   To send a message to a running EXECed process with id 2:
+      /msg %2 exit
+
+   To send a message to an EXECed process named "mail":
+      /msg %mail x
+
+Aliases:
+   When sending a message to your current channel, MSG has the same effect
+   as the SAY command.
+

@@ -1,0 +1,11 @@
+Synopsis:
+   on [<modes>]disconnect [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever a disconnect is done from a server.
+
+Parameters:
+
+Examples:
+
+See Also:

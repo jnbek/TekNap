@@ -1,0 +1,17 @@
+Synopsis:
+   $getarrays()
+
+Technical:
+   This function displays all existing arrays created by $setitem().
+
+Practical:
+   This function is used to show all current arrays.  his might be useful
+   for modifying data in multiple arrays, when it is not known precisely
+   which ones exist at the moment in question.
+
+Returns:
+   list of array names, or nothing if none are set
+
+See Also:
+   Arrays(7); setitem(6)
+

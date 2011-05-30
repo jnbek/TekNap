@@ -1,0 +1,16 @@
+Synopsis:
+   mode [channel] [+/-][Invite][Moderated][Private][Topic] 
+
+Description:
+   Changes a channels mode to the specified mode. Channel may be specified
+   or the current channel is used.
+      Invite    - only invited users may join the channel.
+      Moderated - Only moderater+ and channels ops may speak.
+      Private   - Channel will not appear in a whois.
+      Topic     - Any user may change the topic.
+
+Examples:
+   /mode Admins +Invite
+
+See Also:
+

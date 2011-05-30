@@ -1,0 +1,21 @@
+Synopsis:
+   on [<modes>]action [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client observes a ME ACTION.  It
+   will hook when the recipient is either the user or a channel.
+
+Parameters:
+   $0    target of the ACTION (channel)
+   $1    nickname of the ACTION sender
+   $2-   message body of the ACTION
+
+Examples:
+   To distinguish personal actions from those sent to a channel:
+      on ^action "*" {
+            echo * $0/$1 $2-
+      }
+
+See Also:
+   me(1); on(5) send_action
+

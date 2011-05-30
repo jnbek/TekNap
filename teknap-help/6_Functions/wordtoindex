@@ -1,0 +1,18 @@
+Synopsis:
+   $wordtoindex(<word number> <list>)
+
+Technical:
+   The $wordtoindex() function returns index offset of the given word
+   number in the given list of words. The count is from zero.
+
+Practical:
+   This function is useful if you need to find the start of a word in a
+   string
+
+Returns:
+   index to word
+
+Examples:
+   $wordtoindex(2 foo bar blah)           returns 8
+
+See Also:

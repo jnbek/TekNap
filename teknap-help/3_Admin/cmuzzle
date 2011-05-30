@@ -1,0 +1,12 @@
+Synopsis:
+   cmuzzle <channel> <n1> [<n2> <n3> ...]
+
+Description:
+   Muzzles the specified nick(s) on a channel. This only effects there chat
+   on a single channel unlike MUZZLE.
+
+Examples:
+   /cmuzzle Alternative [yak]
+
+See Also:
+   cunmuzzle, muzzle, unmuzzle  

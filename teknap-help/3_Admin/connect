@@ -1,0 +1,13 @@
+Synopsis:
+   admin connect <server address> <port> [ remote server]
+
+Description:
+   The CONNECT command can be used to establish a link to another server.
+   There must be an entry in the servers file on each of the servers for 
+   the link to work,  consult the opennap doccumentation for more info.
+
+Examples:
+   /admin connect opennap.somewhere.com 8888
+
+See Also:
+   disconnect(3)

@@ -1,0 +1,11 @@
+Synopsis:
+   links
+
+Description:
+   Show a network map of the servers that are linked together.
+
+Examples:
+   /links
+
+See Also:
+

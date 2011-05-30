@@ -1,0 +1,12 @@
+Synopsis:
+   oplist [channel]
+
+Description:
+   Display the operator list for the specified channel.
+
+Examples:
+   /oplist Alternative
+   /oplist
+
+See Also:
+   op, opsay, opdel, deop

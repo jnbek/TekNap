@@ -1,0 +1,20 @@
+Synopsis:
+   banuser <nick> <reason>
+   banuser <IP> <reason>
+
+Description:
+   The BANUSER command allows you to ban a user from connecting to the
+   server(s). The ban can either be assigned by nick or by IP. 
+
+Examples:
+   To ban the user ILoveFloods:
+   /admin banuser ILoveFloods Flooding
+
+   To ban an IP:
+   /admin banuser 192.168.1.23 Flooding
+
+   To ban all IPs in 192.168.1.1-254
+   /admin banuser 192.168.1. 
+
+See Also:
+   kill(3); banlist(3); unbanuser(3)   

@@ -1,0 +1,19 @@
+Synopsis:
+   tban <nick|ip> <time> [reason]
+
+Description:
+   Timed Ban an abusive user based on there nick or there ip address. 
+   The ip address can be a subnet. When banning a subnet a trailing "." is 
+   required on the end of the ip. Using ,'s you can ban multiple nick and or 
+   ip's. A timeout period on the ban will automatically remove the ban after
+   the specified period of time. Either the number of seconds or a specific
+   time period can be used.. y for years, d for days, h for hours and s for
+   seconds.
+
+Examples:
+   /tban buddhax 86000 bad boy buddha
+   /tban 207.195. 1y200d12h ban a class B ip range
+   /tban badboy,badboy2 30d go away
+
+See Also:
+   unban, ban

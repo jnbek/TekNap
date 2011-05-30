@@ -1,0 +1,23 @@
+Synopsis:
+   on [#][<mode>]timer_hour [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the specified time (or time glob pattern)
+   matches the current time.  The time is in the following format:
+
+      Format         Description                                          
+      hh:mm          0 <= hh <= 23, 0 <= mm <= 59
+
+Parameters:
+   $0    current time 
+
+Examples:
+   To inform the user of the time once per hour on the hour:
+      on ^timer "%:00*" {
+         echo *** The time is not $Z
+         beep
+      }
+
+See Also:
+   set(4) clock_24hour
+

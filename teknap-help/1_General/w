@@ -1,0 +1,16 @@
+Synopsis:
+   whois [<nickname>]
+
+Description:
+   The WHOIS command is used to retrieve moderately detailed information
+   about the nickname(s) specified.  
+
+   WHOIS may be used on multiple nicknames at once, provided they are
+   delimited with commas.  If a server name is specified, that server will
+   be queried instead of the client's current server.  If no arguments are
+   given, the WHOIS will be performed on the client itself.
+
+Examples:
+   To get information on users JoeBob, ToeJam, and JuneBug:
+      /whois joebob,toejam,junebug
+

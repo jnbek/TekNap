@@ -1,0 +1,12 @@
+Synopsis:
+   unvoice <channel> <n1> [<n2> <n3> ...]
+
+Description:
+   Removes voice status from the specified nicks. If no nicks are specified,
+   then a list of the voiced nicks are shown.
+
+Examples:
+   /unvoice Alternative [yak]
+
+See Also:
+   voice

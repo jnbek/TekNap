@@ -1,0 +1,19 @@
+Synopsis:
+    dbsearch [[-S "filename"] [-l label] [-b bitrate] [-B bitrate] ["filename"]]
+
+Description:
+    dbsearch is used to search a mp3 database which my brother and I created
+    to index our cdr's. It's a flat datafile which stores the filenames and
+    directories and other pertinent information. The default location for
+    this file is /etc/mp3.db which is hardcoded into TekNap. Wildcards are
+    used to find what your looking for in the db. Compiled into the client
+    is the "format" used to print the output to the screen.
+
+Examples:
+    To search your db for madonna:
+    /dbsearch -S "*madonna*" 
+
+Notes: 
+    The standalone program is called caselogic. This command is only of use
+    if you have and are using the database program.
+

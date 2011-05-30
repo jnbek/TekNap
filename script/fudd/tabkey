@@ -1,0 +1,77 @@
+/*
+ * Binds the TAB key to automatically reply to msgs
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ *
+ * NOTE: TekNap has this feature built-in, although it works slightly
+ *       differently so you may find you like this better. Keep in mind, that
+ *       using this script disables the other built-in functions for the TAB
+ *       key.
+ */
+
+/* CONFIG SECTION */
+
+assign MAX_MSG_BUFFER_SIZE 10
+
+/* END CONFIG SECTION */
+
+
+bind ^I parse_command getlastmsg
+
+alias getlastmsg (void)
+{
+	^local itm,msgcmd,spc
+	@ itm = numitems(tabkey) - 1
+	@ msgcmd = CMDCHARS ## [msg]
+	@ spc = [ ]
+	if (numitems(tabkey))
+	{
+		if (hashish >= 0)
+		{
+			type ^U^A$msgcmd $getitem(tabkey $hashish)$spc
+			@ hashish = hashish - 1
+		}{
+			type ^U^A$msgcmd $getitem(tabkey $itm)$spc
+			@ hashish = itm - 1
+		}
+	}{
+		@ hashish = [-1]
+	}
+}
+
+on #-msg 421 "*"
+{
+	if (#getmatches(tabkey $0))
+	{
+		fe ($getmatches(tabkey $0)) nickitm
+		{
+			@ delitem(tabkey $nickitm)
+		}
+	}
+	if (numitems(tabkey) == MAX_MSG_BUFFER_SIZE)
+	{
+		@ delitem(tabkey 0)
+	}
+	@ setitem(tabkey $numitems(tabkey) $0)
+	@ hashish = [-1]
+}
+
+on #-send_msg 421 "*"
+{
+	if (#getmatches(tabkey $0))
+	{
+		fe ($getmatches(tabkey $0)) nickitm
+		{
+			@ delitem(tabkey $nickitm)
+		}
+	}
+	if (numitems(tabkey) == MAX_MSG_BUFFER_SIZE)
+	{
+		@ delitem(tabkey 0)
+	}
+	@ setitem(tabkey $numitems(tabkey) $0)
+	@ hashish = [-1]
+}
+
+
+/* bmw '01 */

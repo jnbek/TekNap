@@ -1,0 +1,16 @@
+Synopsis:
+   window [<refnum>] [<command> [<arguments> ...]]
+
+Description:
+   The WINDOW command allows the client to display multiple "windows" of
+   napster activity at once.  Some common uses for this include using
+   separate windows for different channels, or for connecting to several
+   servers at the same time.
+
+   These work by splitting the screen vertically, such that there are 
+   multiple panes stacked on top of one another.  Each window has its own 
+   status bar, which is what separates them.
+
+Other Notes:
+   If <refnum> is given, all <commands> will be executed on that window.
+

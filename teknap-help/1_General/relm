@@ -1,0 +1,12 @@
+Synopsis:
+    relm [-clear]
+
+Description:
+    Displays the last /set MAX_RELM number of recieved/sent msgs.
+    -clear   clears the list of recieved msgs
+
+Examples:
+    To display the last message:
+    /relm
+    /relm -clear
+

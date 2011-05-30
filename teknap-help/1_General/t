@@ -1,0 +1,28 @@
+Synopsis:
+   t <channel> [<new topic>]
+   t [<new topic>]
+   
+Description:
+   With this command you can change the current topic of the specified
+   channel.  If no new topic is specified, the current one is displayed.
+   If the new topic is not specified AND either the channel name is prefixed
+   with a hyphen (a "-") or the hyphen is the only argument, the topic
+   for the assumed channel will be removed.
+
+Examples:
+   To set a new topic on your channel:
+      /t blah Welcome to blah, a very serious channel.
+      or
+      /t Welcome to blah, a very serious channel.
+
+   To view the current topic for your channel:
+      /t blah
+      or
+      /t
+      
+   To unset the topic for your channel:
+      /t -blah
+      or
+      /t -
+      /untopic
+

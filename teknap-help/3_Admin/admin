@@ -1,0 +1,10 @@
+Synopsis:
+   admin <admin command> <arg1> <arg2> ...
+
+Description:
+   The ADMIN command is used to execute commands used for administration 
+   of the server. To get a list of admin commands available type:  
+   /admin
+
+Examples:
+   /admin connect opennap.somewhere.com 8888

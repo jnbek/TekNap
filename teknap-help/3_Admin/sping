@@ -1,0 +1,15 @@
+Synopsis:
+   sping <-All>|<server.name>
+
+Description:
+    Sends a server ping to the server and times the result. Gives an
+    indication of lag and distance. If -All is used then a opennap mass
+    server ping is sent. If no server is specified then, we sping the
+    current server.
+
+Examples:
+    /sping -A
+    /sping bitchx.dimension6.com
+    /sping
+    
+See Also:

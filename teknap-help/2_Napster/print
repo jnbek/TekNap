@@ -1,0 +1,33 @@
+Synopsis:
+    print [-file filename][-bitrate #][-count #][-freq #][-md5]
+          [-format "string"][path]
+
+Description:
+    Use this to print the file server files which you have loaded. /set
+    FORMAT_FILENAME and /set FORMAT_DIRECTORY control the output of this
+    command. 
+         %b bitrate
+         %l long filesize
+         %L short filesize
+         %a filesize modifier (Mb, Kb, bytes)
+         %t minutes:seconds
+         %T long seconds
+         %M checksum
+         %m mimetype (mp3/audio/image/video/application/text)
+         %N nick
+         %S mode (Stereo, Joint Stereo, Dual Channel, Mono)
+         %d directory. a number can be used to specify how many dirs to
+                 print. Negative number works backwords.
+         %f filename - directory
+         %F full filename
+         %h frequency
+         %H short frequency
+         
+    All of the above allow width specifications like printf. A specific
+    extension to this is "," which will add ,'s to large numbers 5,123,543.
+
+Examples:
+    /print -format "%4b %,14l %-30f"
+    /print -format 
+       "%b \"%-30f\" %2.1H %3.1h [%t] %T %S %s %m %M %,l %g4.2L %3d/ %-2d/ %F"
+

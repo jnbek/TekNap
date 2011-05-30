@@ -1,0 +1,7 @@
+Synopsis:
+   window [refnum] refresh
+
+Description:
+   Refreshes the current window.
+
+See Also:

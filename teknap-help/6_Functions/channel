@@ -1,0 +1,8 @@
+Synopsis:
+   $channel()
+
+Technical:
+   This is exactly the same as $C
+
+Returns:
+    Returns the clients idea of the current channel for a window/server.

@@ -1,0 +1,96 @@
+The status line contains a number of important pieces of information that
+updates dynamically as conditions around the client change.  This includes
+your nickname, channel, current user and channel modes, etc.  Refer to
+"SET STATUS_USER" in Section 4 for more information about customizing the
+status line.
+
+   %A     - upload/download 
+   %B     - number of hold lines /set status_hold_lines
+   %C     - current channel /set channel_name_width, /set status_channel
+   %D     - number of shared files
+   %E     - status of scrollback /set status_scrollback
+   %F     - notify windows /set status_notify /set show_status_all
+   %G     - status of load/share
+   %H     - status of hold /set status_hold
+   %I     - status of insert mode /set insert_mode, /set status_all, 
+               /set status_insert
+   %J     - cpu saver mode /set cpu_saver_after, /set cpu_save_before,
+               /set status_cpu_saver
+   %{1}K  - Display Scrollback position
+   %L     - lag indicator 
+   %N     - nickname /set status_nick, /set default_nickname
+   %O     - overwrite mode /set insert_mode, /set status_show_all, 
+               /set status_overwrite
+   %P     - status position in scrollback
+   %Q     - query /set status_query
+   %R     - window refnum 
+   %S     - server /set status_server dispays truncated server name
+   %{2}S  - displays complete server name
+   %T     - clock /set status_clock, /set clock, /set show_status_all
+   %U     - status_user0 /set status_user0
+   %V     - client version /set show_status_all
+   %W     - window status /set status_window
+   %X     - status_user1 /set status_user1
+   %Y     - status_user2 /set status_user2
+   %Z     - status_user3 /set status_user3
+   %%     - print a % char
+   %>     - right justify
+   %d     - download status 
+   %c     - usercount on current channel
+   %e     - eta remaining
+   %h     - cloak status * if cloaked. 
+   %s     - server stats /set status_stats.  %s prints users, %s %s prints
+               users and files, %s %s %s shares, files and songs
+   %t     - topic display. limited topic length
+   %u     - current working share directory
+   %0     - /set status_user0
+   %1     - /set status_user1
+   %2     - /set status_user2
+   %3     - /set status_user3
+   %4     - /set status_user4
+   %5     - /set status_user5
+   %6     - /set status_user6
+   %7     - /set status_user7
+   %8     - /set status_user8
+   %9     - /set status_user9
+   %{10}  - /set status_user10
+   %{11}  - /set status_user11
+   %{12}  - /set status_user12
+   %{13}  - /set status_user13
+   %{14}  - /set status_user14
+   %{15}  - /set status_user15
+   %{16}  - /set status_user16
+   %{17}  - /set status_user17
+   %{18}  - /set status_user18
+   %{19}  - /set status_user19
+   %{20}  - /set status_user20
+   %{21}  - /set status_user21
+   %{22}  - /set status_user22
+   %{23}  - /set status_user23
+   %{24}  - /set status_user24
+   %{25}  - /set status_user25
+   %{26}  - /set status_user26
+   %{27}  - /set status_user27
+   %{28}  - /set status_user28
+   %{29}  - /set status_user29
+   %{30}  - /set status_user30
+   %{31}  - /set status_user31
+   %{32}  - /set status_user32
+   %{33}  - /set status_user33
+   %{34}  - /set status_user34
+   %{35}  - /set status_user35
+   %{36}  - /set status_user36
+   %{37}  - /set status_user37
+   %{38}  - /set status_user38
+   %{39}  - /set status_user39
+
+STATUS_FORMAT1 and STATUS_FORMAT2 define how the 2 status bars will appear.
+By default only one of the status bars is displayed. /window double on will
+make a double status bar, and /window split on will make a status bar on top
+and one on the bottom of the screen. Any color changes you want must be set
+in the STATUS_FORMAT* as well as the various STATUS_ variables. The
+status_user* variables are for scripters to define things they would like to
+appear in the topic bar.
+
+
+

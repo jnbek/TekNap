@@ -1,0 +1,176 @@
+/*
+ * Away system for TekNap
+ *
+ * Author: Brian Weiss <brian@got.net> - 2000
+ */
+
+assign AWAY_LOG 1
+assign AWAY_LOGFILE ~/.TekNap/away.log
+assign DEFAULT_AWAY_REASON gone
+assign DEFAULT_BACK_REASON hi
+assign PUBLIC_AWAY 0
+
+/* This will cause the script to send the public away msg only to certain
+   channels. PUBLIC_AWAY must also be 1 of course. Uncomment this line or
+   use /assign to set this variable and use this feature. */
+#assign PUBLIC_AWAY_CHANNELS #Admins
+
+/* Notify people that msg you that you are away. */
+assign SEND_AWAY_MSG 1
+
+alias away (reason)
+{
+	if (!A)
+	{
+		if (AWAY_LOG)
+		{
+			^local fd
+			@ fd = open($AWAY_LOGFILE w)
+			@ write($fd [MsgLog Started $strftime(%B %d %Y %X)])
+			@ close($fd)
+		}
+		if (PUBLIC_AWAY)
+		{
+			if (PUBLIC_AWAY_CHANNELS)
+			{
+				fe ($PUBLIC_AWAY_CHANNELS) chan
+				{
+					if (match($chan $onchannels()))
+					{
+						raw 824 $chan \"is away: ${reason ? reason : DEFAULT_AWAY_REASON} [Log/${AWAY_LOG ? [ON] : [OFF]}]\"
+					}
+				}
+			}{
+				fe ($onchannels()) chan
+				{
+					raw 824 $chan \"is away: ${reason ? reason : DEFAULT_AWAY_REASON} [Log/${AWAY_LOG ? [ON] : [OFF]}]\"
+				}
+			}
+		}
+		^assign A $time() \"${reason ? reason : DEFAULT_AWAY_REASON}\"
+		xecho -b You have been marked as away.
+	}{
+		xecho -b You are already away!
+	}
+}
+
+alias back (reason)
+{
+	if (A)
+	{
+		if (AWAY_LOG)
+		{
+			^local fd
+			@ fd = open($AWAY_LOGFILE w)
+			@ write($fd [MsgLog Stopped $strftime(%B %d %Y %X)])
+			@ close($fd)
+		}
+		if (PUBLIC_AWAY)
+		{
+			if (PUBLIC_AWAY_CHANNELS)
+			{
+				fe ($PUBLIC_AWAY_CHANNELS) chan
+				{
+					if (match($chan $onchannels()))
+					{
+						raw 824 $chan \"is back: ${reason ? reason : DEFAULT_BACK_REASON} [Gone since: $strftime($word(0 $A) %B %d %Y %X)]\"
+					}
+				}
+			}{
+				fe ($onchannels()) chan
+				{
+					raw 824 $chan \"is back: ${reason ? reason : DEFAULT_BACK_REASON} [Gone since: $strftime($word(0 $A) %B %d %Y %X)]\"
+				}
+			}
+		}
+		^assign -A
+		@ delarray(sent_away)
+		xecho -b You are no longer away.
+		xecho -b Type /readlog to view your msgs.
+	}{
+		xecho -b You are not set away.
+	}
+}
+
+/*
+ * This was taken from archon's 'more' script distributed with EPIC
+ * http://www.epicsol.org/
+ */
+alias readlog (void)
+{
+    if (fexist($AWAY_LOGFILE))
+    {
+	@ done = 0
+	@ line = 0
+	@ fd = open($AWAY_LOGFILE r)
+	@ rows = winsize() - 1
+	while (!eof($fd) && (pause != [q]))
+	{
+		while (line++ != rows)
+		{
+			@ ugh = read($fd)
+			if (eof($fd))
+			{
+				@ done = 1
+				@ line = rows
+			}{
+				echo $ugh
+			}
+		}
+		if (!done)
+		{
+			^assign pause $"Enter q to quit, or anything else to continue "
+			@ line = 0
+		}
+	}
+	@ close($fd)	
+	@ fd = line = done = rows = pause = ugh = []
+    }{
+	xecho -b Logfile [$AWAY_LOGFILE] does not exist.
+    }
+}
+
+alias remlog (void)
+{
+	if (fexist($AWAY_LOGFILE))
+	{
+		@ unlink($AWAY_LOGFILE)
+		xecho -b Removed logfile [$AWAY_LOGFILE]
+	}{
+		xecho -b Logfile [$AWAY_LOGFILE] does not exist.
+	}
+	if (A && AWAY_LOG)
+	{
+		^local fd
+		@ fd = open($AWAY_LOGFILE w)
+		@ write($fd [MsgLog Started $strftime(%B %d %Y %X)])
+		@ close($fd)
+	}
+}
+
+on #^msg 420 "*" if (A && !match($0 $N ChanServ OperServ))
+{
+	if (AWAY_LOG)
+	{
+		^local fd
+		@ fd = open($AWAY_LOGFILE w)
+		@ write($fd [$strftime($time() %X)] [$0\(*@*\)] $1-)
+		@ close($fd)
+	}
+	if (SEND_AWAY_MSG && finditem(sent_away $0) < 0)
+	{
+		@ setitem(sent_away $numitems(sent_away) $0)
+		msg $0 I am currently away. \($word(1 $A)\) [Gone since: $strftime($word(0 $A) %B %d %Y %X)] [Log/${AWAY_LOG ? [ON] : [OFF]}]
+	}
+}
+
+on #^timer 420 "12:00" if (A && AWAY_LOG)
+{
+	^local fd
+	@ fd = open($AWAY_LOGFILE w)
+	@ write($fd [TimeStamp $strftime(%B %d %Y %X)])
+	@ close($fd)
+}
+
+
+/* bmw '00 */

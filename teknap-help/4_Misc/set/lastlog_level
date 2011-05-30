@@ -1,0 +1,40 @@
+Synopsis:
+   set lastlog_level [[-]<level> [[-]<level> ...]]
+
+Description:
+   This setting controls the type(s) of information that TekNap will store
+   in its lastlog buffer.  Any single message type, or any combination,
+   may be used.  If a type is prepended with a '-', messages of that type
+   are explicitly not saved (useful with the ALL type).  Message types
+   may be abbreviated unambiguously.
+
+Options:
+   msgs           MSG messages
+   public         public channel messages
+   server         anything hooked by the SERVERMSG hook
+   userlog1 - 4   reserved for the user (available with XECHO)
+   walls          WALL messages (deprecated, no servers support it)
+   wallops        WALLOP messages
+   crap           everything else (channel joins/parts, mode changes...)
+   beep
+   send_msg
+   kill
+   parts
+   join
+   topic
+   notify
+   all            all of the above
+   none           none of the above
+
+Examples:
+   To log everything except server and operator notices:
+      /set lastlog_level all -opnotes -server
+
+See Also:
+   msg(1); note(4); notice(1); on(5) servermsg; set(4)
+   lastlog; wallop(3); window(4) lastlog_level; xecho(5)
+
+Bugs:
+   Message type names may only be abbreviated when including the type.  The
+   full name must be given when excluding the type with a '-'.
+

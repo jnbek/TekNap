@@ -1,0 +1,17 @@
+Synopsis:
+   me <action description>
+
+Description:
+   ME lets you perform an action on your current channel.  It lets you
+   describe what you're doing as though someone is watching you, rather
+   than you telling them.
+ 
+Examples:
+   To perform an action:
+      /me doesn't want to go to work today
+
+   Anyone on the channel you sent the action to will see something like
+   this:
+      * foobar doesn't want to go to work today
+
+

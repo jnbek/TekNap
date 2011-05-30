@@ -1,0 +1,13 @@
+Synopsis:
+   opsay <text>
+
+Description:
+   Wallop the channel moderators and operators a msg. Only people on the
+   current channel will see this msg.
+
+Examples:
+   /opsay hey luna, wanna dance?
+
+See Also:
+   op, opsay, opdel, deop
+

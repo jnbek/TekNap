@@ -1,0 +1,11 @@
+Synopsis:
+   clearchannel <channel>
+
+Description:
+   Kicks all users out of the channel.
+
+Examples:
+   /clearchannel Opennap
+
+See Also:
+   Kick(3)

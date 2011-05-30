@@ -1,0 +1,48 @@
+Alot of confusion with the Win32 version of TekNap. So here comes a
+explanation.
+
+Because TekNap is unix based, we use a unix emulator (cygwindevo.dll) to
+provide some of the things needed by TekNap. This also makes various things in
+TekNap weird for you non-DOS users. 
+
+We require a HOME directory. This is automatically provided under unix
+systems, but DOS it is not. So edit your c:\autoexec.bat file and add the
+following. You can use notepad or a DOS editor called edit todo this.
+
+edit c:\autoexec.bat
+
+set HOME=//c/TekNap
+
+and save the file. You will need to reboot the system for the changes to
+take effect.
+
+You can setup several other required variables in your autoexec.bat.
+
+set NAPNICK=Your_Nick
+set NAPPASS=Your_Pass
+set NAPSERVER="bitchx.dimension6.com:8888:::0
+	some.other.server:8888:another_nick:some_other_pass:0"
+(not the server line is ALL on one line, and not split over two lines,
+multiple servers are separated by spaces)
+
+Once you've edited the autoexec.bat file, save it and then reboot your
+system. This is so that the variables are loaded and become available for
+TekNap to use.
+
+[Scripts]
+
+teknap.rc  which is placed in the HOME directory will be auto-loaded on
+           startup of the client. You can have any command you like within
+           this file, including the "load" command for loading other
+           scripts. The HOME directory will usually be c:\TekNap unless
+           you happened to set a HOME directory in your autoexec.bat file.
+
+You can also load scripts from the TekNap command line using the load
+command. Use this for temporary scripts that you do not run all the time.
+
+	/load //c/TekNap/script.rc
+	/load ~/script.rc
+
+The above two commands are equivalent. ~ translates to HOME which in most
+cases will be c:\TekNap, unless you set a HOME variable in autoexec.bat.
+

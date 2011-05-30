@@ -1,0 +1,26 @@
+Synopsis:
+   $write(<fd> <text>)
+
+Technical:
+   This function writes the given text to the given file descriptor.  A
+   newline is automatically appended to the text. The file mode has to have
+   been specified in the call to open.
+
+Practical:
+   This function is useful for saving information to an external file.  It
+   is most often used in scripts for saving configuration settings and the
+   like.  
+
+Returns:
+     -1   if file descriptor does not exist
+   > -1   number of bytes written (text length plus newline, if applicable)
+
+Examples:
+   $write(7 blah blah)                 writes "blah blah" plus NL to fd "7"
+                                       if the file is in non-binary mode.
+   $write(foo bar)                     "foo" not an fd, writes nothing
+   $writeb(foo bar)                    "foo" not an fd, writes nothing
+
+See Also:
+   close(6); open(6); read(6)
+

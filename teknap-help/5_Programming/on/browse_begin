@@ -1,0 +1,13 @@
+Synopsis:
+   on [<modes>]browse_begin [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the user attempts to browse someone
+
+Parameters:
+   $0   nickname of the browsed user
+
+Examples:
+
+See Also:
+   on(5) browse_end

@@ -1,0 +1,19 @@
+Synopsis:
+   on [<modes>]mp3 [<serial#>] [-|^]<match> { <action> }
+
+Description:
+   This hook is triggered whenever the client receives output from
+   the mp3 command player.  Any individual line of output can trigger
+   the hook.
+
+Parameters:
+    variable.
+
+Examples:
+   on ^mp3 "@I ID3: *" { 
+      say $cparse(%RNow Playing %n$2 by $3 Mpeg$8/Layer$9 $11 $19kb/$10) 
+   }
+
+See Also:
+   mp3(2)
+

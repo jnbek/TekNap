@@ -1,0 +1,12 @@
+Synopsis:
+   raw <#> [<args>]
+
+Description:
+   Used to send raw commands to the server. See napster.txt for a complete
+   list of numerics which can be used. Also the README from opennap has
+   several extensions to the napster protocol.
+
+Examples:
+   To join the channel Alternative:
+       /raw 400 Alternative
+

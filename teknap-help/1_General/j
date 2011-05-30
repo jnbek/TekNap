@@ -1,0 +1,17 @@
+Synopsis:
+   j <channel>
+
+Description:
+   J lets you join a new channel.  If you are on multiple channels,
+   the specified channel will become the current one.  If you do not
+   specify a channel (or channels) to join, your client will display
+   your current channels, along with their respective modes and users,
+   and which server you are on the channel from.
+
+Examples:
+   To join channel blah (or create it if it does not exist):
+      /j blah
+
+Aliases:
+   J is identical in operation to JOIN.
+

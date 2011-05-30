@@ -1,0 +1,15 @@
+Synopsis:
+   dns [-cmd { ... }] [-flush] [-list] nick [nick1 nick2]
+
+Description:
+    Will whois a nick and then provide a reverse DNS ip lookup.
+    A -cmd {} structure can be used todo something with that particular
+    result. -flush will clear the whois buffer in case of a problem. -list
+    will display pending whois requests.
+
+Examples:
+    /dns buddhax
+    /dns -cmd { echo $* } buddhax
+
+See Also:
+   nslookup, whois

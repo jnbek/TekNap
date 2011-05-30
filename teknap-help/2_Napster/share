@@ -1,0 +1,35 @@
+Synopsis:
+    share [-share][-load [filename]][-save [filename]][-unshare]
+            [-remove pattern(s)][-count #][-total #][-recurse]
+            [-update][-reload][-type video/image/audio/any] [path(s)]
+
+Description:
+    The share command is used to manage the files you are willing to share
+    with other napster users. Nothing is done automatically as the other
+    napster clients do. After you have loaded the files, you MUST
+    specifically use "-share" in order to send them to the server and make
+    them available to others
+
+        -share    used to share the files on the server.
+        -load     used to load a previously saved data file of shares.
+        -save     used to save a data file of shares. [~/TekNap/shared.dat]
+        -unshare  unshares all files on the server.
+        -remove   will remove any shares matching a pattern. Multiple
+                  patterns can be specified
+        -count    number of files to load from a directory
+        -total    max number of files to load from specified directories
+        -recurse  totals recursion of directories
+        -update   attempts to update the loaded files
+        -reload   scans the directories for any missing files or new files
+        -type     specifies the type of files which we are going to look
+                  for.
+        
+Examples:
+    To load files from a dir:
+         /share /home/mp3
+    To load files from multiple dirs:
+         /share /home/mp3/dir1 /home/mp3/dir2 /home/mp3/dir3
+    To "share" these files:
+         /share -share
+
+

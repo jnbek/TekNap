@@ -1,0 +1,12 @@
+Synopsis:
+   set debug [ALL|COMMANDS|EXPANSIONS|ALIAS|HOOK|VARIABLES|FUNCTIONS]
+
+Description:
+   With this set you can control the debug output from the alias parser. It
+   will create a hidden window which all debug output will be written to.
+   ALOT of output is possible with this, so be selective in what you set
+   debugging up on.
+
+See Also:
+   debug(4)
+

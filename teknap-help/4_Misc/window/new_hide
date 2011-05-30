@@ -1,0 +1,12 @@
+Synopsis:
+   window new_hide
+
+Description:
+   This creates a new TeKNap window. The window will be automatically
+   hidden. By default, the new window will be created with the NOTIFY_LEVEL 
+   and HOLD_MODE settings.
+
+See Also:
+   set(4) always_split_biggest, hold_mode, notify_level; window(4) create,
+   delete, kill, new
+
