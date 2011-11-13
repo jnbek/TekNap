@@ -2,17 +2,18 @@
  * Away system for TekNap
  *
  * Author: Brian Weiss <brian@got.net> - 2000
+ * Modified: Colten Edwards <edwards@bitchx.dimension6.com> - 2001
  */
 
 assign AWAY_LOG 1
-assign AWAY_LOGFILE ~/.BWap/away.log
-assign DEFAULT_AWAY_REASON not here
-assign DEFAULT_BACK_REASON hi
+assign AWAY_LOGFILE ~/.TekNap/away.log
+assign DEFAULT_AWAY_REASON work! no play
+assign DEFAULT_BACK_REASON playtime boys
 assign PUBLIC_AWAY 1
 
 /* This will cause the script to send the public away msg only to certain
    channels. PUBLIC_AWAY must also be 1 of course. */
-assign PUBLIC_AWAY_CHANNELS Admins
+assign PUBLIC_AWAY_CHANNELS #sabina #bedroom #shower #mybedroom #sabina.
 
 /* Notify people that msg you that you are away. */
 assign SEND_AWAY_MSG 1
@@ -145,6 +146,10 @@ alias remlog (void)
 
 on #^msg 420 "*" if (A)
 {
+	if ([$0] == [Doofus] || [$0] == [ChanServ] || [$0] == [OperServ] || [$0] == [NickServ])
+	{
+		return
+	}
 	if (AWAY_LOG)
 	{
 		^local fd
@@ -152,9 +157,19 @@ on #^msg 420 "*" if (A)
 		@ write($fd [$strftime($time() %X)] [$0\(*@*\)] $1-)
 		@ close($fd)
 	}
-	if (SEND_AWAY_MSG && [$0] != [ChanServ] && [$0] != [OperServ])
+	if (SEND_AWAY_MSG)
 	{
-		msg $0 I am currently away. \($word(1 $A)\) [Gone since: $strftime($word(0 $A) %B %d %Y %X)] [Log/${AWAY_LOG ? [ON] : [OFF]}]
+		@count = $numitems(last_nick_away)
+		while (@count > 10)
+		{
+			@ delitem(last_nick_away 0)
+			@count--
+		}
+		if (finditem(last_nick_away $0) < 0)
+		{
+			@setitem(last_nick_away $numitems(last_nick_away) $0)
+			msg $0 I am currently away. \($word(1 $A)\) [Gone since: $strftime($word(0 $A) %B %d %Y %X)] [Log/${AWAY_LOG ? [ON] : [OFF]}]
+		}
 	}
 }
 

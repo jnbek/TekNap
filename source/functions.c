@@ -1,4 +1,4 @@
-/* $Id: functions.c,v 1.3 2001/09/19 16:57:47 edwards Exp $ */
+/* $Id: functions.c,v 1.1.1.1 2001/02/19 03:23:59 edwards Exp $ */
  
 #include "teknap.h"
 #include "struct.h"
@@ -3032,7 +3032,7 @@ BUILT_IN_FUNCTION(function_status)
  */
 BUILT_IN_FUNCTION(function_crypt)
 {
-#if defined(WINNT) || defined(__PPC__)
+#if defined(WINNT)
 	RETURN_STR(empty_string);
 #else
         char pass[9] = "\0";
@@ -3073,7 +3073,7 @@ BUILT_IN_FUNCTION(function_servernick)
 	int serv = from_server;
 	if (input && *input)
 		GET_INT_ARG(serv, input);
-	RETURN_STR(get_server_nickname(serv));
+	RETURN_MSTR(get_server_nickname(serv));
 }
 
 BUILT_IN_FUNCTION(function_chmod)

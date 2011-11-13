@@ -12,7 +12,7 @@ dnl
 dnl This is *not* the same revision as the autoconf script in ircII.
 dnl Revision 1.00 will correspond with the BitchX-1.0 release with versions
 dnl moving up from there. 
-AC_REVISION($Revision: 1.2 $)dnl
+AC_REVISION($Revision: 1.1.1.1 $)dnl
 AC_INIT(source/main.c)
 AC_CONFIG_HEADER(include/defs.h)
 
@@ -326,8 +326,7 @@ if test x"$cross_compiling" != x"yes"; then
 #include <termcap.h>
   ], [ AC_DEFINE(HAVE_TERMCAP_H) 
        AC_MSG_RESULT(yes)
-       havetputs=1
-       AC_CHECK_HEADER(termcap.h)], blahhack=1; AC_MSG_RESULT(no))
+       havetputs=1 AC_CHECK_HEADER(termcap.h)], blahhack=1; AC_MSG_RESULT(no))
   fi
 
   if test x"$blahhack" = x"1"; then
@@ -1399,7 +1398,7 @@ dnl
 dnl Almost done. Hopefully people read this.
 dnl
 
-echo $_VERSION_ \(C\) 1999-2003 Colten Edwards
+echo $_VERSION_ \(C\) 1999-2000 Colten Edwards
 echo ---------------------------------------------------------- 
 echo
 echo The configuration script has finished. You should look through and make any

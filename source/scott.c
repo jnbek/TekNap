@@ -357,7 +357,6 @@ browser_main_loop(void)
 		cleanup();
 		return;
 	default:
-	break;
 #if 0
 	{
 		char buf[20];
@@ -365,6 +364,7 @@ browser_main_loop(void)
 		mvwaddstr(main_win, 1, 0, buf);
 	}
 #endif
+		break;
 	}
 #if 0
 	wrefresh(main_win);

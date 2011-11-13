@@ -10,7 +10,7 @@
  * Copyright 1995 Matthew Green
  * Copyright 1997 EPIC Software Labs
  * See the COPYRIGHT file, or do a HELP IRCII COPYRIGHT 
- * $Id: newio.c,v 1.5 2001/10/11 16:27:08 edwards Exp $
+ * $Id: newio.c,v 1.3 2001/07/09 15:35:15 edwards Exp $
  */
 
 #include "teknap.h"
@@ -129,8 +129,6 @@ void dget_clear_data(int des)
 	if (!io_rec)
 		init_io();
 
-	if (!io_rec[des])
-		return;
 	ioe = io_rec[des];
 	memset(&ioe->data, 0, sizeof(N_DATA));
 }
@@ -392,7 +390,6 @@ int dgets (char *str, int des, int buffer, int buffersize)
 			return -2;
 		}
 		ioe->data_read = 0;
-
 		ioe->data.len = ioe->databuffer[0] + ((ioe->databuffer[1] << 8) & 0xff00);
 		ioe->data.command = ioe->databuffer[2] + ((ioe->databuffer[3] << 8) & 0xff00);
 		if (set_capability)

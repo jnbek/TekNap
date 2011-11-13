@@ -8,9 +8,6 @@ Fix problem with /set default_dataport not setting the dataport properly
  0 byte compiled scripts (violates the ircII principle)
  0 real arrays (i.e. replace Karll's arrays with a numerical array op),
 
- - from Spike -
- 0 fix scrollback problems where memory is never released with /clear.
-
 *** News 06/22/Y2K -- Numeric parameters available in /wait %cmd and /exec
 -end
         When you are inside a /wait %cmd {...} or /exec -end {...} body, the
@@ -19,3 +16,4 @@ Fix problem with /set default_dataport not setting the dataport properly
                 $1 - The signal (if any) that killed the process
                 $2 - The return code (if any) of the procss
         This is exactly the same as what you get inside /on exec_exit.
+

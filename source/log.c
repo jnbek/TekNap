@@ -1,7 +1,7 @@
 /*
  * log.c: handles the irc session logging functions 
  *
- * $Id: log.c,v 1.2 2001/07/13 20:45:30 edwards Exp $
+ * $Id: log.c,v 1.1.1.1 2001/01/31 17:53:26 edwards Exp $
  */
 
 
@@ -40,11 +40,7 @@ void do_log(int flag, char *logfile, FILE **fp)
 			{
 				say("Starting logfile %s", logfile);
 				chmod(logfile, S_IREAD | S_IWRITE);
-#ifdef WINNT
-				fprintf(*fp, "NAP log started %.24s\r\n", ctime(&t));
-#else
 				fprintf(*fp, "NAP log started %.24s\n", ctime(&t));
-#endif
 				fflush(*fp);
 			}
 			else
@@ -59,11 +55,7 @@ void do_log(int flag, char *logfile, FILE **fp)
 	{
 		if (*fp)
 		{
-#ifdef WINNT
-			fprintf(*fp, "NAP log ended %.24s\r\n", ctime(&t));
-#else
 			fprintf(*fp, "NAP log ended %.24s\n", ctime(&t));
-#endif
 			fflush(*fp);
 			fclose(*fp);
 			*fp = NULL;
@@ -152,11 +144,7 @@ int must_free = 0;
 
 		
 		
-#ifdef WINNT
-		fprintf(fp, "%s\r\n", local_line);
-#else
 		fprintf(fp, "%s\n", local_line);
-#endif
 		fflush(fp);
 		if (must_free)
 			new_free(&local_line);

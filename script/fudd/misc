@@ -1,7 +1,7 @@
 /*
  * Miscellaneous stuff for TekNap
  *
- * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ * Author: Brian Weiss <brian@got.net> - 2000
  */
 
 alias cme (text)
@@ -11,7 +11,7 @@ alias cme (text)
 		raw 824 $C \"$cparse("$text")\"
 	}{
 		xecho -b Usage: /cme <text>
-		xecho -b   - Sends an action with colored text to the channel using \$cparse()
+		xecho -b   - Sends an action with colored text to the channel using $cparse()
 		xecho -b   - /help 6 cparse for a list of color codes
 	}
 }
@@ -23,7 +23,7 @@ alias csay (text)
 		raw 402 $C $cparse("$text")
 	}{
 		xecho -b Usage: /csay <text>
-		xecho -b   - Sends a public with colored text to the channel using \$cparse()
+		xecho -b   - Sends a public with colored text to the channel using $cparse()
 		xecho -b   - /help 6 cparse for a list of color codes
 	}
 }
@@ -50,8 +50,7 @@ alias partall (void)
 	{
 		switch ($tolower($left(1 $0)))
 		{
-			(y)
-			{
+			(y) {
 				fe ($onchannels()) chan
 				{
 					raw 401 $chan
@@ -73,7 +72,18 @@ alias quote raw
 
 alias sv version
 
-alias wi whois
+alias wi (nicks)
+{
+	if (nicks)
+	{
+		fe ($nicks) n1
+		{
+			whois $n1
+		}
+	}{
+		whois $N
+	}
+}
 
 /* Keep track of channels you have parted for 5 seconds after you
    part them. (Required for Auto-rejoin on channel clears) */
@@ -90,7 +100,6 @@ on -servermsg '% % $N out of channel *'
 {
 	local chan
 	@ chan = before(-1 : $6)
-
 	if (AUTO_REJOIN)
 	{
 		join $chan
@@ -102,7 +111,6 @@ on -servermsg "% cleared channel *"
 {
 	local chan
 	@ chan = before(-1 : $3)
-
 	if (AUTO_REJOIN && finditem(part $chan) > -1)
 	{
 		join $chan
@@ -114,6 +122,3 @@ alias cleanup_part (item)
 	@ delitem(part $item)
 	return 1
 }
-
-
-/* bmw '01 */

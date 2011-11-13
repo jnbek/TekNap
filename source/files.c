@@ -1,7 +1,7 @@
 /*
  * various c functions for receiving files on napster.
  * Copyright Colten Edwards Feb 2000
- * $Id: files.c,v 1.2 2001/08/03 06:49:02 edwards Exp $
+ * $Id: files.c,v 1.1.1.1 2001/01/24 15:21:47 edwards Exp $
  */
  
 #include "teknap.h"
@@ -24,7 +24,7 @@
 #ifdef HAVE_SYS_FILIO_H
 #include <sys/filio.h>
 #endif
-#ifdef HAVE_LIBWRAP
+#if HAVE_LIBWRAP
 #include <tcpd.h>
 int allow_severity;              /* for connection logging */
 int deny_severity;               /* for connection logging */
@@ -991,7 +991,7 @@ int rc;
 	if ((sock = accept(snum, (struct sockaddr *) &remaddr, &sra)) > -1)
 	{
 		set_keepalive(sock);
-#ifdef HAVE_LIBWRAP
+#if HAVE_LIBWRAP
 		if (!hosts_ctl (PACKAGE, STRING_UNKNOWN, inet_ntoa (remaddr.sin_addr),
 			STRING_UNKNOWN))
 		{

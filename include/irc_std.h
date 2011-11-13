@@ -7,7 +7,7 @@
  *
  * See the copyright file, or do a help ircii copyright 
  *
- * @(#)$Id: irc_std.h,v 1.2 2001/08/28 19:10:17 edwards Exp $
+ * @(#)$Id: irc_std.h,v 1.1.1.1 2000/10/16 01:39:24 edwards Exp $
  */
 
 #ifndef __irc_std_h
@@ -60,12 +60,7 @@
 #include <sys/endian.h>
 #elif defined(HAVE_MACHINE_ENDIAN_H)
 #include <machine/endian.h>
-#elif defined(HAVE_PPC_ENDIAN_H)
-#include <ppc/endian.h>
-#elif defined(__PPC__)
-#include <ppc/endian.h>
 #endif
-
 
 /*
  * Some systems define tputs, etc in this header

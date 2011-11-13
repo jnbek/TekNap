@@ -5,7 +5,7 @@
  *
  * Most of this was taken from the nick completion module that shade wrote
  * for my BitchX/EPIC4 script called playdough. He deserves most of the
- * credit. Please send bug reports to me, not shade.
+ * credit.
  */
 
 assign NICK_COMP 1

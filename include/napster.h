@@ -1,5 +1,5 @@
 
- /* $Id: napster.h,v 1.2 2001/07/13 20:45:28 edwards Exp $ */
+ /* $Id: napster.h,v 1.1.1.1 2001/02/25 05:24:34 edwards Exp $ */
  
 #ifndef _napster_h
 #define _napster_h
@@ -450,6 +450,5 @@ NAP_COMM(cmd_direct_browse);
 #define SEARCH_FINISH	0x0000
 #define SEARCH_START	0x0001
 #define	SEARCH_FULLPATH 0x0002
-int get_napigator(void);
 
 #endif

@@ -2,13 +2,11 @@
  * Some useful functions for TekNap
  *
  * Author: Brian Weiss <brian@got.net> - 2000
- *         fudd @ EFnet IRC / opennap
  */
 
 alias checkuserclass (nick, void)
 {
 	^local ulevel
-
 	wait for whois -cmd
 	{
 		switch ($tr(/"//$1))
@@ -20,7 +18,6 @@ alias checkuserclass (nick, void)
 			(Elite) {@ ulevel = [4]}
 		}
 	} $nick
-
 	@ function_return = ulevel
 }
 
@@ -28,6 +25,3 @@ alias fparse
 {
 	eval return $cparse($($0))
 }
-
-
-/* bmw '00 */

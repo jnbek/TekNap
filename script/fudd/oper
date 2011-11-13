@@ -1,7 +1,7 @@
 /*
  * Some stuff for Moderators+
  *
- * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ * Author: Brian Weiss <brian@got.net> - 2000
  */
 
 assign AUTO_MUZZLE 1
@@ -11,22 +11,13 @@ assign OPERVIEW_SIZE 5
 /* Toggle auto-muzzle on/off */
 alias automuzzle (arg, void)
 {
-	switch ($tolower($arg))
+	switch ($arg)
 	{
-		(0)
-		(off)
-		{
-			^assign AUTO_MUZZLE 0
-		}
-		(1)
-		(on)
-		{
-			^assign AUTO_MUZZLE 1
-		}
-		(*)
-		{
-			@ AUTO_MUZZLE = AUTO_MUZZLE ? [0] : [1]
-		}
+		(0) {^assign AUTO_MUZZLE 0}
+		(1) {^assign AUTO_MUZZLE 1}
+		(off) {^assign AUTO_MUZZLE 0}
+		(on) {^assign AUTO_MUZZLE 1}
+		(*) {@ AUTO_MUZZLE = AUTO_MUZZLE ? [0] : [1]}
 	}
 	xecho -b Auto-muzzle has been ${AUTO_MUZZLE ? [activated] : [de-activated]}
 }
@@ -40,8 +31,7 @@ alias c (level, void)
 		(2) {admin setchanlevel $C moderator}
 		(3) {admin setchanlevel $C admin}
 		(4) {admin setchanlevel $C elite}
-		(*)
-		{
+		(*) {
 			xecho -b Usage: /c <level>
 			xecho -b   - Sets channel level to <level>
 			xecho -b   - <level> can be any numbered between 0 and 4
@@ -52,20 +42,19 @@ alias c (level, void)
 
 /* Clone checker. Executes /gusers and stores the output in an array.
    It then checks each IP for duplicates and stores them in a new array. */
-alias clones (server default "*", max_clones default "2", void)
+alias clones (server default "*", void)
 {
-	@ cleanup_clonechk()
-	xecho -b Checking for clones > $max_clones on $server
-
+	xecho -b Checking for clones on $server
 	^on ^831 "*"
 	{
-		for (@ :cnt = [0], numitems(users) > cnt, @ cnt++)
+		^local cnt
+		for (@ cnt = [0], numitems(users) > cnt, @ cnt++)
 		{
 			if (matchitem(clones $getitem(users $cnt)) < 0)
 			{
-				@ :blah = getmatches(users % $word(1 $getitem(users $cnt)))
-
-				if (#blah > max_clones)
+				^local blah
+				@ blah = getmatches(users % $word(1 $getitem(users $cnt)))
+				if (#blah > 1)
 				{
 					fe ($blah) clone
 					{
@@ -77,9 +66,10 @@ alias clones (server default "*", max_clones default "2", void)
 		if (numitems(clones))
 		{
 			xecho -b Nickname                         IP
-			for (@ :cnt = [0], numitems(clones) > cnt, @ cnt++)
+			for (@ cnt = [0], numitems(clones) > cnt, @ cnt++)
 			{
-				@ :user = getitem(clones $cnt)
+				^local user
+				@ user = getitem(clones $cnt)
 				echo     $[32]word(0 $user) $word(1 $user)
 			}
 			xecho -b Found $numitems(clones) clone${numitems(clones) > 1 ? [s] : []}.
@@ -88,12 +78,10 @@ alias clones (server default "*", max_clones default "2", void)
 		}
 		@ cleanup_clonechk()
 	}
-
 	^on ^832 "*"
 	{
 		@ setitem(users $numitems(users) $*)
 	}
-
 	^gusers $server
 }
 
@@ -102,30 +90,26 @@ alias mkill (victim, reason)
 {
     if (victim)
     {
-	@ cleanup_mkill()
+	xecho -b Finding matches for \"$victim\"
 	@ mkill.victim = victim
 	@ mkill.reason = reason
-
-	xecho -b Finding matches for \"$victim\"
-
 	^on ^831 "*"
 	{
 		if (numitems(mkill))
 		{
+			^local cnt
 			xecho -b Nickname                         IP
-			for (@ :cnt = [0], numitems(mkill) > cnt, @ cnt++)
+			for (@ cnt = [0], numitems(mkill) > cnt, @ cnt++)
 			{
 				echo     $[32]word(0 $getitem(mkill $cnt)) $word(1 $getitem(mkill $cnt))
 			}
-
 			xecho -b Found $numitems(mkill) match${numitems(mkill) > 1 ? [es] : []}.
 			input "Kill these users now? (y/N) "
 			{
 				switch ($tolower($left(1 $0)))
 				{
-					(y)
-					{
-						for (@ :cnt = [0], numitems(mkill) > cnt, @ cnt++)
+					(y) {
+						for (@ cnt = [0], numitems(mkill) > cnt, @ cnt++)
 						{
 							raw 610 $word(0 $getitem(mkill $cnt)) \"$mkill.reason\"
 						}
@@ -139,7 +123,6 @@ alias mkill (victim, reason)
 			@ cleanup_mkill()
 		}
 	}
-
 	^on ^832 "*"
 	{
 		if (match($mkill.victim $0) || match($mkill.victim $1) && [$0] != N)
@@ -147,7 +130,6 @@ alias mkill (victim, reason)
 			@ setitem(mkill $numitems(mkill) $*)
 		}
 	}
-
 	^gusers * $victim
     }{
 	xecho -b Usage: /mkill <string> [reason]
@@ -212,7 +194,7 @@ alias cleanup_mkill (void)
 	^on 832 -
 	@ delarray(mkill)
 	@ mkill.victim = mkill.reason = []
-	return
+	return 1
 }
 
 alias cleanup_clonechk (void)
@@ -221,7 +203,7 @@ alias cleanup_clonechk (void)
 	^on 832 -
 	@ delarray(users)
 	@ delarray(clones)
-	return
+	return 1
 }
 
 on #^flood 421 "% PUBLIC *" if (AUTO_MUZZLE)
@@ -229,32 +211,23 @@ on #^flood 421 "% PUBLIC *" if (AUTO_MUZZLE)
 	^assign chan $2
 	^assign nick $0
 	^assign type $1
-
-	if (chan && nick && type)
+	if (finditem(pubflood $nick) < [0])
 	{
-		if (finditem(pubflood $nick) < [0])
+		@ setitem(pubflood $numitems(pubflood) $nick)
+		whois -cmd
 		{
-			@ setitem(pubflood $numitems(pubflood) $nick)
-			whois -cmd
+			switch ($tr(/"//$1))
 			{
-				switch ($tr(/"//$1))
-				{
-					(Elite) {#}
-					(Admin) {#}
-					(Moderator) {#}
-					(*)
-					{
-						xecho -b PUBLIC flooding detected from $nick on $chan - Muzzling for $AUTO_MUZZLE_TIME seconds
-						raw 622 $nick \"Auto-muzzle for $AUTO_MUZZLE_TIME seconds: flood\"
-						timer $AUTO_MUZZLE_TIME eval raw 623 $nick;@ delitem(pubflood $finditem(pubflood $nick))
-					}
+				(Elite) {#}
+				(Admin) {#}
+				(Moderator) {#}
+				(*) {
+					xecho -b PUBLIC flooding detected from $nick on $chan - Muzzling for $AUTO_MUZZLE_TIME seconds
+					raw 622 $nick \"Auto-muzzle for $AUTO_MUZZLE_TIME seconds: flood\"
+					timer $AUTO_MUZZLE_TIME eval raw 623 $nick;@ delitem(pubflood $finditem(pubflood $nick))
 				}
-			} $nick
-		}
+			}
+		} $nick
 	}
-
 	wait -cmd @ chan = nick = type = []
 }
-
-
-/* bmw '01 */

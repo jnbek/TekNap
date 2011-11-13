@@ -483,11 +483,6 @@ SocketList *s1;
 	s1->func_write = s1->func_read = direct_browse_handler;
 	s1->is_write = s1->is_read;
 	sprintf(buffer, "%s\n", get_server_nickname(from_server));
-	if (write(snum, buffer, strlen(buffer)) <= 0)
-	{
-		say("Error with direct browse");
-		close_socketread(snum);
-		return;
-	}
+	write(snum, buffer, strlen(buffer));
 	direct_browse_handler(snum);
 }

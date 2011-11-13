@@ -6,7 +6,7 @@
  * Copyright(c) 1990 
  *
  * See the COPYRIGHT file, or do a HELP IRCII COPYRIGHT 
- * $Id: lastlog.c,v 1.2 2001/07/13 20:45:29 edwards Exp $
+ * $Id: lastlog.c,v 1.1.1.1 2001/01/18 15:04:19 edwards Exp $
  */
 
 
@@ -232,7 +232,7 @@ Lastlog *ptr;
 }
 
 
-void print_lastlog(FILE *fp, Lastlog *msg, int timelog)
+void print_lastlog(Lastlog *msg, int timelog)
 {
 	time_t ltime;
 	struct tm *tm;
@@ -246,27 +246,10 @@ void print_lastlog(FILE *fp, Lastlog *msg, int timelog)
 			get_string_var(LASTLOG_TIMEFORMAT_VAR) ? 
 			get_string_var(LASTLOG_TIMEFORMAT_VAR) : 
 				"[%H:%M]", tm);	
-		if (fp)
-		{
-#ifdef WINNT
-			fprintf(fp, "%s %s\r\n", buff, msg->msg);
-#else
-			fprintf(fp, "%s %s\n", buff, msg->msg);
-#endif
-		}
-		else
-			put_it("%s %s", buff, msg->msg);
+		put_it("%s %s", buff, msg->msg);
 	}
 	else
-	{
-		fp ?
-#ifdef WINNT
-		fprintf(fp, "%s\r\n", msg->msg)
-#else
-		fprintf(fp, "%s\n", msg->msg)
-#endif
-		: put_it("%s", msg->msg);
-	}
+		put_it("%s", msg->msg);
 }
 
 /*
@@ -479,8 +462,8 @@ BUILT_IN_COMMAND(lastlog)
 			i++;
 			if (!match || wild_match(blah, start_pos->msg))
 			{
-				if (fp || do_hook(LASTLOG_LIST, "%lu %s", start_pos->time, start_pos->msg))
-					print_lastlog(fp, start_pos, time_log);
+				if (do_hook(LASTLOG_LIST, "%lu %s", start_pos->time, start_pos->msg))
+					print_lastlog(start_pos, time_log);
 
 				if (lines == 0)
 					continue;
@@ -493,8 +476,6 @@ BUILT_IN_COMMAND(lastlog)
 	if (header && !fp)
 		if (do_hook(LASTLOG_LIST, "%s of %s", "End", "LastLog"))
 			say("End of Lastlog");
-	if (fp)
-		fclose(fp);
 	current_window->lastlog_level = level;
 	set_lastlog_msg_level(msg_level);
 }

@@ -5,7 +5,7 @@
  * Copyright 1994 Matthew Green
  * Copyright 1997 EPIC Software Labs
  * See the COPYRIGHT file, or do a HELP IRCII COPYRIGHT 
- * $Id: hook.c,v 1.2 2001/09/19 16:57:48 edwards Exp $
+ * $Id: hook.c,v 1.1.1.1 2001/01/18 15:04:17 edwards Exp $
  */
 
 #include "teknap.h"
@@ -103,7 +103,6 @@ hook_functions[] =
 	{ "PONG",		(Hook *) 0,	1,	0,	0 },
 	{ "PUBLIC",		(Hook *) 0,	3,	0,	0 },
 	{ "PUBLIC_OTHER",	(Hook *) 0,	3,	0,	0 },
-	{ "RAW_IRC",		(Hook *) 0,	1,	0,	0 },
 	{ "RAW_NAP",		(Hook *) 0,	1,	0,	0 },
 	{ "SEARCH_BEGIN",	(Hook *) 0,	1,	0,	0 },
 	{ "SEARCH_END",		(Hook *) 0,	1,	0,	0 },

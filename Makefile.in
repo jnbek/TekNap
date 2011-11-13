@@ -34,7 +34,7 @@ INSTALL_NAP = @INSTALL_NAP@
 NAPLIB = @NAPLIB@
 
 CC = @CC@
-DEFS = -I$$(srcdir)/../include -I$(topdir)/include
+DEFS = -I. -I$(topdir)/include -I-
 LIBS = @LIBS@
 INCLUDES = @INCLUDES@
 
@@ -62,8 +62,8 @@ HELPDIR = ${datadir}/TekNap/help
 
 # This command will be used to install the TekNap help files.  If you don't
 # want to install them, replace with the following:
-# INSTALL_HELP_CMD = @echo The help files have not been installed.
-INSTALL_HELP_CMD = cp -pr $(srcdir)/teknap-help/* $(HELPDIR)
+INSTALL_HELP_CMD = @echo
+#INSTALL_HELP_CMD = cp -pr $(srcdir)/teknap-help/* $(HELPDIR)
 
 ## You probably don't need to change anything below this line
 
@@ -137,7 +137,7 @@ installuserhelp:
 	cp -pr $(srcdir)/teknap-help/* $(local_dir)/.TekNap/help
 
 installdirs:
-	umask 022; $(srcdir)/mkinstalldirs $(bindir) $(HELPDIR) $(NAPLIB) $(mandir)/man1
+	umask 022; $(srcdir)/mkinstalldirs $(bindir)  $(mandir)/man1
 
 local_installdirs:
 	umask 022; $(srcdir)/mkinstalldirs $(local_dir)/bin $(local_dir)/.TekNap
@@ -161,9 +161,15 @@ distrib: $(srcdir)/TekNap
 depend:
 	@cd $(objdir); $(MAKE) depend
 
+# FIXME This was taken straight from the autoconf docs, but it doesn't ever run
+# autolocal or autoheader... Does it?
+configure: configure.in aclocal.m4
+	cd $(topdir) && autoconf
+
 # autoheader might not change $(topdir)/include/defs.h.in, so touch a stamp file.
 include/defs.h.in: stamp-h.in
 stamp-h.in: configure.in aclocal.m4
+	cd $(topdir) && autoheader
 	echo timestamp > $(topdir)/stamp-h.in
 
 include/defs.h: stamp-h

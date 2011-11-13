@@ -1,5 +1,5 @@
 #!/bin/sh
-# This is my autogen script. I know there is a "better" one out there but this
+# This is my autogen script. I knwo there is a "better" one out there but this
 # works for me.
 
 echo Running aclocal...

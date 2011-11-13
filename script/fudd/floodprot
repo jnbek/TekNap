@@ -1,42 +1,70 @@
 /*
  * Flood protection for TekNap
- * Author: Brian Weiss <brian@got.net> - 2000, 2001
  *
- * *NOTE* If AUTO_MUZZLE is true then this will do nothing for PUBLIC
+ * Author: Brian Weiss <brian@got.net> - 2000
+ *
+ * *NOTE* If AUTO_MUZZLE is enabled then this will do nothing for PUBLIC
  *        floods.
  */
 
+/* Remember, this is in seconds. */
 assign AUTO_IGNORE_TIME 60
-assign FLOOD_PROTECTION 0
+assign FLOOD_PROTECTION 1
 
 alias fprot (arg, void)
 {
-	switch ($tolower($arg))
-	{
-		(0)
-		(off)
-		{
-			^assign FLOOD_PROTECTION 0
-		}
-		(1)
-		(on)
-		{
-			^assign FLOOD_PROTECTION 1
-		}
-		(*)
-		{
-			@ FLOOD_PROTECTION = FLOOD_PROTECTION ? [0] : [1]
-		}
-	}
-
+        switch ($arg)
+        {
+                (0) {^assign FLOOD_PROTECTION 0}
+                (1) {^assign FLOOD_PROTECTION 1}
+                (off) {^assign FLOOD_PROTECTION 0}
+                (on) {^assign FLOOD_PROTECTION 1}
+                (*) {@ FLOOD_PROTECTION = FLOOD_PROTECTION ? [0] : [1]}
+        }
 	xecho -b Flood protection has been ${FLOOD_PROTECTION ? [activated] : [de-activated]}
+}
+
+alias ignore (nick, void)
+{
+	if (nick)
+	{
+		^local nickitm
+		@ nickitm = finditem(ignores $nick)
+		if (nickitm <= -1)
+		{
+			@ setitem(ignores $numitems(ignores) $nick)
+			^on ^join ^"% $nick *"
+			^on ^leave ^"% $nick *"
+			^on ^msg ^"$nick *"
+			//ignore $nick
+			raw 322 $nick
+		}
+	}{
+		^local ignorecmd
+		@ ignorecmd = CMDCHARS ## CMDCHARS ## [ignore]
+		eval $ignorecmd
+	}
 }
 
 alias unignore (nick, void)
 {
 	if (nick)
 	{
-		//ignore -REMOVE $nick
+		^local nickitm
+		@ nickitm = finditem(ignores $nick)
+		if (nickitm > -1)
+		{
+			@ delitem(ignores $getitem(ignores $nickitm))
+			^on ^join -"% $nick *"
+			^on ^leave -"% $nick *"
+			^on ^msg -"$nick *"
+			//ignore -$nick
+			raw 323 $nick
+		}
+	}{
+		^local ignorecmd
+		@ ignorecmd = CMDCHARS ## CMDCHARS ## [ignore]
+		eval $ignorecmd
 	}
 }
 
@@ -53,23 +81,23 @@ on #^flood 420 "*" if (FLOOD_PROTECTION)
 			if (!AUTO_MUZZLE)
 			{
 				xecho -b PUBLIC flooding detected from $nick - Ignoring for $AUTO_IGNORE_TIME seconds
-				//ignore $nick
-				timer $AUTO_IGNORE_TIME //ignore -REMOVE $nick
+				ignore $nick
+				timer $AUTO_IGNORE_TIME unignore $nick
 			}
 		}
 		(JOINS)
 		{
 			xecho -b JOIN flooding detected from $nick - Ignoring for $AUTO_IGNORE_TIME seconds
-			//ignore $nick
-			timer $AUTO_IGNORE_TIME //ignore -REMOVE $nick
+			ignore $nick
+			timer $AUTO_IGNORE_TIME unignore $nick
 		}
 		(MSGS)
 		{
-			if (!match($nick ChanServ NickServ OperServ))
+			if (nick != [OperServ] && nick != [ChanServ])
 			{
 				xecho -b MSG flooding detected from $nick - Ignoring for $AUTO_IGNORE_TIME seconds
-				//ignore $nick
-				timer $AUTO_IGNORE_TIME //ignore -REMOVE $nick
+				ignore $nick
+				timer $AUTO_IGNORE_TIME unignore $nick
 			}
 		}
 	}
@@ -77,8 +105,3 @@ on #^flood 420 "*" if (FLOOD_PROTECTION)
 
 on ^322 ^"*"
 on ^323 ^"*"
-
-set FLOOD_WARNING OFF
-
-
-/* bmw '01 */

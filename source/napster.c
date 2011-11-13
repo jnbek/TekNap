@@ -1335,7 +1335,7 @@ char *nick;
 			new_free(&p);
 		}
 		else
-			say("Unexpected pong from %s", nick);
+			say("Unexpect pong from %s", nick);
 	}
 	return 0;
 }
@@ -1766,7 +1766,7 @@ NAP_COMM(cmd_usage)
 	say("Server stats: Started %s", my_ctime(start_t));
 	put_it("\tClients %7s\t Servers %12s\t Channels %18s", num_clients, num_servers, num_channels);
 	put_it("\tShares  %7s\t Files   %12s\t Bytes    %18s", total_users, buff, slongcomma(buff1));
-	if (mem_usage > 0)
+	if (mem_usage <= 0)
 		put_it("\tMemory Usage %lu", mem_usage);
 	if (args && *args)
 	{

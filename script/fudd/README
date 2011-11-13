@@ -1,6 +1,6 @@
 This is a set of scripts I wrote for TekNap (formerly BWap). They do a range 
 of things including nick completion, auto-response, fixed tabkey support, and
-a wide variety of stuff for Moderators and higher. I wrote everything except
+a wide  variety of stuff for Moderators and higher. I wrote everything except
 the nick completion which was written by shade for a BitchX/EPIC script I
 wrote a while back.
 
@@ -15,11 +15,12 @@ client by typing "/load <filename>".
   Examples:
 
 	/load /home/you/.TekNap/scripts/oper
+	/load $HOME/scripts/floodprot
 	/load ~/.TekNap/scripts/away
 	/load scripts/misc
 
 Most people don't want to have to type this every single time they start
-TekNap. So loading the scripts automatically on startup through the .teknaprc
+BWap. So loading the scripts automatically on startup through the .teknaprc
 file is usually the best way to go. This can be done a couple of different
 ways..
 
@@ -47,8 +48,7 @@ ways..
 
 	---
 
-  The sample.teknaprc file included demonstrates method 2.
-
+  The sample.bwaprc file included demonstrates method 2.
 
 WHAT'S IN THE SCRIPTS
 
@@ -62,11 +62,9 @@ done on the fly using /assign or in the scripts themselves.
   This script makes the nick of anyone saying something with
   $AUTO_RESPONSE_STR in it, yellow.
 
-  *note* AUTO_RESPONSE_STR can contain multiple nicks separated by spaces.
-
   Config Variables:		Value:		Description:
+    AR_BEEP			0/1		Auto-response beep ON/OFF
     AUTO_RESPONSE		0/1		Auto-response ON/OFF
-    AUTO_RESPONSE_BEEP		0/1		Auto-response beep ON/OFF
     AUTO_RESPONSE_STR		text string	What triggers Auto-response
 
 *away*
@@ -123,8 +121,7 @@ done on the fly using /assign or in the scripts themselves.
     /ignore [nick]			- Add [nick] to ignore list
     /unignore [nick]			- Remove [nick] from ignore list
 
-  If you want to change what exactly triggers a flood, try '/set flood' from
-  within TekNap.
+  If you want to change what exactly triggers a flood, try /set flood in BWap
 
 *functions*
 
@@ -153,7 +150,7 @@ done on the fly using /assign or in the scripts themselves.
     /wi <nick1> [nick2] ...	- Perform a whois lookup on nick(s)
 
   Also included is a fix for Auto-rejoin on channel kick and on channel
-  clear. Works with TekNap's internal /set AUTO_REJOIN
+  clear. Works with BWap's internal /set AUTO_REJOIN
 
 *nickcomp*
 
@@ -205,15 +202,12 @@ done on the fly using /assign or in the scripts themselves.
   script BWap only keeps track of the last nick that msg'd you. This allows
   you to keep track of an unlimited amount of nicks.
 
-  *NOTE* This has been fixed in the latest release of TekNap.. This script
-         is no longer needed, and I recommend using the builtin tabkey stuff.
-
   Config Variables:		Value:		Description:
     MAX_MSG_BUFFER_SIZE		#		How many nicks to keep in
 						the msg history
 
   Just press your Tab key to use this. Note: loading this script will
-  disable all builtin tabkey functions such as filename and command completion.
+  disable all other tabkey functions such as filename and command completion.
 
 *window*
 
@@ -232,8 +226,11 @@ done on the fly using /assign or in the scripts themselves.
 That's it for now.. I'll try to keep this file updated as often as possible.
 Let me know if you find any bugs or have any suggestions for these scripts.
 
+These scripts are updated frequently so remember to check my webpage from
+time to time..
+
 Enjoy..
 
 Brian Weiss <brian@got.net>
-http://www.got.net/~brian/
-I can be found on OpenNap or EFnet IRC on the nick "fudd"
+http://www.got.net/~brian
+I can be found on opennap or IRC on the nick "fudd"

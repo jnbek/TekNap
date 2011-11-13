@@ -8,7 +8,6 @@
 #include "ircaux.h"
 #include "irchandler.h"
 #include "list.h"
-#include "hook.h"
 #include "napster.h"
 #include "output.h"
 #include "server.h"
@@ -170,12 +169,6 @@ char buff[BIG_BUFFER_SIZE];
 			break;
 		case 333: /* topic time */
 			break;
-
-//ωνω Numbered server stuff: "352 pana #opennap toasty bender.thirty4.com
-//          irc.lightning.net Toasty_ H@ :2 Chad Boyda" (irc.core.com)
-//          ωνω Numbered server stuff: "315 pana #opennap :End of /WHO list."
-//                    (irc.core.com)
-
 		case 315:
 			break;
 		case 352:
@@ -874,10 +867,7 @@ void parse_irc_server(char *line)
 	set_display_target(from, LOG_CRAP);
 	/* Check for a numeric first */
 	if ((numeric = atoi(comm)))
-	{
-		if (do_hook(RAW_IRC_LIST, "%s %d %s", from, numeric, line))
-			numbered_command(from, numeric, ArgList);
-	}
+		numbered_command(from, numeric, ArgList);
 	else
 	{
 		retval = (protocol_command *)find_fixed_array_item(
@@ -886,8 +876,7 @@ void parse_irc_server(char *line)
 
 		if (cnt < 0 && rfc1459[loc].inbound_handler)
 		{
-			if (do_hook(RAW_IRC_LIST, "%s %s", from, line))
-				rfc1459[loc].inbound_handler(from, ArgList);
+			rfc1459[loc].inbound_handler(from, ArgList);
 		}
 		else
 			rfc1459_odd(from, comm, ArgList);
@@ -948,4 +937,4 @@ int ofs = from_server;
 	}
 	from_server = ofs;
 }
-
+ 

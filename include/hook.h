@@ -1,4 +1,4 @@
- /* $Id: hook.h,v 1.2 2001/09/19 16:57:46 edwards Exp $ */
+ /* $Id: hook.h,v 1.1.1.1 2001/01/18 15:04:11 edwards Exp $ */
  
 /*
  * hook.h: header for hook.c
@@ -51,7 +51,6 @@ enum HOOK_TYPES {
 	PUBLIC_LIST,
 	PUBLIC_OTHER_LIST,
 	RAW_IRC_LIST,
-	RAW_NAP_LIST,
 	SEARCH_BEGIN_LIST,
 	SEARCH_END_LIST,
 	SEND_ACTION_LIST,

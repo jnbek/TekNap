@@ -2,7 +2,7 @@
  * TekNap: a new napster client.
  * Copyright Colten Edwards Feb 14/2000
  *
- * $Id: main.c,v 1.3 2001/10/11 16:57:50 edwards Exp $
+ * $Id: main.c,v 1.1.1.1 2001/02/25 05:24:51 edwards Exp $
  */
 
 #include "teknap.h"
@@ -48,14 +48,13 @@
 #include <signame.h>
 #endif
 
-/* the 'u' here stands for unoffical - Spike */
 #ifndef VERSION
-	const char nap_version[] = "TekNap-1.4u";
+	const char nap_version[] = "TekNap-1.3g";
 #else
 	const char nap_version[] = VERSION;
 #endif
 
-static char main_version[] = "$Id: main.c,v 1.3 2001/10/11 16:57:50 edwards Exp $";
+static char main_version[] = "$Id: main.c,v 1.1.1.1 2001/02/25 05:24:51 edwards Exp $";
 
 /*
  * major version is 75
@@ -72,9 +71,9 @@ static char main_version[] = "$Id: main.c,v 1.3 2001/10/11 16:57:50 edwards Exp 
  * Its format is actually YYYYMMDD, for the _release_ date of the
  * client..
  */
-const char internal_version[] = "20011011";
+const char internal_version[] = "20000909";
 
-int	nap_port = 8888,			/* port of napster server */
+int	nap_port = 8875,			/* port of ircd */
 	use_input = 1,				/* if 0, stdin is never
 						 * checked */
 	dead	   = 0, 
@@ -110,7 +109,7 @@ char
 	*irc_path = NULL,		/* paths used by /load */
 	*irc_lib = NULL,		/* path to the ircII library */
 	*bircrc_file = NULL,
-	*ircservers_file = NULL,	/* name of server file */
+	*ircservers_file = NULL,	/* name  of server file */
 	nickname[NICKNAME_LEN + 1],	/* users nickname */
 	password[NICKNAME_LEN + 1],	/* users nickname */
 	shared_file_dir[2048+1],
@@ -160,7 +159,7 @@ static		char	switch_help[] =
    -p\t\trequest password to use\n\
    -a\t\tadds default servers and command line servers to server list\n\
    -r filename\tuse filename for the serverlist\n\
-   -c\t\tset napster beta 10.3 capability\n\
+   -c\t\tset napster beta8 capability\n\
    -v\t\ttells you about the client's version\n";
 
 #if defined(WINNT) || defined(EMX)

@@ -1,22 +1,18 @@
 /*
  * Ban related stuff for TekNap
  *
- * Author: Brian Weiss <brian@got.net> - 2000, 2001
+ * Author: Brian Weiss <brian@got.net> - 2000
  */
 
 alias admin
 {
 	switch ($0)
 	{
-		(banlist)
-		{
+		(banlist) {
 			@ delarray(banlist)
 			raw 615
 		}
-		(*)
-		{
-			//admin $*
-		}
+		(*) {//admin $*}
 	}
 }
 
@@ -97,7 +93,6 @@ alias ctban (chan default "$C", void)
 {
 	cbanlist $chan
 	@ channel = chan
-
 	input "Which ban(s) to remove? (1, 2-5, ...) " if ([$0])
 	{
 		fe ($*) bannum
@@ -105,7 +100,6 @@ alias ctban (chan default "$C", void)
 			^local tban1,tban2
 			@ tban1 = before(- $bannum)
 			@ tban2 = after(- $bannum)
-
 			if (tban1 < tban2 && tban1 < numitems(cbanlist) && tban2 <= numitems(cbanlist))	
 			{
 				for (@ count = tban1, count <= tban2, @ count++)
@@ -139,7 +133,6 @@ alias cunban (chan, ban)
 alias tban (void)
 {
 	banlist
-
 	input "Which ban(s) to remove? (1, 2-5, ...) " if ([$0])
 	{
 		fe ($*) bannum
@@ -147,7 +140,6 @@ alias tban (void)
 			^local tban1,tban2
 			@ tban1 = before(- $bannum)
 			@ tban2 = after(- $bannum)
-
 			if (tban1 < tban2 && tban1 < numitems(banlist) && tban2 <= numitems(banlist))
 			{
 				for (@ count = tban1, count <= tban2, @ count++)
@@ -194,7 +186,6 @@ on ^420 "*"
 	if (numitems(cbanlist))
 	{
 		^local count
-
 		xecho --  #    SETBY      DATE     BAN
 		for (@ count = [0], numitems(cbanlist) > count, @ count++)
 		{
@@ -221,7 +212,6 @@ on ^615 "*"
 	if (numitems(banlist))
 	{
 		^local count
-
 		xecho --  #    SETBY      DATE     BAN
 		for (@ count = [0], numitems(banlist) > count, @ count++)
 		{
@@ -242,6 +232,3 @@ on ^616 "*"
 {
 	@ setitem(banlist $numitems(banlist) $*)
 }
-
-
-/* bmw '01 */

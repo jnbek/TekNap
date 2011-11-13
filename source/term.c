@@ -88,7 +88,6 @@ extern	int		tgetflag();
 #endif
 
 extern  char    *getenv();
-//extern	char	*tparm();
 
 /*
  * The old code assumed termcap. termcap is almost always present, but on
@@ -630,7 +629,7 @@ static	char	termcap[2048];	/* bigger than we need, just in case */
 #endif
 static	char	termcap2[2048];	/* bigger than we need, just in case */
 
-//static	char	*tptr = termcap2;
+static	char	*tptr = termcap2;
 #endif
 
 /*

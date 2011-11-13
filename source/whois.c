@@ -1,4 +1,4 @@
- /* $Id: whois.c,v 1.3 2001/10/11 16:27:08 edwards Exp $ */
+ /* $Id: whois.c,v 1.1.1.1 2001/02/05 00:22:18 edwards Exp $ */
  
 #include "teknap.h"
 #include "struct.h"
@@ -305,15 +305,16 @@ int o_f_s = from_server;
 			coder = "Whiner";
 		else if (!strcasecmp(nick, "fudd"))
 			coder = "Scripter";
-		else if (!strcasecmp(nick, "dusk"))
-			coder = "Perl Slut";
+		else if (!strcasecmp(nick, "[YaK]"))
+			coder = "elpresidente!";
+		else if (!strcasecmp(nick, "SunBeam"))
+			coder = "dork";
 		else if (!strcasecmp(nick, "sabina") || !strncasecmp(nick, "bina", 4))
 			coder = "cyber-slut";
-		else if (!strcasecmp(nick, "cosima"))
-			coder = "motorcycle Mama";
-		else if (!strcasecmp(nick, "Whoa_There_Chief"))
-			coder = "vagrant";
-
+		else if (!strcasecmp(nick, "h"))
+			coder = "Facist Pig";
+		else if (!strcasecmp(nick, "luna") || !strcasecmp(nick, "luna_jenny") || !strcasecmp(nick, "p"))
+			coder = "puta!";
 		if (l_ip)
 			put_it("52³57 User     :-1 %s50(-1%s50)-1 %s l57:-1%s d57:-1%s",nick, email, l_ip, l_port, d_port);
 		else

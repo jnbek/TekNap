@@ -8231,7 +8231,7 @@ test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 
 
-echo $_VERSION_ \(C\) 1999-2003 Colten Edwards
+echo $_VERSION_ \(C\) 1999-2000 Colten Edwards
 echo ---------------------------------------------------------- 
 echo
 echo The configuration script has finished. You should look through and make any

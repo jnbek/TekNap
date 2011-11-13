@@ -1,6 +1,5 @@
-/* $Id: server.c,v 1.4 2001/09/19 16:57:48 edwards Exp $ */
-/* Added updated napigator server listing code - Spike */ 
-
+/* $Id: server.c,v 1.2 2001/07/08 21:33:56 edwards Exp $ */
+ 
 #include "teknap.h"
 #include "struct.h"
 #include "hook.h"
@@ -614,10 +613,8 @@ int writelen;
 #ifdef WANT_THREAD
 	pthread_mutex_lock(&send_ncommand_mutex);
 #endif
-
 	if (internal_debug & DEBUG_SERVER && !in_debug_yell)
 		debugyell("%3d ->> %d %d %s", debug_count, ncmd, writelen, fmt ? buffer : empty_string);
-
 	server_list[from_server].sent = 1;
 
 	rc = NAP_send(buffer, sizeof(n_data) + writelen);
@@ -634,7 +631,6 @@ int writelen;
 		return rc;
 	}
 #endif
-
 #ifdef WANT_THREAD
 	pthread_mutex_unlock(&send_ncommand_mutex);
 #endif
@@ -1804,25 +1800,15 @@ FILE *out;
 	return number_of_servers;
 }
 
-/*
- * We really only need ip (or better hostname) and port for this napigator structure
- * 'nulltoken' picks up headers we don't need
- */
-
 int parse_napigator(char *buffer)
 {
 char *p;
-char *ip, *nulltoken;
+char *ip, *net, *users, *files, *gigs;
 int port;
 #if 0
-This was www.napigator.com/servers.php format
 <SERVER IP> <SERVER PORT> <NETWORK> <USERS> <FILES> <GIGABYTES>
 And then the last line, is 4 tokens and is a total of all the stats
 <NUMBER OF SERVERS> <TOTAL USERS> <TOTAL FILES> <TOTAL GIGABYTES>
-New client[1|2].napigator.com/servers.php format
-<?> <SERVER IP> <SERVER PORT> <NETWORK> <?> <USERS> <FILES> <GIGABYTES> <SERVER HOST> <?> <?> <?> <EMAIL> <WWW>
-We pick tokens 3(port) and 9(hostname)
-And then the last line, is 4 tokens and is a total of all the stats
 #endif
 	if ((p = strchr(buffer, '\r')))
 		*p = 0;
@@ -1841,20 +1827,15 @@ And then the last line, is 4 tokens and is a total of all the stats
 		return 0;
 	if (!my_strnicmp(buffer, "Connection:", 11))
 		return 0;
-	if (!my_strnicmp(buffer, "X-Cache:", 8))
-		return 0;
-	nulltoken = next_arg(buffer, &buffer);
-	/* This next variable is actually the ip if you want it */
-	nulltoken = next_arg(buffer, &buffer);
-	port = my_atol(next_arg(buffer, &buffer));
-	nulltoken = next_arg(buffer, &buffer);
-	/* We check here for end of list */
-	if (!(nulltoken = next_arg(buffer, &buffer)))
-                return -2;
-	nulltoken = next_arg(buffer, &buffer);
-	nulltoken = next_arg(buffer, &buffer);
-	nulltoken = next_arg(buffer, &buffer);
 	ip = next_arg(buffer, &buffer);
+	port = my_atol(next_arg(buffer, &buffer));
+	net = next_arg(buffer, &buffer);
+	users = next_arg(buffer, &buffer);
+	if (!(files = next_arg(buffer, &buffer)))
+		return -2;
+	gigs = next_arg(buffer, &buffer);
+	if (!strstr(buffer, "napster.com"))
+		ip = buffer;
 	return add_to_server_list(ip, port, get_string_var(DEFAULT_PASSWORD_VAR), get_string_var(DEFAULT_NICKNAME_VAR), 0, 0);
 }
 
@@ -1867,16 +1848,12 @@ static struct timeval nap_timer = {0};
 
 char buffer[BIG_BUFFER_SIZE+1], *bufptr;
 /*
-Old www.napigator.com/servers.php structure
 GET /servers.php HTTP/1.0
-client[1|2].napigator.com/servers.php structure
-GET /servers.php HTTP/1.0
-Host: client1.napigator.com
 */
-	s = connect_by_number("client1.napigator.com", &port, SERVICE_CLIENT, PROTOCOL_TCP, 0);
+	s = connect_by_number("www.napigator.com", &port, SERVICE_CLIENT, PROTOCOL_TCP, 0);
 	if (s == -1)
 		return -1;
-	strcpy(buffer, "GET /servers.php HTTP/1.0\r\nHost: client1.napigator.com\r\n\r\n\r\n");
+	strcpy(buffer, "GET /servers.php HTTP/1.0\r\n\r\n");
 	len = strlen(buffer);
 	if (write(s, buffer, len) != len)
 	{
