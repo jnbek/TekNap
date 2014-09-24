@@ -1,9 +1,10 @@
 TekNap 1.3g_3
 This version has been patched and will compile on GCC versions up to 4.6.2
 with craptons of warnings; by the port maintainer, (I presume) for the FreeBSD port.
-Compilation on Arch Linux with GCC 4.6.2 succeeded up until the link point, with errors
+NOTE: If your compile works and then fails at the link point, with errors
 with pthreads, so you must pass --disable-threads in configure to compile on Linux.
 
+Example:
 Errors on Linux with pthreads:
 
 term.o: In function `pthread_equal':
@@ -12,6 +13,7 @@ term.o: In function `pthread_equal':
 One of these days, I might fix this, anyone is welcome to do so.
 
 ++++++_____++++++
+BEGIN TekNap 1.3g README content
 
 Environment Variables.
 
