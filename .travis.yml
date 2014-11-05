@@ -1,2 +1,2 @@
 language: c
-script: "./configure --disable-threads && make && make install"
+script: "./configure --disable-threads && make"
