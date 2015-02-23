@@ -1,3 +1,2 @@
 language: c
-script: "./configure --disable-threads"
-after-success: "make"
+script: "./autogen.sh --disable-threads && make"
