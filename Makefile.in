@@ -100,8 +100,7 @@ MFLAGS ='CC=$(CC)'					\
 	'VERSION=$(VERSION)'				\
 	'INSTALL_DATA=$(INSTALL_DATA)'			\
 	'INCLUDES=$(INCLUDES)'				\
-	'local_dir=$(local_dir)'                        \
-	'-U__USE_EXTERN_INLINES'
+	'local_dir=$(local_dir)'
 
 default: all
 
