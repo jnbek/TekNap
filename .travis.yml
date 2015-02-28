@@ -7,4 +7,4 @@ os:
   - linux
   - osx
   - freebsd
-  - netbsd
+osx_image: xcode61
