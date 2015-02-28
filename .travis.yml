@@ -1,2 +1,5 @@
 language: c
-script: "./configure && make -U__USE_EXTERN_INLINES"
+script: "./configure && make"
+compiler:
+  - clang
+  - gcc
