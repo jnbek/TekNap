@@ -24,8 +24,6 @@ libexecdir = @libexecdir@
 mandir = @mandir@
 local_dir = $(HOME)
 
-undefine __USE_EXTERN_INLINES
-
 # Where the TekNap binary will be installed.
 # 'make install' will compile and install the program
 INSTALL_NAP = @INSTALL_NAP@
@@ -36,7 +34,7 @@ INSTALL_NAP = @INSTALL_NAP@
 NAPLIB = @NAPLIB@
 
 CC = @CC@
-DEFS = -I. -I$(topdir)/include -iquote 
+DEFS = -I. -I$(topdir)/include -iquote -U__USE_EXTERN_INLINES 
 # DEFS = -I. -I$(topdir)/include -I-
 LIBS = @LIBS@
 INCLUDES = @INCLUDES@
