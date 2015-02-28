@@ -3,3 +3,8 @@ script: "./configure && make"
 compiler:
   - clang
   - gcc
+os:
+  - linux
+  - osx
+  - freebsd
+  - netbsd
