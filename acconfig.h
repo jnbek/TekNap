@@ -1,3 +1,5 @@
+/* Fix broken pthread.h
+#undef __USE_EXTERN_INLINES
 /* Define short ircii version here */
 #undef _VERSION_
 
