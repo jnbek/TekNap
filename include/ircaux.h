@@ -59,8 +59,7 @@ char *	my_ctime 		(time_t);
 #define my_stricmp(x, y) strcasecmp(x, y) /* unable to use these for reasons of case sensitivity and finish */
 #define my_strnicmp(x, y, n) strncasecmp(x, y, n)
 #else
-int	my_stricmp 	(const unsigned char *, char *);
-/* int	my_stricmp 	(const unsigned char *, const unsigned char *); */
+int	my_stricmp 	(const unsigned char *, const unsigned char *);
 int	my_strnicmp	(const unsigned char *, const unsigned char *, size_t);
 #endif
 
