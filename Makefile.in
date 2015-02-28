@@ -34,7 +34,7 @@ INSTALL_NAP = @INSTALL_NAP@
 NAPLIB = @NAPLIB@
 
 CC = @CC@
-DEFS = -I. -I$(topdir)/include -iquote -U__USE_EXTERN_INLINES 
+DEFS = -I. -I$(topdir)/include -iquote 
 # DEFS = -I. -I$(topdir)/include -I-
 LIBS = @LIBS@
 INCLUDES = @INCLUDES@
@@ -100,7 +100,8 @@ MFLAGS ='CC=$(CC)'					\
 	'VERSION=$(VERSION)'				\
 	'INSTALL_DATA=$(INSTALL_DATA)'			\
 	'INCLUDES=$(INCLUDES)'				\
-	'local_dir=$(local_dir)'
+	'local_dir=$(local_dir)'                        \
+	'-U__USE_EXTERN_INLINES'
 
 default: all
 
